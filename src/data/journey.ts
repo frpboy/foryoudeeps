@@ -1,0 +1,66 @@
+import type { JourneyItem } from '@/types';
+
+export const journeyItems: JourneyItem[] = [
+  {
+    id: 'journey-001',
+    order: 1,
+    enabled: true,
+    emphasis: 'featured',
+    caption: 'Some memories stay with us forever',
+    dateLabel: 'Through the years',
+    image: {
+      id: 'journey-img-001',
+      type: 'image',
+      src: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=warm%20portrait%20of%20a%20young%20South%20Indian%20woman%20with%20a%20gentle%20smile%2C%20soft%20natural%20lighting%2C%20candid%20moment%2C%20film%20grain%2C%20nostalgic%20mood&image_size=portrait_4_3',
+      alt: 'A cherished memory',
+      order: 1,
+      enabled: true,
+    },
+  },
+  {
+    id: 'journey-002',
+    order: 2,
+    enabled: true,
+    emphasis: 'normal',
+    caption: 'The moments that shaped us',
+    image: {
+      id: 'journey-img-002',
+      type: 'image',
+      src: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=group%20of%20friends%20laughing%20together%2C%20casual%20moment%2C%20warm%20colours%2C%20candid%20photography%2C%20film%20aesthetic&image_size=landscape_4_3',
+      alt: 'Friends together',
+      order: 2,
+      enabled: true,
+    },
+  },
+  {
+    id: 'journey-003',
+    order: 3,
+    enabled: true,
+    emphasis: 'normal',
+    caption: 'Little girl with big dreams',
+    dateLabel: 'The early days',
+    image: {
+      id: 'journey-img-003',
+      type: 'image',
+      src: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=vintage%20photograph%20of%20a%20small%20South%20Indian%20girl%20child%20portrait%2C%20soft%20sepia%20tones%2C%20nostalgic%20memory%2C%20gentle%20smile&image_size=portrait_4_3',
+      alt: 'Childhood memory',
+      order: 3,
+      enabled: true,
+    },
+  },
+  {
+    id: 'journey-004',
+    order: 4,
+    enabled: true,
+    emphasis: 'featured',
+    caption: 'Building dreams, one step at a time',
+    image: {
+      id: 'journey-img-004',
+      type: 'image',
+      src: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=professional%20South%20Indian%20woman%20in%20thoughtful%20moment%20at%20work%2C%20warm%20office%20lighting%2C%20candid%2C%20elegant%20style%2C%20confident%20expression&image_size=landscape_4_3',
+      alt: 'Professional journey',
+      order: 4,
+      enabled: true,
+    },
+  },
+];

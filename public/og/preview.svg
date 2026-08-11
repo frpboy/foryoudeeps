@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#07150F"/>
+      <stop offset="50%" stop-color="#0B2117"/>
+      <stop offset="100%" stop-color="#123324"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#9B2430" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#9B2430" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <g transform="translate(120, 160)">
+    <text font-family="'Playfair Display', Georgia, serif" font-size="44" fill="#C94A55" opacity="0.9">for you,</text>
+    <text y="80" font-family="'Playfair Display', Georgia, serif" font-size="120" font-weight="600" fill="#F8F0DD">Deeps</text>
+    <text y="160" font-family="system-ui, sans-serif" font-size="28" fill="#EBDDBF" opacity="0.75">something special is waiting for you ♡</text>
+  </g>
+  <g transform="translate(880, 220)">
+    <path d="M 160 220 C 90 180, 50 140, 50 100 C 50 65, 80 50, 100 50 C 120 50, 140 60, 160 85 C 180 60, 200 50, 220 50 C 240 50, 270 65, 270 100 C 270 140, 230 180, 160 220 Z" fill="#9B2430" opacity="0.95"/>
+  </g>
+  <text x="120" y="560" font-family="'Caveat', cursive" font-size="40" fill="#E07A84" opacity="0.7">15 August 2026</text>
+  <text x="1080" y="560" text-anchor="end" font-family="system-ui, sans-serif" font-size="22" fill="#6F6A5F" opacity="0.6">LEVEL 31 UNLOCKED</text>
+</svg>

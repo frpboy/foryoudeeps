@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-matcha-950: #07150F;
+  --color-matcha-900: #0B2117;
+  --color-matcha-800: #123324;
+  --color-matcha-700: #1A4531;
+  --color-matcha-600: #255B40;
+  --color-red-900: #5C1119;
+  --color-red-800: #751722;
+  --color-red-700: #9B2430;
+  --color-red-500: #C94A55;
+  --color-cream-50: #FFFDF5;
+  --color-cream-100: #F8F0DD;
+  --color-cream-200: #EBDDBF;
+  --color-ink: #1B1A16;
+  --color-muted: #6F6A5F;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --content-max: 1280px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 600ms;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-matcha-900);
+  color: var(--color-cream-100);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+body.no-scroll {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+::selection {
+  background: var(--color-red-700);
+  color: var(--color-cream-50);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-matcha-900);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-matcha-700);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-matcha-600);
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  .font-handwritten {
+    font-family: 'Caveat', cursive;
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .bg-gradient-matcha {
+    background: linear-gradient(180deg, #07150F 0%, #0B2117 50%, #123324 100%);
+  }
+
+  .bg-paper-texture {
+    background-color: var(--color-cream-50);
+    background-image:
+      radial-gradient(circle at 20% 80%, rgba(235, 221, 191, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(235, 221, 191, 0.2) 0%, transparent 50%);
+  }
+
+  .card-cream {
+    background: linear-gradient(145deg, #FFFDF5 0%, #F8F0DD 100%);
+    color: var(--color-ink);
+  }
+
+  .card-matcha {
+    background: linear-gradient(145deg, #1A4531 0%, #123324 100%);
+    color: var(--color-cream-100);
+    border: 1px solid rgba(248, 240, 221, 0.08);
+  }
+
+  .shadow-drop {
+    filter: drop-shadow(0 8px 24px rgba(7, 21, 15, 0.25));
+  }
+
+  .aspect-photo {
+    aspect-ratio: 4 / 5;
+  }
+
+  .aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
