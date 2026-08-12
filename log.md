@@ -353,3 +353,22 @@ npm run test:e2e
 - Vitest: 4 files and 15 tests passed.
 - Playwright: 12 tests passed across desktop and mobile Chromium, including
   the complete 320px through 1920px responsive overflow matrix.
+
+---
+
+## 2026-08-12 - Voice-note resilience and duration context
+
+### Implemented
+
+- Added a graceful, accessible failure state for future contributor audio
+  notes, preserving any approved written message when audio cannot load.
+- Added optional minute-and-second duration context to the minimal audio
+  control when the supplied asset metadata includes a duration or the browser
+  can read it.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, `npm run validate-content`, `npm run
+  test`, `npm run build`, and `npm run test:e2e` passed.
+- Vitest: 4 files and 16 tests passed, including the failed-audio regression.
+- Playwright: 12 browser tests passed across desktop and mobile Chromium.

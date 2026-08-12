@@ -10,15 +10,24 @@ import type { Wish, WishVariant } from '@/types';
 interface AudioPlayerProps {
   src: string;
   label: string;
+  duration?: number;
   pauseOthers: () => void;
   register: (el: HTMLMediaElement | null) => void;
   unregister: (el: HTMLMediaElement | null) => void;
 }
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, label, pauseOthers, register, unregister }) => {
+function formatDuration(seconds?: number): string | null {
+  if (!seconds || !Number.isFinite(seconds) || seconds < 0) return null;
+  const minutes = Math.floor(seconds / 60);
+  return `${minutes}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
+}
+
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, label, duration, pauseOthers, register, unregister }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = React.useState(false);
   const [progress, setProgress] = React.useState(0);
+  const [failed, setFailed] = React.useState(false);
+  const [loadedDuration, setLoadedDuration] = React.useState<number | undefined>(duration);
   useEffect(() => {
     const a = audioRef.current;
     if (!a) return;
@@ -37,14 +46,26 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, label, pauseOthers, regi
     }
   };
 
+  if (failed) {
+    return <MediaFallback message="This voice note is unavailable, but the thought behind it is still here." className="min-h-24 rounded-xl" />;
+  }
+
   return (
-    <div className="flex items-center gap-3 w-full">
+    <div className="flex items-center gap-3 w-full" aria-label={label}>
       <audio
         ref={audioRef}
         src={src}
         preload="none"
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
+        onLoadedMetadata={(event) => {
+          const mediaDuration = event.currentTarget.duration;
+          if (Number.isFinite(mediaDuration)) setLoadedDuration(mediaDuration);
+        }}
+        onError={() => {
+          setPlaying(false);
+          setFailed(true);
+        }}
         onTimeUpdate={(e) => {
           const t = e.currentTarget;
           setProgress(t.duration ? (t.currentTime / t.duration) * 100 : 0);
@@ -68,6 +89,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, label, pauseOthers, regi
           style={{ width: `${progress}%` }}
         />
       </div>
+      {formatDuration(loadedDuration) && (
+        <span className="font-mono text-[10px] tabular-nums text-current/50" aria-label={`Duration ${formatDuration(loadedDuration)}`}>
+          {formatDuration(loadedDuration)}
+        </span>
+      )}
     </div>
   );
 };
@@ -149,6 +175,7 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
           <AudioPlayer
             src={wish.audio.src}
             label={`${wish.name}'s voice message`}
+            duration={wish.audio.duration}
             pauseOthers={pauseAllMedia}
             register={registerMedia}
             unregister={unregisterMedia}

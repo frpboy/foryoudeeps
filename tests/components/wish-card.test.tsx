@@ -53,4 +53,16 @@ describe('WishCard', () => {
     expect(screen.getByText('The important part is still here.')).toBeInTheDocument();
     expect(screen.getByText('This memory is taking a little break.')).toBeInTheDocument();
   });
+
+  it('replaces a failed voice note without losing its written message', () => {
+    renderWish({
+      ...baseWish,
+      text: 'The note is still here.',
+      audio: { id: 'broken-audio', type: 'audio', src: '/media/wishes/missing.mp3', duration: 64, order: 1, enabled: true },
+    });
+    expect(screen.getByText('1:04')).toBeInTheDocument();
+    fireEvent.error(document.querySelector('audio')!);
+    expect(screen.getByText('The note is still here.')).toBeInTheDocument();
+    expect(screen.getByText('This voice note is unavailable, but the thought behind it is still here.')).toBeInTheDocument();
+  });
 });
