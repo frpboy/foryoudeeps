@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Heart, Play, Pause, ChevronLeft, ChevronRight, Volume2, VolumeX, ArrowDown, Maximize, SkipForward } from 'lucide-react';
+import { X, Heart, Play, Pause, ChevronLeft, ChevronRight, Volume2, VolumeX, ArrowDown, Maximize, SkipForward, SkipBack } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -170,5 +170,5 @@ export const PaperNote: React.FC<PaperNoteProps> = ({
   );
 };
 
-export { X, Heart, Play, Pause, ChevronLeft, ChevronRight, Volume2, VolumeX, ArrowDown, Maximize, SkipForward };
+export { X, Heart, Play, Pause, ChevronLeft, ChevronRight, Volume2, VolumeX, ArrowDown, Maximize, SkipForward, SkipBack };
 export type { LucideIcon };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { IconButton, Play, Pause, SkipForward, Volume2, VolumeX } from '@/components/ui/primitives';
+import { IconButton, Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from '@/components/ui/primitives';
 import { motion, AnimatePresence } from 'motion/react';
 import { useReducedMotion } from '@/hooks';
 import { filterEnabled, sortByOrder } from '@/lib/media';
@@ -21,6 +21,7 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
   const [muted, setMuted] = useState(false);
   const [trackIndex, setTrackIndex] = useState(0);
   const [resumeOnTrackChange, setResumeOnTrackChange] = useState(false);
+  const [progress, setProgress] = useState(0);
   const activeTrack = tracks[trackIndex];
 
   useEffect(() => {
@@ -44,9 +45,16 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
     setTrackIndex((current) => (current + 1) % tracks.length);
   };
 
+  const selectPreviousTrack = (resume = !audioRef.current?.paused) => {
+    if (tracks.length < 2) return;
+    setResumeOnTrackChange(resume);
+    setTrackIndex((current) => (current - 1 + tracks.length) % tracks.length);
+  };
+
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+    setProgress(0);
     audio.load();
     if (resumeOnTrackChange) {
       audio.play().catch(() => setPlaying(false));
@@ -75,6 +83,10 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
             if (tracks.length > 1) selectNextTrack(true);
           }}
           onError={() => setPlaying(false)}
+          onTimeUpdate={(event) => {
+            const { currentTime, duration } = event.currentTarget;
+            setProgress(Number.isFinite(duration) && duration > 0 ? (currentTime / duration) * 100 : 0);
+          }}
           preload="metadata"
           loop={tracks.length === 1}
         />
@@ -90,6 +102,16 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
             onClick={togglePlayback}
             className="!w-9 !h-9"
           />
+          {tracks.length > 1 && (
+            <IconButton
+              icon={SkipBack}
+              size="sm"
+              variant="ghost"
+              label="Previous track"
+              className="!w-9 !h-9 opacity-70 hover:opacity-100"
+              onClick={() => selectPreviousTrack()}
+            />
+          )}
           {tracks.length > 1 && (
             <IconButton
               icon={SkipForward}
@@ -108,6 +130,9 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
             className="!w-9 !h-9 opacity-70 hover:opacity-100"
             onClick={() => setMuted((value) => !value)}
           />
+        </div>
+        <div className="mt-1 h-px overflow-hidden rounded-full bg-cream-100/10" aria-label="Music progress">
+          <div className="h-full bg-deepred-500 transition-[width] duration-150" style={{ width: `${progress}%` }} />
         </div>
       </motion.div>
     </AnimatePresence>

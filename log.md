@@ -415,3 +415,20 @@ npm run test:e2e
   test`, `npm run build`, and `npm run test:e2e` passed.
 - Vitest: 4 files and 16 tests passed.
 - Playwright: 12 browser tests passed across desktop and mobile Chromium.
+
+---
+
+## 2026-08-12 - Playlist navigation and progress completion
+
+### Implemented
+
+- Completed the optional playlist controls with accessible previous and next
+  track actions plus a subtle live progress line. These controls render only
+  when approved music tracks exist and never start audio without interaction.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, `npm run validate-content`, `npm run
+  test`, `npm run build`, and `npm run test:e2e` passed.
+- Vitest: 4 files and 16 tests passed.
+- Playwright: 12 browser tests passed across desktop and mobile Chromium.
