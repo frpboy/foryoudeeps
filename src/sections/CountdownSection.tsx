@@ -1,131 +1,70 @@
 import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useCountdown, useReducedMotion } from '@/hooks';
-import { padZero, formatCountdownDate } from '@/lib/countdown';
+import { formatCountdownDate, padZero } from '@/lib/countdown';
 import { DecorativeHeart } from '@/components/ui/primitives';
 import { siteConfig } from '@/data/site';
 
-interface CountdownSectionProps {
-  onEnter?: () => void;
-  userHasInteracted?: boolean;
-}
+interface CountdownSectionProps { onEnter?: () => void; userHasInteracted?: boolean; }
+interface CountdownUnitProps { value: number; label: string; delay: number; reduced: boolean; }
 
-interface CountdownUnitProps {
-  value: number;
-  label: string;
-  delay: number;
-  reduced: boolean;
-}
-
-const CountdownUnit: React.FC<CountdownUnitProps> = ({ value, label, delay, reduced }) => {
-  return (
-    <motion.div
-      initial={reduced ? {} : { opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: delay / 1000, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="flex flex-col items-center gap-1 min-w-[64px] sm:min-w-[80px] md:min-w-[96px]"
-    >
-      <div className="relative">
-        <span
-          aria-hidden="true"
-          className="font-display text-cream-100 text-5xl sm:text-6xl md:text-7xl font-semibold leading-none tabular-nums"
-        >
-          {padZero(value)}
-        </span>
-        <DecorativeHeart size="sm" className="absolute -top-2 -right-3 opacity-0 animate-fade-in" />
-      </div>
-      <span className="font-body text-cream-200/60 text-xs sm:text-sm uppercase tracking-[0.2em] font-medium">
-        {label}
-      </span>
-    </motion.div>
-  );
-};
+const CountdownUnit: React.FC<CountdownUnitProps> = ({ value, label, delay, reduced }) => (
+  <motion.div
+    initial={reduced ? {} : { opacity: 0, y: 12 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: delay / 1000, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+    className="flex min-w-[54px] flex-col items-center gap-2 sm:min-w-[72px] md:min-w-[94px]"
+  >
+    <span aria-hidden="true" className="countdown-clock font-display text-cream-50 text-5xl font-medium leading-none tabular-nums sm:text-6xl md:text-8xl">
+      {padZero(value)}
+    </span>
+    <span className="font-body text-[10px] font-medium uppercase tracking-[0.26em] text-cream-200/45 sm:text-xs">{label}</span>
+  </motion.div>
+);
 
 export const CountdownSection: React.FC<CountdownSectionProps> = () => {
   const countdown = useCountdown(siteConfig.birthdayDate);
   const reduced = useReducedMotion();
 
   useEffect(() => {
-    if (countdown.isZero) {
-      const id = window.setTimeout(() => {
-        window.dispatchEvent(new CustomEvent('birthday-start'));
-      }, 300);
-      return () => window.clearTimeout(id);
-    }
+    if (!countdown.isZero) return;
+    const id = window.setTimeout(() => window.dispatchEvent(new CustomEvent('birthday-start')), 300);
+    return () => window.clearTimeout(id);
   }, [countdown.isZero]);
 
   return (
-    <section
-      id="countdown"
-      className="relative min-h-[100svh] flex items-center justify-center bg-gradient-matcha safe-top safe-bottom overflow-hidden"
-    >
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-deepred-800/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '0s' }} />
-        <div className="absolute -bottom-32 -right-32 w-[28rem] h-[28rem] bg-matcha-600/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-      </div>
-
-      <div className="relative z-10 flex flex-col items-center gap-12 px-6 py-16 w-full max-w-xl mx-auto text-center">
-        <motion.div
-          initial={reduced ? {} : { opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="flex flex-col items-center gap-3"
-        >
-          <span className="font-handwritten text-deepred-500 text-3xl md:text-4xl leading-none">
-            for you,
-          </span>
-          <h1 className="font-display text-cream-50 text-4xl md:text-5xl font-semibold tracking-tight">
-            deeps
-            <DecorativeHeart size="sm" className="inline-block ml-3 -translate-y-2" />
+    <section id="countdown" className="countdown-stage relative flex min-h-[100svh] items-center justify-center overflow-hidden safe-top safe-bottom">
+      <div className="relative z-10 flex w-full max-w-2xl flex-col items-center px-6 py-16 text-center">
+        <motion.div initial={reduced ? {} : { opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }} className="flex flex-col items-center gap-2">
+          <span className="font-handwritten text-3xl leading-none text-deepred-500 md:text-4xl">for you,</span>
+          <h1 className="font-display text-5xl font-medium tracking-[-0.06em] text-cream-50 sm:text-6xl md:text-7xl">
+            deeps <DecorativeHeart size="sm" className="mb-5 ml-2 inline-block" />
           </h1>
         </motion.div>
 
-        <motion.div
-          initial={reduced ? {} : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.8 }}
-          className="text-cream-200/70 font-body text-base md:text-lg"
-        >
-          something special is waiting for you.
-        </motion.div>
+        <motion.p initial={reduced ? {} : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25, duration: 0.8 }} className="mt-10 font-body text-base italic text-cream-200/65 md:text-lg">
+          something is waiting for you...
+        </motion.p>
 
-        <div
-          className="flex items-end justify-center gap-3 sm:gap-6 md:gap-8 py-4"
-          aria-live="polite"
-          aria-atomic="true"
-        >
+        <div className="mt-9 flex items-end justify-center gap-2 py-4 sm:gap-5 md:gap-7" aria-live="polite" aria-atomic="true">
           <CountdownUnit value={countdown.days} label="Days" delay={300} reduced={reduced} />
-          <span className="font-display text-deepred-500 text-4xl sm:text-5xl md:text-6xl pb-6 opacity-60 animate-pulse-soft">:</span>
+          <span className="countdown-separator pb-6 text-3xl sm:text-4xl md:text-5xl">:</span>
           <CountdownUnit value={countdown.hours} label="Hours" delay={400} reduced={reduced} />
-          <span className="font-display text-deepred-500 text-4xl sm:text-5xl md:text-6xl pb-6 opacity-60 animate-pulse-soft">:</span>
+          <span className="countdown-separator pb-6 text-3xl sm:text-4xl md:text-5xl">:</span>
           <CountdownUnit value={countdown.minutes} label="Minutes" delay={500} reduced={reduced} />
-          <span className="font-display text-deepred-500 text-4xl sm:text-5xl md:text-6xl pb-6 opacity-60 animate-pulse-soft">:</span>
+          <span className="countdown-separator pb-6 text-3xl sm:text-4xl md:text-5xl">:</span>
           <CountdownUnit value={countdown.seconds} label="Seconds" delay={600} reduced={reduced} />
         </div>
 
-        <motion.div
-          initial={reduced ? {} : { opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.6 }}
-          className="flex flex-col items-center gap-2"
-        >
-          <div className="flex items-center gap-3 px-5 py-2 rounded-full border border-cream-100/10 bg-matcha-800/30 backdrop-blur-sm">
-            <DecorativeHeart size="sm" />
-            <span className="font-body text-cream-100/90 text-sm sm:text-base tracking-wide">
-              {formatCountdownDate(siteConfig.birthdayDate)}
-            </span>
-          </div>
+        <motion.div initial={reduced ? {} : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.85, duration: 0.65 }} className="mt-10 flex items-center gap-3">
+          <span className="h-px w-8 bg-deepred-500/55" />
+          <span className="font-body text-sm tracking-[0.08em] text-cream-100/75 sm:text-base">{formatCountdownDate(siteConfig.birthdayDate)}</span>
+          <span className="h-px w-8 bg-deepred-500/55" />
         </motion.div>
 
-        <motion.div
-          initial={reduced ? {} : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.1, duration: 1 }}
-          className="pt-4"
-          aria-hidden="true"
-        >
-          <DecorativeHeart size="md" className="text-deepred-500/60 animate-float" />
-        </motion.div>
+        <motion.p initial={reduced ? {} : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1, duration: 1 }} className="mt-12 font-handwritten text-xl text-deepred-300/75">
+          keep this little secret for a few more days ♡
+        </motion.p>
       </div>
     </section>
   );

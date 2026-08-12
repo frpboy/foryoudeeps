@@ -21,7 +21,7 @@ test('renders the birthday journey with intentional empty media states', async (
   await expect(page.getByText('A few memories, held close')).toBeVisible();
   await expect(page.getByText('The album is ready')).toBeVisible();
   await expect(page.getByText('Words worth waiting for')).toBeVisible();
-  await expect(page.getByRole('button', { name: /replay the experience/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /start again/i })).toBeVisible();
 });
 
 test('opens the birthday journey through the explicit preview URL before the date', async ({ page }) => {
@@ -48,7 +48,7 @@ test('keeps the responsive birthday journey free of horizontal overflow and cons
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 
   await page.locator('#final').scrollIntoViewIfNeeded();
-  const replay = page.getByRole('button', { name: /replay the experience/i });
+    const replay = page.getByRole('button', { name: /start again/i });
   await expect(replay).toBeVisible();
   await replay.click();
   await expect(page.getByRole('heading', { name: 'Deeps' })).toBeVisible();

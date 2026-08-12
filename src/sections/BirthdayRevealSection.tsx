@@ -1,102 +1,66 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowDown, DecorativeHeart } from '@/components/ui/primitives';
-import { useReducedMotion, useIntersectionObserver } from '@/hooks';
+import { useIntersectionObserver, useReducedMotion } from '@/hooks';
 import { siteConfig } from '@/data/site';
-import { formatCountdownDate } from '@/lib/countdown';
 
-interface BirthdayRevealSectionProps {
-  onContinue?: () => void;
-}
+interface BirthdayRevealSectionProps { onContinue?: () => void; }
 
 export const BirthdayRevealSection: React.FC<BirthdayRevealSectionProps> = ({ onContinue }) => {
   const reduced = useReducedMotion();
-  const { ref, visible } = useIntersectionObserver<HTMLDivElement>();
-
-  const handleScroll = () => {
+  const { ref, visible } = useIntersectionObserver<HTMLElement>();
+  const moveToStory = () => {
     onContinue?.();
-    const el = document.getElementById('journey');
-    if (el) el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    document.getElementById('journey')?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
   };
 
   return (
-    <section
-      id="reveal"
-      ref={ref}
-      className="relative min-h-[100svh] flex items-center justify-center bg-gradient-matcha safe-top safe-bottom overflow-hidden"
-    >
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-80 h-80 -translate-x-1/2 -translate-y-1/2 bg-deepred-700/8 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 translate-x-1/3 translate-y-1/3 bg-matcha-600/8 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }} />
-      </div>
-
-      <div className="relative z-10 flex flex-col items-center gap-10 px-6 py-20 w-full max-w-3xl mx-auto text-center">
-        <motion.div
-          initial={reduced || !visible ? {} : { opacity: 0, y: 24 }}
-          animate={visible ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="flex flex-col items-center gap-4"
-        >
-          <span className="font-handwritten text-deepred-500 text-3xl md:text-4xl leading-none">
-            happy birthday,
-          </span>
-          <h1 className="font-display text-cream-50 leading-[1] text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-semibold tracking-tight text-balance">
-            {siteConfig.displayName}
-          </h1>
-          <DecorativeHeart size="md" className="mt-2 animate-float" />
-        </motion.div>
-
-        <div className="flex flex-col items-center gap-2">
-          <motion.div
-            initial={reduced || !visible ? {} : { opacity: 0, scale: 0.9 }}
-            animate={visible ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: 0.25, duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }}
-            className="relative"
-          >
-            <span className="font-display text-deepred-500 leading-none text-[7rem] sm:text-[9rem] md:text-[11rem] lg:text-[13rem] font-bold block">
-              {siteConfig.turningAge}
-            </span>
-            <span className="absolute -top-2 -right-4 sm:-right-8 animate-pulse-soft">
-              <DecorativeHeart size="lg" />
-            </span>
-          </motion.div>
-
-          <motion.div
-            initial={reduced || !visible ? {} : { opacity: 0, y: 12 }}
-            animate={visible ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.5, duration: 0.6 }}
-            className="mt-2"
-          >
-            <span className="inline-block font-body text-cream-100 tracking-[0.25em] uppercase text-xs sm:text-sm md:text-base px-5 py-2 rounded-full border border-deepred-700/40 bg-deepred-900/30">
-              {siteConfig.levelPhrase}
-            </span>
-          </motion.div>
-        </div>
-
-        <motion.div
-          initial={reduced || !visible ? {} : { opacity: 0 }}
-          animate={visible ? { opacity: 1 } : {}}
-          transition={{ delay: 0.7, duration: 0.8 }}
-          className="flex items-center gap-2 text-cream-200/60 font-body"
-        >
-          <DecorativeHeart size="sm" />
-          <span>{formatCountdownDate(siteConfig.birthdayDate)}</span>
-        </motion.div>
-
-        <motion.button
+    <section id="reveal" ref={ref} className="reveal-stage relative flex min-h-[100svh] items-center justify-center overflow-hidden safe-top safe-bottom">
+      <div className="relative z-10 flex w-full max-w-4xl flex-col items-center px-6 py-16 text-center">
+        <motion.p
           initial={reduced || !visible ? {} : { opacity: 0, y: 16 }}
           animate={visible ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.9, duration: 0.6 }}
-          onClick={handleScroll}
-          className="group mt-4 inline-flex flex-col items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deepred-500 rounded-2xl px-6 py-4"
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="font-handwritten text-3xl leading-none text-deepred-500 md:text-4xl"
+        >
+          happy birthday,
+        </motion.p>
+        <motion.h1
+          initial={reduced || !visible ? {} : { opacity: 0, letterSpacing: '-0.13em', scale: 0.96 }}
+          animate={visible ? { opacity: 1, letterSpacing: '-0.085em', scale: 1 } : {}}
+          transition={{ delay: 0.18, duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
+          className="reveal-name mt-7 font-display font-medium text-cream-50"
+        >
+          {siteConfig.displayName}
+        </motion.h1>
+        <motion.div
+          initial={reduced || !visible ? {} : { opacity: 0, y: 18 }}
+          animate={visible ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.62, duration: 0.7 }}
+          className="mt-12 flex items-center gap-4 text-deepred-300"
+        >
+          <span className="h-px w-9 bg-current opacity-60" />
+          <DecorativeHeart size="sm" className="text-deepred-300" />
+          <span className="h-px w-9 bg-current opacity-60" />
+        </motion.div>
+        <motion.p
+          initial={reduced || !visible ? {} : { opacity: 0, y: 14 }}
+          animate={visible ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.82, duration: 0.7 }}
+          className="level-seal mt-8 py-2 font-body text-[10px] uppercase text-cream-100/80 sm:text-xs"
+        >
+          {siteConfig.levelPhrase}
+        </motion.p>
+        <motion.button
+          initial={reduced || !visible ? {} : { opacity: 0 }}
+          animate={visible ? { opacity: 1 } : {}}
+          transition={{ delay: 1.1, duration: 0.7 }}
+          onClick={moveToStory}
+          className="group mt-20 inline-flex flex-col items-center gap-3 rounded-full px-6 py-3 font-body text-sm text-cream-200/70 transition-colors hover:text-cream-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deepred-500"
           aria-label="Continue to memories"
         >
-          <span className="font-display text-cream-100 text-lg md:text-xl">
-            let us go through the memories
-          </span>
-          <span className="mt-1 text-cream-200/50 animate-float">
-            <ArrowDown size={22} strokeWidth={2} />
-          </span>
+          <span>keep scrolling</span>
+          <ArrowDown size={18} className="transition-transform duration-300 group-hover:translate-y-1" />
         </motion.button>
       </div>
     </section>

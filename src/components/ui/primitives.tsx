@@ -53,6 +53,7 @@ interface SectionHeadingProps {
   subtitle?: string;
   align?: 'left' | 'center';
   accent?: boolean;
+  tone?: 'light' | 'dark';
 }
 
 export const SectionHeading: React.FC<SectionHeadingProps> = ({
@@ -61,22 +62,23 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
   subtitle,
   align = 'center',
   accent = true,
+  tone = 'light',
 }) => {
   const alignClasses = align === 'center' ? 'text-center items-center mx-auto' : 'text-left items-start';
 
   return (
     <div className={`flex flex-col gap-3 max-w-2xl w-full ${alignClasses}`}>
       {eyebrow && (
-        <span className="font-handwritten text-deepred-500 text-xl md:text-2xl leading-none">
+        <span className={`font-handwritten text-xl md:text-2xl leading-none ${tone === 'light' ? 'text-deepred-500' : 'text-deepred-700'}`}>
           {eyebrow}
         </span>
       )}
-      <h2 className="font-display text-cream-100 text-balance leading-[1.1] text-3xl md:text-4xl lg:text-5xl font-semibold">
+      <h2 className={`font-display text-balance leading-[1.02] text-4xl md:text-5xl lg:text-6xl font-medium tracking-[-0.045em] ${tone === 'light' ? 'text-cream-100' : 'text-ink'}`}>
         {accent ? (
           <>
             {title.split(' ').map((word, i) =>
               i === title.split(' ').length - 1 ? (
-                <span key={i} className="text-deepred-500">
+                <span key={i} className={tone === 'light' ? 'text-deepred-500' : 'text-deepred-700'}>
                   {' '}{word}
                 </span>
               ) : (
@@ -89,7 +91,7 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
         )}
       </h2>
       {subtitle && (
-        <p className="text-cream-200/70 font-body text-base md:text-lg leading-relaxed max-w-xl">
+        <p className={`font-body text-base md:text-lg leading-relaxed max-w-xl ${tone === 'light' ? 'text-cream-200/70' : 'text-ink/65'}`}>
           {subtitle}
         </p>
       )}
@@ -159,10 +161,10 @@ export const PaperNote: React.FC<PaperNoteProps> = ({
 
   return (
     <div
-      className={`relative rounded-2xl p-5 md:p-6 ${toneClasses} ${className}`}
+      className={`paper-edge relative p-5 md:p-7 ${toneClasses} ${className}`}
       style={{ transform: `rotate(${rotation}deg)` }}
     >
-      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-12 h-4 bg-deepred-700/10 rounded-md border border-deepred-700/20" />
+      <div className="absolute -top-2 left-1/2 h-3 w-14 -translate-x-1/2 bg-deepred-700/10" />
       {children}
     </div>
   );

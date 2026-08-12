@@ -36,7 +36,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, total, reduced, 
       transition={{ duration: 0.55, delay: Math.min(index * 0.05, 0.4), ease: [0.22, 1, 0.36, 1] }}
       whileHover={reduced ? {} : { scale: 1.015, y: -2 }}
       whileTap={reduced ? {} : { scale: 0.98 }}
-      className={`group relative block w-full text-left overflow-hidden rounded-2xl shadow-soft card-matcha ${spanClass}`}
+      className={`gallery-memory group relative block w-full overflow-hidden text-left ${spanClass}`}
       aria-label={`Open gallery item ${index + 1}`}
     >
       <div className={item.featured ? 'aspect-[4/5]' : 'aspect-square md:aspect-auto md:h-full'}>
@@ -224,14 +224,13 @@ export const GallerySection: React.FC = () => {
   }, [items.length]);
 
   return (
-    <section id="gallery" className="relative py-24 md:py-32 px-6 bg-matcha-950">
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cream-100/10 to-transparent" />
-      <div className="relative max-w-7xl mx-auto w-full">
-        <div className="mb-16 md:mb-20">
+    <section id="gallery" className="story-section gallery-atmosphere">
+      <div className="mx-auto w-full max-w-7xl">
+        <div className="mb-16 md:mb-24">
           <SectionHeading
-            eyebrow="moments of deeps"
-            title="a gallery of memories"
-            subtitle="Some favourites from the journey so far."
+            eyebrow="a few photographs"
+            title="the album is waiting"
+            subtitle="The real, unrepeatable kind of moments belong here."
           />
         </div>
 

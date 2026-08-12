@@ -64,15 +64,14 @@ export const JourneySection: React.FC = () => {
   return (
     <section
       id="journey"
-      className="relative py-24 md:py-32 px-6 bg-matcha-900 overflow-hidden"
+      className="story-section journey-atmosphere"
     >
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cream-100/10 to-transparent" />
-      <div className="relative max-w-5xl mx-auto w-full">
-        <div className="mb-16 md:mb-20">
+      <div className="mx-auto w-full max-w-5xl">
+        <div className="mb-16 md:mb-24">
           <SectionHeading
             eyebrow="a little journey"
-            title="pieces of your story"
-            subtitle="Some moments stay with us forever. These are a few of ours."
+            title="the parts that stay with us"
+            subtitle="A few photographs will arrive here soon — exactly as they happened."
           />
         </div>
 

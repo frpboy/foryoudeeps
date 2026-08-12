@@ -19,7 +19,7 @@ describe('App birthday state', () => {
     expect(screen.getByText('A few memories, held close')).toBeInTheDocument();
     expect(screen.getByText('The album is ready')).toBeInTheDocument();
     expect(screen.getByText('Words worth waiting for')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /replay the experience/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /start again/i })).toBeInTheDocument();
   });
 
   it('opens the birthday experience with the explicit testing preview URL', () => {

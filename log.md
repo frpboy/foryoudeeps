@@ -270,3 +270,31 @@ npm run test:e2e
 - Added `vercel.json` with production response security headers.
 - Added `VERCEL_DEPLOYMENT.md` with the one-time Vercel dashboard action to
   attach `foryoudeeps.frpboy.in` to the project.
+
+---
+
+## 2026-08-12 - Editorial birthday experience redesign
+
+### Implemented
+
+- Reworked the countdown and birthday reveal into an editorial, poster-led
+  experience: expressive typography, understated marks, a soft paper texture,
+  and no dashboard-style metric cards.
+- Gave the journey, gallery, wishes, daughter-message, and final wish their
+  own visual atmospheres so the experience moves from deep matcha and wine-red
+  into warm cream, then returns to a quiet final dark scene.
+- Kept the existing data architecture and intentional empty states. No
+  placeholder people, images, voices, or messages were fabricated while real
+  media is still pending.
+- Preserved reduced-motion behavior, preview URLs, replay navigation, and all
+  existing content hooks; updated the browser assertions for the intentionally
+  renamed `Start again` control.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, `npm run validate-content`, `npm run
+  test`, and `npm run build` passed.
+- Vitest: 4 files and 13 tests passed.
+- Playwright: 8 tests passed across desktop Chromium and iPhone 13 emulation,
+  including both pre-birthday preview URL forms, no horizontal overflow, no
+  browser console errors, and replay navigation.

@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { SectionHeading, IconButton, Play, Pause, DecorativeHeart, PaperNote } from '@/components/ui/primitives';
 import { ResponsiveImage } from '@/components/ui/Media';
-import { FutureContent } from '@/components/ui/FutureContent';
 import { useReducedMotion, useIntersectionObserver, useMediaRegistry } from '@/hooks';
 import { filterEnabled, sortByOrder, getWishVariant } from '@/lib/media';
 import { wishes } from '@/data/wishes';
@@ -156,7 +155,7 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
       initial={reduced || !visible ? {} : { opacity: 0, y: 32, rotate: rotation * 2 }}
       animate={visible ? { opacity: 1, y: 0, rotate: rotation } : {}}
       transition={{ duration: 0.6, delay: Math.min((index % 6) * 0.08, 0.45), ease: [0.22, 1, 0.36, 1] }}
-      className={`${wish.featured ? 'md:col-span-2' : ''}`}
+      className={`wish-note wish-note-${index % 4} ${wish.featured ? 'md:col-span-2' : ''}`}
     >
       <PaperNote tone={toneCream ? 'cream' : 'matcha'} rotation={rotation} className="h-full">
         {wish.featured && (
@@ -208,28 +207,24 @@ export const WishesSection: React.FC = () => {
   return (
     <section
       id="wishes"
-      className="relative py-24 md:py-32 px-6 bg-matcha-900 overflow-hidden"
+      className="story-section wishes-atmosphere"
     >
-      <div className="absolute inset-0 pointer-events-none opacity-30">
-        <div className="absolute top-1/4 right-0 w-96 h-96 bg-deepred-800/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-matcha-600/10 rounded-full blur-3xl" />
-      </div>
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cream-100/10 to-transparent" />
-
-      <div className="relative max-w-7xl mx-auto w-full">
-        <div className="mb-16 md:mb-20">
+      <div className="mx-auto w-full max-w-7xl">
+        <div className="mb-16 md:mb-24">
           <SectionHeading
-            eyebrow="words for deeps ♡"
-            title="from your people"
-            subtitle="Every one of these is a little piece of how much you are loved."
+            eyebrow="from the people who know you"
+            title="some things are better said properly"
+            subtitle="Each note will arrive in its own voice."
+            tone="dark"
           />
         </div>
 
         {items.length === 0 ? (
-          <FutureContent
-            title="Words worth waiting for"
-            message="Every note here will be shared by the person who wrote it."
-          />
+          <div className="editorial-empty editorial-empty--paper mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
+            <DecorativeHeart size="sm" className="opacity-75" />
+            <h3 className="font-display text-3xl font-medium tracking-[-0.04em] text-ink md:text-4xl">Words worth waiting for</h3>
+            <p className="max-w-md font-body leading-relaxed text-ink/65">Every note here will be shared by the person who wrote it.</p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-7 lg:gap-8">
             {items.map((wish, i) => (
