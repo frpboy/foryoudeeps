@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { SectionHeading, IconButton, Play, ChevronLeft, ChevronRight, DecorativeHeart } from '@/components/ui/primitives';
 import { Modal } from '@/components/ui/Modal';
 import { ResponsiveImage, MediaFallback } from '@/components/ui/Media';
+import { FutureContent } from '@/components/ui/FutureContent';
 import { useReducedMotion, useIntersectionObserver } from '@/hooks';
 import { filterEnabled, sortByOrder } from '@/lib/media';
 import { galleryItems } from '@/data/gallery';
@@ -82,14 +83,15 @@ interface LightboxContentProps {
   index: number;
   onPrev: () => void;
   onNext: () => void;
-  onClose: () => void;
-  reduced: boolean;
 }
 
-const LightboxContent: React.FC<LightboxContentProps> = ({ items, index, onPrev, onNext, onClose, reduced }) => {
+const LightboxContent: React.FC<LightboxContentProps> = ({ items, index, onPrev, onNext }) => {
   const item = items[index];
   const touchStartX = useRef<number | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [mediaFailed, setMediaFailed] = useState(false);
+
+  useEffect(() => setMediaFailed(false), [item.id]);
 
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -133,7 +135,10 @@ const LightboxContent: React.FC<LightboxContentProps> = ({ items, index, onPrev,
       onTouchEnd={onTouchEnd}
     >
       <div className="relative flex items-center justify-center aspect-video max-h-[75svh] w-full overflow-hidden bg-matcha-950 rounded-t-3xl">
-        {item.media.type === 'video' ? (
+        <h2 id="lightbox-title" className="sr-only">Gallery memory {index + 1}</h2>
+        {mediaFailed ? (
+          <MediaFallback className="w-full h-full rounded-none" />
+        ) : item.media.type === 'video' ? (
           <video
             ref={videoRef}
             key={item.id}
@@ -143,7 +148,7 @@ const LightboxContent: React.FC<LightboxContentProps> = ({ items, index, onPrev,
             playsInline
             preload="metadata"
             className="w-full h-full object-contain"
-            onError={() => {}}
+            onError={() => setMediaFailed(true)}
           />
         ) : (
           <img
@@ -151,7 +156,7 @@ const LightboxContent: React.FC<LightboxContentProps> = ({ items, index, onPrev,
             src={item.media.src}
             alt={item.media.alt || ''}
             className="w-full h-full object-contain"
-            onError={() => <MediaFallback />}
+            onError={() => setMediaFailed(true)}
           />
         )}
 
@@ -218,8 +223,6 @@ export const GallerySection: React.FC = () => {
     setIndex((i) => Math.min(items.length - 1, i + 1));
   }, [items.length]);
 
-  if (items.length === 0) return null;
-
   return (
     <section id="gallery" className="relative py-24 md:py-32 px-6 bg-matcha-950">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cream-100/10 to-transparent" />
@@ -232,24 +235,31 @@ export const GallerySection: React.FC = () => {
           />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 auto-rows-[minmax(120px,auto)] md:auto-rows-[180px]">
-          {items.map((item, i) => (
-            <GalleryCard
-              key={item.id}
-              item={item}
-              index={i}
-              total={items.length}
-              reduced={reduced}
-              onClick={() => {
-                setIndex(i);
-                setOpen(true);
-              }}
-            />
-          ))}
-        </div>
+        {items.length === 0 ? (
+          <FutureContent
+            title="The album is ready"
+            message="Real photographs and small films will live here, exactly as they happened."
+          />
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 auto-rows-[minmax(120px,auto)] md:auto-rows-[180px]">
+            {items.map((item, i) => (
+              <GalleryCard
+                key={item.id}
+                item={item}
+                index={i}
+                total={items.length}
+                reduced={reduced}
+                onClick={() => {
+                  setIndex(i);
+                  setOpen(true);
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      <Modal
+      {items.length > 0 && <Modal
         open={open}
         onClose={() => setOpen(false)}
         labelledBy="lightbox-title"
@@ -261,10 +271,8 @@ export const GallerySection: React.FC = () => {
           index={index}
           onPrev={onPrev}
           onNext={onNext}
-          onClose={() => setOpen(false)}
-          reduced={reduced}
         />
-      </Modal>
+      </Modal>}
     </section>
   );
 };

@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { SectionHeading, IconButton, Play, Pause, DecorativeHeart, PaperNote } from '@/components/ui/primitives';
 import { ResponsiveImage } from '@/components/ui/Media';
-import { useReducedMotion, useIntersectionObserver, useMediaPlayback } from '@/hooks';
+import { FutureContent } from '@/components/ui/FutureContent';
+import { useReducedMotion, useIntersectionObserver, useMediaRegistry } from '@/hooks';
 import { filterEnabled, sortByOrder, getWishVariant } from '@/lib/media';
 import { wishes } from '@/data/wishes';
 import type { Wish, WishVariant } from '@/types';
@@ -11,20 +12,20 @@ interface AudioPlayerProps {
   src: string;
   label: string;
   pauseOthers: () => void;
+  register: (el: HTMLMediaElement | null) => void;
+  unregister: (el: HTMLMediaElement | null) => void;
 }
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, label, pauseOthers }) => {
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, label, pauseOthers, register, unregister }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = React.useState(false);
   const [progress, setProgress] = React.useState(0);
-  const { registerAudio, unregisterAudio } = useMediaPlayback();
-
   useEffect(() => {
     const a = audioRef.current;
     if (!a) return;
-    registerAudio(a);
-    return () => unregisterAudio(a);
-  }, [registerAudio, unregisterAudio]);
+    register(a);
+    return () => unregister(a);
+  }, [register, unregister]);
 
   const toggle = () => {
     const a = audioRef.current;
@@ -77,9 +78,11 @@ interface WishCardProps {
   index: number;
   reduced: boolean;
   pauseAllMedia: () => void;
+  registerMedia: (el: HTMLMediaElement | null) => void;
+  unregisterMedia: (el: HTMLMediaElement | null) => void;
 }
 
-const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseAllMedia }) => {
+export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseAllMedia, registerMedia, unregisterMedia }) => {
   const { ref, visible } = useIntersectionObserver<HTMLDivElement>();
   const variant = getWishVariant(wish);
   const hasPhoto = Boolean(wish.photo);
@@ -90,14 +93,12 @@ const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseAllMedia
   const rotation = wish.featured ? 0 : ((index % 5) - 2) * 0.4;
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { registerVideo, unregisterVideo } = useMediaPlayback();
-
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    registerVideo(v);
-    return () => unregisterVideo(v);
-  }, [registerVideo, unregisterVideo]);
+    registerMedia(v);
+    return () => unregisterMedia(v);
+  }, [registerMedia, unregisterMedia]);
 
   const contentOrder = (
     <>
@@ -141,6 +142,8 @@ const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseAllMedia
             src={wish.audio.src}
             label={`${wish.name}'s voice message`}
             pauseOthers={pauseAllMedia}
+            register={registerMedia}
+            unregister={unregisterMedia}
           />
         </div>
       )}
@@ -200,9 +203,7 @@ const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseAllMedia
 export const WishesSection: React.FC = () => {
   const reduced = useReducedMotion();
   const items = sortByOrder(filterEnabled(wishes));
-  const { pauseAll } = useMediaPlayback();
-
-  if (items.length === 0) return null;
+  const { pauseAll, register, unregister } = useMediaRegistry();
 
   return (
     <section
@@ -224,17 +225,26 @@ export const WishesSection: React.FC = () => {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-7 lg:gap-8">
-          {items.map((wish, i) => (
-            <WishCard
-              key={wish.id}
-              wish={wish}
-              index={i}
+        {items.length === 0 ? (
+          <FutureContent
+            title="Words worth waiting for"
+            message="Every note here will be shared by the person who wrote it."
+          />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-7 lg:gap-8">
+            {items.map((wish, i) => (
+              <WishCard
+                key={wish.id}
+                wish={wish}
+                index={i}
               reduced={reduced}
               pauseAllMedia={pauseAll}
-            />
-          ))}
-        </div>
+              registerMedia={register}
+              unregisterMedia={unregister}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

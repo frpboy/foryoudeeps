@@ -23,7 +23,7 @@ export const Modal: React.FC<ModalProps> = ({
   const dialogRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   useLockBodyScroll(open);
-  const { triggerRef, returnFocus } = useFocusReturn(open);
+  const { returnFocus } = useFocusReturn(open);
 
   const handleKey = useCallback(
     (e: KeyboardEvent) => {
@@ -97,7 +97,6 @@ export const Modal: React.FC<ModalProps> = ({
             {showClose && (
               <div className="absolute top-3 right-3 z-10">
                 <IconButton
-                  ref={triggerRef as React.RefObject<HTMLButtonElement>}
                   icon={X}
                   size="md"
                   variant="solid"

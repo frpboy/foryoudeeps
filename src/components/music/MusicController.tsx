@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { IconButton, Play, Pause, Volume2, VolumeX } from '@/components/ui/primitives';
+import { IconButton, Play, Pause, Volume2 } from '@/components/ui/primitives';
 import { motion, AnimatePresence } from 'motion/react';
 import { useReducedMotion } from '@/hooks';
 import { filterEnabled, sortByOrder } from '@/lib/media';

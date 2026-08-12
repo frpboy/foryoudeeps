@@ -33,14 +33,12 @@ export function padZero(value: number, length = 2): string {
 
 export function formatCountdownDate(isoDate: string): string {
   const date = new Date(isoDate);
-  const day = date.getUTCDate();
-  const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
-  ];
-  const month = months[date.getUTCMonth()];
-  const year = date.getUTCFullYear();
-  return `${day} ${month} ${year}`;
+  return new Intl.DateTimeFormat('en-IN', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'Asia/Kolkata',
+  }).format(date);
 }
 
 export function formatCompactDate(isoDate: string): string {

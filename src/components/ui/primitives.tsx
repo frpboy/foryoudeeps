@@ -100,14 +100,16 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
 interface DecorativeHeartProps {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
+  style?: React.CSSProperties;
 }
 
-export const DecorativeHeart: React.FC<DecorativeHeartProps> = ({ size = 'md', className = '' }) => {
+export const DecorativeHeart: React.FC<DecorativeHeartProps> = ({ size = 'md', className = '', style }) => {
   const sizes = { sm: 12, md: 20, lg: 32 };
   return (
     <Heart
       size={sizes[size]}
       className={`text-deepred-500 fill-deepred-700/30 ${className}`}
+      style={style}
       strokeWidth={1.5}
     />
   );

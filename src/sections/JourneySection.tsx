@@ -2,12 +2,19 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { SectionHeading, PaperNote, DecorativeLeaf } from '@/components/ui/primitives';
 import { ResponsiveImage } from '@/components/ui/Media';
+import { FutureContent } from '@/components/ui/FutureContent';
 import { useReducedMotion, useIntersectionObserver } from '@/hooks';
 import { filterEnabled, sortByOrder } from '@/lib/media';
 import { journeyItems } from '@/data/journey';
 import type { JourneyItem } from '@/types';
 
-const JourneyCard: React.FC<{ item: JourneyItem; index: number; reduced: boolean }> = ({ item, index, reduced }) => {
+interface JourneyCardProps {
+  item: JourneyItem;
+  index: number;
+  reduced: boolean;
+}
+
+const JourneyCard: React.FC<JourneyCardProps> = ({ item, index, reduced }) => {
   const { ref, visible } = useIntersectionObserver<HTMLDivElement>();
   const isLeft = index % 2 === 0;
   const rotation = (index % 3 - 1) * 0.8;
@@ -17,7 +24,7 @@ const JourneyCard: React.FC<{ item: JourneyItem; index: number; reduced: boolean
       ref={ref}
       initial={reduced || !visible ? {} : { opacity: 0, y: 40, x: isLeft ? -30 : 30 }}
       animate={visible ? { opacity: 1, y: 0, x: 0 } : {}}
-      transition={{ duration: 0.7, delay: (index % 3) * 0.1, ease: [0.22, 1, 0.36, 1 }}
+      transition={{ duration: 0.7, delay: (index % 3) * 0.1, ease: [0.22, 1, 0.36, 1] }}
       className={`relative w-full ${item.emphasis === 'featured' ? 'lg:col-span-2' : ''}`}
     >
       <PaperNote tone={isLeft ? 'cream' : 'matcha'} rotation={rotation} className="h-full">
@@ -54,8 +61,6 @@ export const JourneySection: React.FC = () => {
   const reduced = useReducedMotion();
   const items = sortByOrder(filterEnabled(journeyItems));
 
-  if (items.length === 0) return null;
-
   return (
     <section
       id="journey"
@@ -71,11 +76,18 @@ export const JourneySection: React.FC = () => {
           />
         </div>
 
-        <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-12">
-          {items.map((item, i) => (
-            <JourneyCard key={item.id} item={item} index={i} reduced={reduced} />
-          ))}
-        </div>
+        {items.length === 0 ? (
+          <FutureContent
+            title="A few memories, held close"
+            message="The photographs that belong in this part of the story are being gathered with care."
+          />
+        ) : (
+          <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-12">
+            {items.map((item, i) => (
+              <JourneyCard key={item.id} item={item} index={i} reduced={reduced} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

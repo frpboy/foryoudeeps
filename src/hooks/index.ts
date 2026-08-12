@@ -35,11 +35,12 @@ export function useCountdown(birthdayDate: string): CountdownValues {
 
 export function useReducedMotion(): boolean {
   const [reduced, setReduced] = useState(() => {
-    if (typeof window === 'undefined') return false;
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false;
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   });
 
   useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return;
     const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
     const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
     mql.addEventListener?.('change', handler);
@@ -121,6 +122,33 @@ export function useMediaPlayback(): {
     unregisterAudio: (el) => el && audios.current.delete(el),
     unregisterVideo: (el) => el && videos.current.delete(el),
   };
+}
+
+export function useMediaRegistry(): {
+  pauseAll: () => void;
+  register: (el: HTMLMediaElement | null) => void;
+  unregister: (el: HTMLMediaElement | null) => void;
+} {
+  const media = useRef<Set<HTMLMediaElement>>(new Set());
+
+  const pauseAll = useCallback(() => {
+    media.current.forEach((element) => {
+      try {
+        element.pause();
+      } catch {
+        /* noop */
+      }
+    });
+  }, []);
+
+  const register = useCallback((element: HTMLMediaElement | null) => {
+    if (element) media.current.add(element);
+  }, []);
+  const unregister = useCallback((element: HTMLMediaElement | null) => {
+    if (element) media.current.delete(element);
+  }, []);
+
+  return { pauseAll, register, unregister };
 }
 
 export function useIntersectionObserver<T extends Element>(

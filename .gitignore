@@ -14,5 +14,6 @@ coverage
 public/media/originals
 tests/playwright-report
 tests/test-results
+test-results
 *.tsbuildinfo
 eslint.config.js.timestamp-*

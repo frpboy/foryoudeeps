@@ -1,17 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
-import { Play, IconButton, DecorativeHeart } from '@/components/ui/primitives';
+import { Play, DecorativeHeart } from '@/components/ui/primitives';
 import { MediaFallback } from '@/components/ui/Media';
 import { useReducedMotion, useIntersectionObserver, useMediaPlayback } from '@/hooks';
 import { daughterMessage } from '@/data/special';
 import { formatCompactDate } from '@/lib/countdown';
 import { siteConfig } from '@/data/site';
 
-interface PosterPlaceholderProps {
+interface VideoRevealProps {
   onPlay: () => void;
 }
 
-const PosterPlaceholder: React.FC<PosterPlaceholderProps> = ({ onPlay }) => {
+const VideoReveal: React.FC<VideoRevealProps> = ({ onPlay }) => {
   return (
     <button
       type="button"
@@ -120,7 +120,7 @@ export const DaughterSection: React.FC = () => {
               />
             </div>
           ) : (
-            <PosterPlaceholder onPlay={startPlayback} />
+            <VideoReveal onPlay={startPlayback} />
           )}
         </motion.div>
 

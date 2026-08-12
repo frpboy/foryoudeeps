@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { DecorativeHeart, IconButton, ArrowDown } from '@/components/ui/primitives';
+import { DecorativeHeart, ArrowDown } from '@/components/ui/primitives';
 import { useReducedMotion, useIntersectionObserver } from '@/hooks';
 import { finalMessage } from '@/data/special';
 import { siteConfig } from '@/data/site';
