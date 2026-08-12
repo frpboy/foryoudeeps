@@ -14,8 +14,8 @@ export const StoryPage: React.FC<{ children: React.ReactNode }> = ({ children })
   return <motion.main initial={reduced ? { opacity: 0 } : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduced ? .01 : .42, ease: [0.22, 1, 0.36, 1] }} className="scene-page">{children}</motion.main>;
 };
 
-export const StoryAction: React.FC<{ to: string; children: React.ReactNode }> = ({ to, children }) => (
-  <div className="scene-action"><Link to={to} className="group inline-flex items-center gap-3 px-5 py-3 font-body text-sm text-cream-200/70 transition-colors hover:text-cream-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deepred-500"><span>{children}</span><ArrowDown size={17} className="transition-transform group-hover:translate-x-1 -rotate-90" /></Link></div>
+export const StoryAction: React.FC<{ to: string; children: React.ReactNode; tone?: 'light' | 'dark' }> = ({ to, children, tone = 'light' }) => (
+  <div className="scene-action"><Link to={to} className={`group inline-flex items-center gap-3 px-5 py-3 font-body text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deepred-500 ${tone === 'dark' ? 'text-ink/65 hover:text-ink' : 'text-cream-200/70 hover:text-cream-50'}`}><span>{children}</span><ArrowDown size={17} className="transition-transform group-hover:translate-x-1 -rotate-90" /></Link></div>
 );
 
 function GalleryMedia({ item }: { item: typeof galleryItems[number] }) {

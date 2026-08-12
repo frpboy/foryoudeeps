@@ -584,3 +584,23 @@ npm run test:e2e
 - Playwright: 14 desktop/mobile tests passed. The matrix opens every major
   routed scene across 320x568 through 1920x1080 and asserts no document
   vertical/horizontal overflow plus `window.scrollY === 0` after navigation.
+
+---
+
+## 2026-08-12 - Full-scene visual acceptance follow-up
+
+### Implemented
+
+- Corrected the warm-paper wishes scene’s contextual action to use ink text;
+  it is now clearly visible without compromising the distinct cream scene.
+
+### Verification
+
+- Re-ran `npm run typecheck`, `npm run lint`, `npm run validate-content`,
+  `npm run test`, `npm run build`, `npm run test:e2e`, and `git diff --check`.
+  All passed.
+- Vitest: 4 files and 17 tests passed. Playwright: 14 desktop/mobile tests
+  passed, including the route-by-route no-overflow viewport matrix.
+- Visually inspected fresh production screenshots for birthday, gallery,
+  gallery detail, wishes, daughter, and final. The wishes scene action is
+  readable and its content remains contained.

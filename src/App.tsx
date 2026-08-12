@@ -115,7 +115,7 @@ const App: React.FC = () => {
         <Route path="/memories" element={guard(<StoryPage><JourneySection /><StoryAction to={to('/gallery')}>see the memories</StoryAction></StoryPage>)} />
         <Route path="/gallery" element={guard(<StoryPage><GallerySection /><StoryAction to={to('/wishes')}>read their wishes</StoryAction></StoryPage>)} />
         <Route path="/gallery/:id" element={guard(<RoutedGalleryDetail to={to} />)} />
-        <Route path="/wishes" element={guard(<StoryPage><WishesSection /><StoryAction to={to('/daughter')}>one more message</StoryAction></StoryPage>)} />
+        <Route path="/wishes" element={guard(<StoryPage><WishesSection /><StoryAction to={to('/daughter')} tone="dark">one more message</StoryAction></StoryPage>)} />
         <Route path="/wishes/:id" element={guard(<RoutedWishDetail to={to} />)} />
         <Route path="/daughter" element={guard(<StoryPage><DaughterSection /><StoryAction to={to('/final')}>one last thing</StoryAction></StoryPage>)} />
         <Route path="/final" element={guard(<StoryPage><FinalWishSection onReplay={() => navigate(to('/birthday'))} /></StoryPage>)} />
