@@ -42,4 +42,15 @@ describe('WishCard', () => {
     fireEvent.error(screen.getByAltText('Missing memory'));
     expect(screen.getByText('Memory unavailable')).toBeInTheDocument();
   });
+
+  it('keeps the written part of a wish available when its video cannot load', () => {
+    renderWish({
+      ...baseWish,
+      text: 'The important part is still here.',
+      video: { id: 'broken-video', type: 'video', src: '/media/wishes/missing.mp4', order: 1, enabled: true },
+    });
+    fireEvent.error(document.querySelector('video')!);
+    expect(screen.getByText('The important part is still here.')).toBeInTheDocument();
+    expect(screen.getByText('This memory is taking a little break.')).toBeInTheDocument();
+  });
 });

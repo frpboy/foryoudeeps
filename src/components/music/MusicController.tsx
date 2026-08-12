@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { IconButton, Play, Pause, Volume2 } from '@/components/ui/primitives';
+import { IconButton, Play, Pause, Volume2, VolumeX } from '@/components/ui/primitives';
 import { motion, AnimatePresence } from 'motion/react';
 import { useReducedMotion } from '@/hooks';
 import { filterEnabled, sortByOrder } from '@/lib/media';
@@ -18,6 +18,7 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
 
   const [active, setActive] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(false);
   const trackIndex = useRef(0);
 
   useEffect(() => {
@@ -49,6 +50,7 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
         <audio
           ref={audioRef}
           src={tracks[trackIndex.current]?.src}
+          muted={muted}
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
           onEnded={() => {
@@ -75,12 +77,12 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
             className="!w-9 !h-9"
           />
           <IconButton
-            icon={Volume2}
+            icon={muted ? VolumeX : Volume2}
             size="sm"
             variant="ghost"
-            label="Music"
+            label={muted ? 'Unmute music' : 'Mute music'}
             className="!w-9 !h-9 opacity-70 hover:opacity-100"
-            onClick={togglePlayback}
+            onClick={() => setMuted((value) => !value)}
           />
         </div>
       </motion.div>

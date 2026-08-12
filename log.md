@@ -298,3 +298,35 @@ npm run test:e2e
 - Playwright: 8 tests passed across desktop Chromium and iPhone 13 emulation,
   including both pre-birthday preview URL forms, no horizontal overflow, no
   browser console errors, and replay navigation.
+
+---
+
+## 2026-08-12 - Production readiness and responsive acceptance extension
+
+### Implemented
+
+- Added a real mute/unmute state to the optional music controller while
+  preserving its user-interaction-only playback policy.
+- Made individual wish videos fail gracefully to the existing media fallback;
+  any contributor-approved written message remains visible if video playback
+  cannot load.
+- Extended browser coverage to verify the pre-birthday page remains a secret
+  waiting room and does not expose birthday-only content.
+- Added explicit response-status and console-error assertions, plus no-
+  horizontal-overflow checks at 320, 360, 375, 390, 414, 430, 768, 1024, 1280,
+  1440, and 1920 pixels.
+
+### Production evidence
+
+- Interactive browser inspection confirmed that
+  `https://foryoudeeps.frpboy.in/?preview=birthday` resolves over HTTPS and
+  serves the complete available birthday story from the custom domain.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, `npm run validate-content`, `npm run
+  test`, and `npm run build` passed.
+- Vitest: 4 files and 14 tests passed.
+- Playwright: 12 tests passed across desktop Chromium and mobile Chromium;
+  the focused mobile console/network check also passed three concurrent repeat
+  runs after a transient Vite-development-server 404 was observed.

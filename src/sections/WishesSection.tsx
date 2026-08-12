@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { SectionHeading, IconButton, Play, Pause, DecorativeHeart, PaperNote } from '@/components/ui/primitives';
-import { ResponsiveImage } from '@/components/ui/Media';
+import { MediaFallback, ResponsiveImage } from '@/components/ui/Media';
 import { useReducedMotion, useIntersectionObserver, useMediaRegistry } from '@/hooks';
 import { filterEnabled, sortByOrder, getWishVariant } from '@/lib/media';
 import { wishes } from '@/data/wishes';
@@ -92,6 +92,10 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
   const rotation = wish.featured ? 0 : ((index % 5) - 2) * 0.4;
 
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoFailed, setVideoFailed] = React.useState(false);
+
+  useEffect(() => setVideoFailed(false), [wish.id, wish.video?.src]);
+
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
@@ -114,16 +118,21 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
       )}
       {hasVideo && wish.video && (
         <div className="relative rounded-xl overflow-hidden mb-4 border border-cream-100/10">
-          <video
-            ref={videoRef}
-            src={wish.video.src}
-            poster={wish.video.poster || wish.videoPoster}
-            controls
-            playsInline
-            preload="metadata"
-            className="w-full aspect-video object-cover bg-matcha-800/30"
-            onPlay={pauseAllMedia}
-          />
+          {videoFailed ? (
+            <MediaFallback className="aspect-video rounded-none" />
+          ) : (
+            <video
+              ref={videoRef}
+              src={wish.video.src}
+              poster={wish.video.poster || wish.videoPoster}
+              controls
+              playsInline
+              preload="metadata"
+              className="w-full aspect-video object-cover bg-matcha-800/30"
+              onError={() => setVideoFailed(true)}
+              onPlay={pauseAllMedia}
+            />
+          )}
         </div>
       )}
       {hasText && (
