@@ -12,11 +12,10 @@ export const BirthdayRevealSection: React.FC<BirthdayRevealSectionProps> = ({ on
   const { ref, visible } = useIntersectionObserver<HTMLElement>();
   const moveToStory = () => {
     onContinue?.();
-    document.getElementById('journey')?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
   };
 
   return (
-    <section id="reveal" ref={ref} className="reveal-stage relative flex min-h-[100svh] items-center justify-center overflow-hidden safe-top safe-bottom">
+    <section id="reveal" ref={ref} className="reveal-stage relative flex items-center justify-center overflow-hidden safe-top safe-bottom">
       <AmbientParticles mood="birthday" />
       <div className="relative z-10 flex w-full max-w-4xl flex-col items-center px-6 py-16 text-center">
         <motion.p
@@ -61,7 +60,7 @@ export const BirthdayRevealSection: React.FC<BirthdayRevealSectionProps> = ({ on
           className="group mt-20 inline-flex flex-col items-center gap-3 rounded-full px-6 py-3 font-body text-sm text-cream-200/70 transition-colors hover:text-cream-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deepred-500"
           aria-label="Continue to memories"
         >
-          <span>keep scrolling</span>
+          <span>begin the story</span>
           <ArrowDown size={18} className="transition-transform duration-300 group-hover:translate-y-1" />
         </motion.button>
       </div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { useCountdown, useReducedMotion } from '@/hooks';
 import { calculateAgeTransitionProgress, formatCountdownDate, padZero } from '@/lib/countdown';
@@ -15,9 +15,9 @@ const CountdownUnit: React.FC<CountdownUnitProps> = ({ value, label, delay, redu
     transition={{ delay: delay / 1000, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
     className="flex min-w-[54px] flex-col items-center gap-2 sm:min-w-[72px] md:min-w-[94px]"
   >
-    <span aria-hidden="true" className="countdown-clock font-display text-cream-50 text-5xl font-medium leading-none tabular-nums sm:text-6xl md:text-8xl">
+    <motion.span key={label === 'Seconds' ? value : undefined} aria-hidden="true" initial={label === 'Seconds' && !reduced ? { scale: 0.96, opacity: 0.74 } : false} animate={{ scale: 1, opacity: 1 }} transition={{ duration: reduced ? .01 : .24, ease: [0.22, 1, 0.36, 1] }} className="countdown-clock font-display text-cream-50 text-5xl font-medium leading-none tabular-nums sm:text-6xl md:text-8xl">
       {padZero(value)}
-    </span>
+    </motion.span>
     <span className="font-body text-[10px] font-medium uppercase tracking-[0.26em] text-cream-200/45 sm:text-xs">{label}</span>
   </motion.div>
 );
@@ -25,6 +25,8 @@ const CountdownUnit: React.FC<CountdownUnitProps> = ({ value, label, delay, redu
 export const CountdownSection: React.FC<CountdownSectionProps> = () => {
   const countdown = useCountdown(siteConfig.birthdayDate);
   const reduced = useReducedMotion();
+  const [, setHeartTaps] = useState(0);
+  const [secretVisible, setSecretVisible] = useState(false);
   const ageProgress = countdown.isZero ? 1 : calculateAgeTransitionProgress(countdown.totalMs);
   const age30Opacity = 0.115 * Math.pow(1 - ageProgress, 1.35);
   const age31Opacity = 0.018 + 0.11 * Math.pow(ageProgress, 1.45);
@@ -35,8 +37,19 @@ export const CountdownSection: React.FC<CountdownSectionProps> = () => {
     return () => window.clearTimeout(id);
   }, [countdown.isZero]);
 
+  const findSecret = () => {
+    if (secretVisible) return;
+    setHeartTaps((current) => {
+      if (current >= 4) {
+        setSecretVisible(true);
+        return current;
+      }
+      return current + 1;
+    });
+  };
+
   return (
-    <section id="countdown" className="countdown-stage relative flex min-h-[100svh] items-center justify-center overflow-hidden safe-top safe-bottom">
+    <section id="countdown" className="countdown-stage relative flex items-center justify-center overflow-hidden safe-top safe-bottom">
       <div aria-hidden="true" className="countdown-age-transition">
         <span
           className="countdown-age countdown-age--past"
@@ -55,7 +68,7 @@ export const CountdownSection: React.FC<CountdownSectionProps> = () => {
         <motion.div initial={reduced ? {} : { opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }} className="flex flex-col items-center gap-2">
           <span className="font-handwritten text-3xl leading-none text-deepred-500 md:text-4xl">for you,</span>
           <h1 className="font-display text-5xl font-medium tracking-[-0.06em] text-cream-50 sm:text-6xl md:text-7xl">
-            deeps <DecorativeHeart size="sm" className="mb-5 ml-2 inline-block" />
+            deeps <button type="button" onClick={findSecret} aria-label="A small hidden heart" className="inline-flex rounded-sm align-baseline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deepred-500"><DecorativeHeart size="sm" className="mb-5 ml-2" /></button>
           </h1>
         </motion.div>
 
@@ -82,6 +95,7 @@ export const CountdownSection: React.FC<CountdownSectionProps> = () => {
         <motion.p initial={reduced ? {} : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1, duration: 1 }} className="mt-12 font-handwritten text-xl text-deepred-300/75">
           keep this little secret for a few more days ♡
         </motion.p>
+        {secretVisible && <motion.div role="status" initial={reduced ? { opacity: 0 } : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduced ? .01 : .45 }} className="mt-8 max-w-sm border-y border-cream-100/15 py-5 text-center"><p className="font-handwritten text-2xl text-deepred-300">psst... you found something.</p><p className="mt-3 font-body text-sm leading-relaxed text-cream-200/70">Yes, this was made specifically for you.<br />No, you can’t complain about the bugs. ♡</p></motion.div>}
       </div>
     </section>
   );

@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { SectionHeading, IconButton, Play, Pause, DecorativeHeart, PaperNote } from '@/components/ui/primitives';
 import { MediaFallback, ResponsiveImage } from '@/components/ui/Media';
 import { AmbientParticles } from '@/components/ui/AmbientParticles';
+import { AgeMotif } from '@/components/ui/AgeMotif';
 import { useReducedMotion, useIntersectionObserver, useMediaRegistry } from '@/hooks';
 import { filterEnabled, sortByOrder, getWishVariant } from '@/lib/media';
 import { wishes } from '@/data/wishes';
@@ -109,9 +111,10 @@ interface WishCardProps {
   pauseAllMedia: () => void;
   registerMedia: (el: HTMLMediaElement | null) => void;
   unregisterMedia: (el: HTMLMediaElement | null) => void;
+  onOpen?: () => void;
 }
 
-export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseAllMedia, registerMedia, unregisterMedia }) => {
+export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseAllMedia, registerMedia, unregisterMedia, onOpen }) => {
   const { ref, visible } = useIntersectionObserver<HTMLDivElement>();
   const variant = getWishVariant(wish);
   const hasPhoto = Boolean(wish.photo?.enabled && wish.photo.src);
@@ -121,6 +124,10 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
   const toneCream = index % 3 !== 1 || wish.featured;
   const rotation = wish.featured ? 0 : ((index % 5) - 2) * 0.4;
   const presentation = wish.presentationStyle ?? (hasAudio ? 'audio' : hasVideo ? 'video' : hasPhoto ? 'polaroid' : 'note');
+  const openFromCard = (target: EventTarget | null) => {
+    if (target instanceof Element && target.closest('button, a, audio, video, input, [role="slider"]')) return;
+    onOpen?.();
+  };
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoFailed, setVideoFailed] = React.useState(false);
@@ -197,8 +204,14 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
       animate={visible ? { opacity: 1, y: 0, rotate: rotation } : {}}
       transition={{ duration: 0.6, delay: Math.min((index % 6) * 0.08, 0.45), ease: [0.22, 1, 0.36, 1] }}
       className={`wish-note wish-note-${index % 4} wish-${presentation} ${wish.featured ? 'md:col-span-2' : ''}`}
+      role="button"
+      tabIndex={0}
+      aria-label={`Open ${wish.name}'s birthday wish`}
+      onClick={(event) => openFromCard(event.target)}
+      onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); onOpen?.(); } }}
     >
       <AmbientParticles mood="wishes" />
+      <AgeMotif tone="paper" />
       <PaperNote tone={toneCream ? 'cream' : 'matcha'} rotation={rotation} className="h-full">
         {wish.featured && (
           <div className="absolute -top-3 right-4">
@@ -247,6 +260,8 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
 export const WishesSection: React.FC = () => {
   const reduced = useReducedMotion();
   const items = sortByOrder(filterEnabled(wishes));
+  const navigate = useNavigate();
+  const location = useLocation();
   const { pauseAll, register, unregister } = useMediaRegistry();
 
   return (
@@ -281,6 +296,7 @@ export const WishesSection: React.FC = () => {
               pauseAllMedia={pauseAll}
               registerMedia={register}
               unregisterMedia={unregister}
+              onOpen={() => navigate(`/wishes/${wish.id}${location.search}`)}
               />
             ))}
           </div>

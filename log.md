@@ -553,3 +553,34 @@ npm run test:e2e
   `npm run test:e2e`, and `git diff --check` passed.
 - Vitest: 4 files and 17 tests passed. Playwright: 12 desktop/mobile browser
   tests passed.
+
+---
+
+## 2026-08-12 - Full-screen scene architecture
+
+### Implemented
+
+- Converted the routed birthday experience into bounded full-screen scene
+  compositions with a shared dynamic viewport shell and no page-level scroll.
+- Removed all remaining scroll-based route actions, replacing the birthday
+  affordance with “begin the story” and keeping replay entirely route-driven.
+- Tightened gallery, memories, daughter, final, and route-detail compositions
+  around viewport-aware media/content constraints; decorative layers remain
+  scene-owned and cannot bleed between routes.
+- Added the recurring but scene-specific `31` motif: chapter treatment for
+  memories, gallery/wishes watermarks, a subtle detail signature, and quieter
+  daughter/final marks.
+- Added the small five-tap countdown-heart discovery and a seconds-only pulse;
+  all other countdown data remains driven by the existing timer.
+- Curated gallery and memories scene payloads to prevent future data growth
+  from creating long-scroll pages. Wish cards now open their routed details
+  while embedded media controls remain protected.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, `npm run validate-content`, `npm run
+  test`, `npm run build`, `npm run test:e2e`, and `git diff --check` passed.
+- Vitest: 4 files and 17 tests passed.
+- Playwright: 14 desktop/mobile tests passed. The matrix opens every major
+  routed scene across 320x568 through 1920x1080 and asserts no document
+  vertical/horizontal overflow plus `window.scrollY === 0` after navigation.

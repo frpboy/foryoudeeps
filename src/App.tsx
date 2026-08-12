@@ -28,6 +28,18 @@ const App: React.FC = () => {
   const markInteracted = useCallback(() => setUserInteracted(true), []);
 
   useEffect(() => {
+    const viewport = window.visualViewport;
+    const syncSceneHeight = () => document.documentElement.style.setProperty('--scene-height', `${window.innerHeight}px`);
+    syncSceneHeight();
+    viewport?.addEventListener('resize', syncSceneHeight);
+    window.addEventListener('resize', syncSceneHeight);
+    return () => {
+      viewport?.removeEventListener('resize', syncSceneHeight);
+      window.removeEventListener('resize', syncSceneHeight);
+    };
+  }, []);
+
+  useEffect(() => {
     const check = () => setBirthdayNow(isBirthday(getTargetTimestamp(siteConfig.birthdayDate)));
     const onVisibility = () => document.visibilityState === 'visible' && check();
     const onBirthday = () => {
@@ -95,7 +107,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-matcha-900" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onClick={onClick}>
+    <div className="scene-app relative bg-matcha-900" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onClick={onClick}>
       {preview && <div className="fixed left-1/2 top-3 z-[60] -translate-x-1/2 rounded-full border border-cream-100/15 bg-matcha-950/90 px-3 py-1 font-body text-xs text-cream-200/80 shadow-soft backdrop-blur">Birthday preview</div>}
       <Routes>
         <Route path="/" element={birthdayAvailable ? <Navigate to={to('/birthday')} replace /> : <CountdownSection onEnter={markInteracted} userHasInteracted={userInteracted} />} />

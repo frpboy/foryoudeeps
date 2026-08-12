@@ -5,6 +5,7 @@ import { SectionHeading, Play, DecorativeHeart } from '@/components/ui/primitive
 import { ResponsiveImage } from '@/components/ui/Media';
 import { FutureContent } from '@/components/ui/FutureContent';
 import { AmbientParticles } from '@/components/ui/AmbientParticles';
+import { AgeMotif } from '@/components/ui/AgeMotif';
 import { useReducedMotion, useIntersectionObserver } from '@/hooks';
 import { filterEnabled, sortByOrder } from '@/lib/media';
 import { galleryItems } from '@/data/gallery';
@@ -91,10 +92,12 @@ export const GallerySection: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const items = sortByOrder(filterEnabled(galleryItems)).filter((item) => item.media.enabled);
+  const sceneItems = items.slice(0, 4);
 
   return (
     <section id="gallery" className="story-section gallery-atmosphere">
       <AmbientParticles mood="gallery" />
+      <AgeMotif tone="dark" />
       <div className="mx-auto w-full max-w-7xl">
         <div className="mb-16 md:mb-24">
           <SectionHeading
@@ -104,19 +107,19 @@ export const GallerySection: React.FC = () => {
           />
         </div>
 
-        {items.length === 0 ? (
+        {sceneItems.length === 0 ? (
           <FutureContent
             title="The album is ready"
             message="Real photographs and small films will live here, exactly as they happened."
           />
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 auto-rows-[minmax(120px,auto)] md:auto-rows-[180px]">
-            {items.map((item, i) => (
+            {sceneItems.map((item, i) => (
               <GalleryCard
                 key={item.id}
                 item={item}
                 index={i}
-                total={items.length}
+                total={sceneItems.length}
                 reduced={reduced}
                 onOpen={() => navigate(`/gallery/${item.id}${location.search}`)}
               />

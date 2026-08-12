@@ -63,3 +63,27 @@ test('stops ambient movement for reduced-motion users', async ({ page }) => {
   await expect(page.locator('.ambient-particles--still')).toBeVisible();
   await expect(page.locator('.ambient-particle').first()).toHaveCSS('animation-name', 'none');
 });
+
+test('keeps every routed scene inside the visual viewport', async ({ page }) => {
+  const viewports = [
+    [320, 568], [360, 640], [375, 667], [390, 844], [414, 896], [430, 932],
+    [768, 1024], [1024, 768], [1280, 720], [1366, 768], [1440, 900], [1920, 1080],
+  ] as const;
+  const routes = ['/', '/birthday?preview=birthday', '/memories?preview=birthday', '/gallery?preview=birthday', '/gallery/gallery-001?preview=birthday', '/wishes?preview=birthday', '/wishes/missing?preview=birthday', '/daughter?preview=birthday', '/final?preview=birthday'];
+  for (const [width, height] of viewports) {
+    await page.setViewportSize({ width, height });
+    for (const route of routes) {
+      await page.goto(route);
+      const dimensions = await page.evaluate(() => ({
+        height: document.documentElement.scrollHeight,
+        width: document.documentElement.scrollWidth,
+        viewportHeight: window.innerHeight,
+        viewportWidth: window.innerWidth,
+        scrollY: window.scrollY,
+      }));
+      expect(dimensions.height, `${route} at ${width}x${height}: ${JSON.stringify(dimensions)}`).toBeLessThanOrEqual(dimensions.viewportHeight + 1);
+      expect(dimensions.width, `${route} at ${width}x${height}`).toBeLessThanOrEqual(dimensions.viewportWidth + 1);
+      expect(dimensions.scrollY, `${route} at ${width}x${height}`).toBe(0);
+    }
+  }
+});

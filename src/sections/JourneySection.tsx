@@ -4,6 +4,7 @@ import { SectionHeading, PaperNote, DecorativeLeaf } from '@/components/ui/primi
 import { MediaFallback, ResponsiveImage } from '@/components/ui/Media';
 import { FutureContent } from '@/components/ui/FutureContent';
 import { AmbientParticles } from '@/components/ui/AmbientParticles';
+import { AgeMotif } from '@/components/ui/AgeMotif';
 import { useReducedMotion, useIntersectionObserver } from '@/hooks';
 import { filterEnabled, sortByOrder } from '@/lib/media';
 import { journeyItems } from '@/data/journey';
@@ -31,7 +32,6 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ item, index, reduced }) => {
       transition={{ duration: 0.7, delay: (index % 3) * 0.1, ease: [0.22, 1, 0.36, 1] }}
       className={`relative w-full ${item.emphasis === 'featured' ? 'lg:col-span-2' : ''}`}
     >
-      <AmbientParticles mood="memories" />
       <PaperNote tone={isLeft ? 'cream' : 'matcha'} rotation={rotation} className="h-full">
         <div className="flex flex-col gap-4 h-full">
           {item.image?.enabled && (
@@ -80,29 +80,32 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ item, index, reduced }) => {
 export const JourneySection: React.FC = () => {
   const reduced = useReducedMotion();
   const items = sortByOrder(filterEnabled(journeyItems)).filter((item) => item.image?.enabled || item.video?.enabled || item.caption);
+  const sceneItems = items.slice(0, 2);
 
   return (
     <section
       id="journey"
       className="story-section journey-atmosphere"
     >
+      <AmbientParticles mood="memories" />
+      <AgeMotif tone="dark" />
       <div className="mx-auto w-full max-w-5xl">
         <div className="mb-16 md:mb-24">
           <SectionHeading
-            eyebrow="a little journey"
+            eyebrow="chapter thirty-one"
             title="the parts that stay with us"
             subtitle="A few photographs will arrive here soon — exactly as they happened."
           />
         </div>
 
-        {items.length === 0 ? (
+        {sceneItems.length === 0 ? (
           <FutureContent
             title="A few memories, held close"
             message="The photographs that belong in this part of the story are being gathered with care."
           />
         ) : (
           <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-12">
-            {items.map((item, i) => (
+            {sceneItems.map((item, i) => (
               <JourneyCard key={item.id} item={item} index={i} reduced={reduced} />
             ))}
           </div>

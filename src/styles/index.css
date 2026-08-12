@@ -46,6 +46,9 @@
 
 html {
   scroll-behavior: smooth;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
@@ -57,9 +60,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  min-height: 100vh;
-  min-height: 100svh;
+  overflow-y: hidden;
+  min-height: var(--scene-height, 100dvh);
+  height: var(--scene-height, 100dvh);
 }
+
+#root { width: 100%; height: var(--scene-height, 100dvh); overflow: hidden; }
+.scene-app { width: 100%; height: var(--scene-height, 100dvh); overflow: hidden; }
 
 body::before {
   content: '';
@@ -162,7 +169,11 @@ body.no-scroll {
   .story-section {
     position: relative;
     overflow: hidden;
-    padding: clamp(7rem, 14vw, 12rem) 1.5rem;
+    height: var(--scene-height, 100dvh);
+    min-height: 0;
+    padding: clamp(3.5rem, 8vh, 6rem) 1.5rem clamp(4.5rem, 10vh, 7rem);
+    display: flex;
+    align-items: center;
   }
 
   .story-section::before {
@@ -173,6 +184,7 @@ body.no-scroll {
   }
 
   .story-section > * { position: relative; z-index: 1; }
+  .story-section > .mx-auto { max-height: 100%; }
 
   .story-kicker {
     font-family: 'Caveat', cursive;
@@ -207,12 +219,40 @@ body.no-scroll {
 
 .countdown-stage,
 .reveal-stage {
+  height: var(--scene-height, 100dvh);
+  min-height: 0;
+  overflow: hidden;
   isolation: isolate;
   background:
     radial-gradient(ellipse 70% 45% at 50% 46%, rgba(153, 36, 48, .13), transparent 64%),
     radial-gradient(ellipse 65% 42% at 14% 90%, rgba(47, 102, 71, .26), transparent 65%),
     linear-gradient(150deg, #06150e 0%, #0a2418 48%, #071a11 100%);
 }
+
+.scene-page { position: relative; width: 100%; height: var(--scene-height, 100dvh); overflow: hidden; }
+.scene-action { position: absolute; left: 50%; bottom: max(1rem, env(safe-area-inset-bottom)); z-index: 20; transform: translateX(-50%); }
+.scene-detail { position: relative; display: flex; height: var(--scene-height, 100dvh); min-height: 0; align-items: center; overflow: hidden; padding: max(3.5rem, env(safe-area-inset-top)) 1.25rem max(1.25rem, env(safe-area-inset-bottom)); }
+.scene-detail__content { position: relative; z-index: 10; display: flex; width: min(100%, 72rem); max-height: 100%; flex-direction: column; margin: 0 auto; }
+.scene-detail__media { display: flex; min-height: 0; flex: 1 1 auto; align-items: center; justify-content: center; }
+.scene-detail__media img, .scene-detail__media video { max-height: min(52dvh, 520px); object-fit: contain; }
+
+/* Full-screen scene compositions: preserve the editorial hierarchy while
+   reducing secondary space before primary media/navigation can be displaced. */
+.journey-atmosphere > .mx-auto,
+.gallery-atmosphere > .mx-auto,
+.wishes-atmosphere > .mx-auto { display: flex; flex-direction: column; }
+.journey-atmosphere .editorial-empty,
+.wishes-atmosphere .editorial-empty { flex: 1 1 auto; min-height: 0; }
+.gallery-atmosphere .grid { min-height: 0; flex: 1 1 auto; align-content: center; }
+.gallery-atmosphere .gallery-polaroid { max-height: min(42dvh, 430px); }
+.gallery-atmosphere .gallery-polaroid > div:first-child { max-height: calc(min(42dvh, 430px) - 2.8rem); }
+.gallery-atmosphere .gallery-polaroid img { object-fit: cover; }
+.daughter-atmosphere > .mx-auto { max-height: 100%; justify-content: center; }
+.daughter-atmosphere .mt-20 { margin-top: clamp(1.5rem, 5vh, 4rem); }
+.daughter-atmosphere video { max-height: min(46dvh, 500px); object-fit: contain; }
+.final-atmosphere > div { max-height: 100%; justify-content: center; }
+.final-atmosphere .mt-12 { margin-top: clamp(1.25rem, 4vh, 3rem); }
+.final-atmosphere .mt-16 { margin-top: clamp(1.5rem, 5vh, 4rem); }
 
 .countdown-stage::before,
 .reveal-stage::before {
@@ -265,6 +305,11 @@ body.no-scroll {
 .wishes-atmosphere::before { background-image: radial-gradient(rgba(92,17,25,.1) .7px, transparent .7px); background-size: 8px 8px; opacity: .22; }
 .daughter-atmosphere { background: linear-gradient(180deg, #0d2419 0%, #07150f 100%); }
 .final-atmosphere { background: radial-gradient(ellipse 65% 55% at 50% 48%, #102a1d 0%, #06140d 74%); }
+.age-motif { position: absolute; right: -1.7rem; bottom: -3.2rem; z-index: 0; pointer-events: none; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(15rem, 49vw, 32rem); line-height: 1; letter-spacing: -.11em; }
+.age-motif--dark { color: rgba(248,240,221,.042); }
+.age-motif--paper { color: rgba(92,17,25,.06); }
+.age-motif--quiet { color: rgba(248,240,221,.028); }
+.age-motif--signature { right: 1.25rem; top: 1.5rem; bottom: auto; font-size: clamp(2.1rem, 4vw, 3.5rem); color: rgba(248,240,221,.22); }
 
 .ambient-particles { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
 .ambient-particle { position: absolute; left: var(--particle-left); top: var(--particle-top); width: 4px; height: 4px; opacity: .42; color: var(--color-red-500); transform: translate3d(0, 0, 0); animation: ambient-drift var(--particle-duration) ease-in-out var(--particle-delay) infinite alternate; will-change: transform, opacity; }
@@ -321,6 +366,30 @@ body.no-scroll {
 
 @media (min-width: 768px) {
   .story-section { padding-left: 3rem; padding-right: 3rem; }
+}
+
+@media (max-height: 720px) {
+  .story-section { padding-top: 3.25rem; padding-bottom: 3.75rem; }
+  .story-section .mb-16 { margin-bottom: 1.5rem; }
+  .story-section .mb-24 { margin-bottom: 2rem; }
+  .story-section .editorial-empty { min-height: 0; padding: 1.25rem 0; }
+  .countdown-stage .mt-10 { margin-top: 1.25rem; }
+  .countdown-stage .mt-12 { margin-top: 1.5rem; }
+  .countdown-stage > div { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+  .countdown-stage .countdown-clock { font-size: clamp(2.25rem, 13vw, 4.25rem); }
+  .countdown-stage .countdown-separator { padding-bottom: 1.35rem; font-size: 2rem; }
+  .countdown-stage .text-3xl { font-size: 1.65rem; }
+  .reveal-stage .mt-20 { margin-top: 2.5rem; }
+  .reveal-stage .mt-12 { margin-top: 1.5rem; }
+  .journey-atmosphere .mb-16,
+  .gallery-atmosphere .mb-16,
+  .wishes-atmosphere .mb-16 { margin-bottom: 1.25rem; }
+  .gallery-atmosphere .gallery-polaroid { max-height: 29dvh; padding-bottom: 1.7rem; }
+  .gallery-atmosphere .gallery-polaroid > div:first-child { max-height: calc(29dvh - 2rem); }
+  .daughter-atmosphere .mt-20 { margin-top: 1.25rem; }
+  .daughter-atmosphere .text-4xl { font-size: 2rem; }
+  .final-atmosphere .mt-12 { margin-top: 1rem; }
+  .final-atmosphere .mt-16 { margin-top: 1.25rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
