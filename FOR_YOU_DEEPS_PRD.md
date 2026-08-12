@@ -111,8 +111,6 @@ to feel instant on a normal mobile connection.
 -   She has close friends including Nikitha, Manju, and Amaya.
 -   Althaf is a trusted colleague who has been with her from the
     beginning.
--   Shabin is CEO of Zabnix.
--   Rafi is Chairman of the Sahakar Group of Companies.
 -   The contributor list currently includes Rahul, Arun, Muzammil,
     Asaru, Sinan, Anshad, Shamil, and Jinshad in addition to the people
     above.
@@ -425,8 +423,6 @@ to feel instant on a normal mobile connection.
 -   **Amaya** --- best friend; contribution format to be decided.
 -   **Althaf** --- trusted colleague from the beginning; contribution
     format to be decided.
--   **Shabin** --- CEO of Zabnix; contribution format to be decided.
--   **Rafi** --- Chairman of the Sahakar Group of Companies;
     contribution format to be decided.
 -   **Rahul** --- personal contributor; exact message/content to be
     prepared.

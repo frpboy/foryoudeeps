@@ -243,10 +243,13 @@ body.no-scroll {
 .wishes-atmosphere > .mx-auto { display: flex; flex-direction: column; }
 .journey-atmosphere .editorial-empty,
 .wishes-atmosphere .editorial-empty { flex: 1 1 auto; min-height: 0; }
-.gallery-composition { display: flex; min-height: 0; flex: 1 1 auto; align-items: center; justify-content: center; gap: clamp(.8rem, 3vw, 3.5rem); }
-.gallery-composition .gallery-polaroid { width: clamp(6.5rem, 16vw, 14rem); height: auto; max-width: none; flex: 0 0 auto; }
-.gallery-composition .gallery-polaroid--featured { width: clamp(7rem, 17vw, 15rem); }
-.gallery-polaroid__photo { display: flex; height: calc(100% - 2.35rem); align-items: center; justify-content: center; overflow: hidden; }
+.gallery-composition { display: flex; min-height: 0; flex: 1 1 auto; align-items: center; justify-content: center; gap: clamp(.25rem, 1vw, 1.1rem); }
+.gallery-composition .gallery-polaroid { width: clamp(8rem, 18vw, 16rem); height: auto; max-width: none; flex: 0 0 auto; }
+.gallery-composition .gallery-polaroid--featured { width: clamp(9rem, 20vw, 18rem); }
+.gallery-composition .gallery-polaroid--scatter-0 { position: relative; top: .9rem; left: .8rem; z-index: 2; }
+.gallery-composition .gallery-polaroid--scatter-1 { position: relative; top: -1.35rem; z-index: 3; }
+.gallery-composition .gallery-polaroid--scatter-2 { position: relative; top: .3rem; left: -.8rem; z-index: 1; }
+.gallery-polaroid__photo { display: flex; height: calc(100% - 1.15rem); align-items: center; justify-content: center; overflow: hidden; }
 .gallery-polaroid__image { display: block; width: auto; max-width: 100%; height: 100%; object-fit: contain; }
 .daughter-atmosphere > .mx-auto { max-height: 100%; justify-content: center; }
 .daughter-atmosphere .mt-20 { margin-top: clamp(1.5rem, 5vh, 4rem); }
@@ -305,7 +308,7 @@ body.no-scroll {
 .wishes-atmosphere { color: #07150f; background: var(--paper); }
 .wishes-atmosphere::before { background-image: radial-gradient(rgba(92,17,25,.1) .7px, transparent .7px); background-size: 8px 8px; opacity: .22; }
 .daughter-atmosphere { background: linear-gradient(180deg, #0d2419 0%, #07150f 100%); }
-.final-atmosphere { background: radial-gradient(ellipse 65% 55% at 50% 48%, #102a1d 0%, #06140d 74%); }
+.final-atmosphere { width: 100%; height: 100%; min-height: var(--scene-height, 100dvh); background: radial-gradient(ellipse 65% 55% at 50% 48%, #102a1d 0%, #06140d 74%); }
 .age-motif { position: absolute; right: -1.7rem; bottom: -3.2rem; z-index: 0; pointer-events: none; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(15rem, 49vw, 32rem); line-height: 1; letter-spacing: -.11em; }
 .age-motif--dark { color: rgba(248,240,221,.042); }
 .age-motif--paper { color: rgba(92,17,25,.06); }
@@ -343,22 +346,25 @@ body.no-scroll {
   background: #123324;
   box-shadow: 0 18px 45px -28px rgba(0, 0, 0, .9);
 }
-.gallery-memory:nth-child(4n + 1) { border-radius: 48% 48% 3% 3% / 12% 12% 3% 3%; }
-.gallery-memory:nth-child(4n + 2) { border-radius: 2px; }
-.gallery-memory:nth-child(4n + 3) { border-radius: 28% 3% 26% 3%; }
-.gallery-memory:nth-child(4n) { border-radius: 3% 22% 3% 22%; }
+.gallery-memory { border-radius: .18rem; }
 .gallery-memory img { filter: saturate(.9) contrast(1.03); transition: filter .5s ease, transform .7s cubic-bezier(.22,1,.36,1); }
 .gallery-memory:hover img { filter: saturate(1.08) contrast(1.05); transform: scale(1.035); }
-.gallery-polaroid { padding: .45rem .45rem 2.35rem; background: #f8f0dd; box-shadow: 0 18px 40px -24px rgba(0,0,0,.85); }
-.gallery-polaroid::after { content: ''; position: absolute; bottom: .72rem; left: .75rem; right: .75rem; height: .75rem; border-bottom: 1px solid rgba(92,17,25,.18); pointer-events: none; }
+.gallery-polaroid { padding: .22rem .22rem 1.15rem; background: #f8f0dd; box-shadow: 0 18px 40px -24px rgba(0,0,0,.85); }
+.gallery-polaroid::after { content: ''; position: absolute; bottom: .4rem; left: .45rem; right: .45rem; height: .35rem; border-bottom: 1px solid rgba(92,17,25,.18); pointer-events: none; }
 .gallery-sticker { transform: rotate(3deg); border-radius: 2px 7px 3px 6px; }
 .wish-polaroid .paper-edge { padding: .55rem .55rem 2.5rem; }
 .wish-polaroid .paper-edge::after { content: '♡'; position: absolute; right: .8rem; bottom: .65rem; color: var(--rose-ink); font-family: 'Caveat', cursive; font-size: 1.45rem; }
 
 @media (max-width: 767px) {
-  .gallery-composition .gallery-polaroid { width: min(37vw, 12rem); }
-  .gallery-composition .gallery-polaroid--featured { width: min(42vw, 13.5rem); }
-  .gallery-composition .gallery-polaroid--mobile-hidden { display: none; }
+  .gallery-composition { gap: 0; }
+  .gallery-composition .gallery-polaroid { width: 31vw; }
+  .gallery-composition .gallery-polaroid--featured { width: 33vw; }
+  .gallery-composition .gallery-polaroid--scatter-0 { top: .9rem; left: .65rem; }
+  .gallery-composition .gallery-polaroid--scatter-1 { top: -1.1rem; left: 0; }
+  .gallery-composition .gallery-polaroid--scatter-2 { top: .3rem; left: -.65rem; }
+  .gallery-polaroid { padding: .18rem .18rem .95rem; }
+  .gallery-polaroid__photo { height: calc(100% - .95rem); }
+  .wishes-atmosphere .wish-note--mobile-hidden { display: none; }
 }
 .wish-chat .paper-edge { border-radius: 18px 18px 18px 4px; clip-path: none; }
 .wish-chat .paper-edge::before { content: ''; position: absolute; left: .8rem; bottom: -.5rem; border-top: .7rem solid currentColor; border-right: .7rem solid transparent; opacity: .14; }
@@ -367,9 +373,15 @@ body.no-scroll {
 .wish-note-1 { width: 96%; justify-self: end; }
 .wish-note-2 { width: 98%; }
 .wish-note-3 { width: 94%; justify-self: center; }
+.wishes-scatter { align-items: center; justify-items: center; }
+.wishes-scatter .wish-scatter-0 { position: relative; top: 1rem; transform: rotate(-1.1deg); }
+.wishes-scatter .wish-scatter-1 { position: relative; top: -1rem; transform: rotate(.7deg); }
+.wishes-scatter .wish-scatter-2 { position: relative; top: .45rem; transform: rotate(-.45deg); }
 .wishes-atmosphere .paper-edge { box-shadow: 0 17px 36px -30px rgba(7,21,15,.55); }
 .wishes-atmosphere .wish-note:nth-child(3n + 1) .paper-edge { background: linear-gradient(135deg, #fffdf5, #f1e4c8); }
 .wishes-atmosphere .wish-note:nth-child(3n + 2) .paper-edge { background: linear-gradient(145deg, #103525, #0b2117); }
+.wishes-atmosphere .wish-note:nth-child(3n + 2) .paper-edge :is(h3, p) { color: #fff8e8; }
+.wishes-atmosphere .wish-note:nth-child(3n + 2) .paper-edge .font-handwritten { color: #f4a1a8; }
 
 @media (min-width: 768px) {
   .story-section { padding-left: 3rem; padding-right: 3rem; }

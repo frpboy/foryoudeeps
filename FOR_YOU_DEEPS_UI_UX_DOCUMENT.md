@@ -398,9 +398,9 @@ Nikitha       Arun        Rahul
 
      Althaf       Manju
 
-Shabin        Deeps ❤️        Amaya
+              Deeps ❤️        Amaya
 
-     Muzammil       Rafi
+     Muzammil
 
 Sinan     Asaru      Anshad
 
@@ -410,7 +410,7 @@ Sinan     Asaru      Anshad
 This arrangement is a conceptual visual inspiration, not a mandatory
 literal grid. - Best friends Nikitha, Manju, and Amaya may be visually
 grouped if the content supports it. - Althaf may have a prominent
-position because of the long-standing connection. - Shabin, Rafi, and
+position because of the long-standing connection. -
 other contributors should not be ranked visually by organizational
 title. - Rahul's contribution should be treated as one personal wish
 among the collection. - The wall should feel like people gathered around

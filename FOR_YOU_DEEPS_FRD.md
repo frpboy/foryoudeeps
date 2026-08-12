@@ -160,7 +160,7 @@ job, role, professional history, or corporate identity.
 -   Teammate wishes will be added later.
 
 -   People currently identified include Nikitha, Manju, Amaya, Althaf,
-    Shabin, Rafi, Rahul, Arun, Muzammil, Asaru, Sinan, Anshad, Shamil,
+    Rahul, Arun, Muzammil, Asaru, Sinan, Anshad, Shamil,
     and Jinshad. \## 9. Emotional Design Principles
 
 -   The opening must create curiosity.
@@ -703,9 +703,7 @@ job, role, professional history, or corporate identity.
 
 -   **Althaf** --- trusted colleague from the beginning.
 
--   **Shabin** --- CEO of Zabnix.
 
--   **Rafi** --- Chairman of the Sahakar Group of Companies.
 
 -   **Rahul** --- personal contributor.
 
@@ -1265,11 +1263,9 @@ job, role, professional history, or corporate identity.
     relationship context is `trusted colleague from the beginning` and
     must not become a corporate hierarchy.
 
--   **PEOPLE-SHABIN** --- Store `Shabin` as the contributor name;
     relationship context is `CEO of Zabnix` and must not become a
     corporate hierarchy.
 
--   **PEOPLE-RAFI** --- Store `Rafi` as the contributor name;
     relationship context is `Chairman of the Sahakar Group of Companies`
     and must not become a corporate hierarchy.
 

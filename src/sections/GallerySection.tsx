@@ -33,7 +33,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, reduced, onOpen 
       transition={{ duration: 0.66, delay: Math.min(index * 0.07, 0.48), ease: [0.22, 1, 0.36, 1] }}
       whileHover={reduced ? {} : { scale: 1.02, y: -5, rotate: rotation + (index % 2 ? 0.8 : -0.8) }}
       whileTap={reduced ? {} : { scale: 0.98 }}
-      className={`gallery-memory gallery-polaroid ${item.featured ? 'gallery-polaroid--featured' : 'gallery-polaroid--supporting'} ${index > 1 ? 'gallery-polaroid--mobile-hidden' : ''} group relative block overflow-hidden text-left`}
+      className={`gallery-memory gallery-polaroid gallery-polaroid--scatter-${index % 3} ${item.featured ? 'gallery-polaroid--featured' : 'gallery-polaroid--supporting'} group relative block overflow-hidden text-left`}
       style={{ transform: `rotate(${rotation}deg)`, aspectRatio: polaroidRatio }}
       aria-label={`Open gallery item ${index + 1}`}
     >

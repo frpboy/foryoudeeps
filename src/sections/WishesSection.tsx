@@ -203,7 +203,7 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
       initial={reduced || !visible ? {} : { opacity: 0, y: 32, rotate: rotation * 2 }}
       animate={visible ? { opacity: 1, y: 0, rotate: rotation } : {}}
       transition={{ duration: 0.6, delay: Math.min((index % 6) * 0.08, 0.45), ease: [0.22, 1, 0.36, 1] }}
-      className={`wish-note wish-note-${index % 4} wish-${presentation} ${wish.featured ? 'md:col-span-2' : ''}`}
+      className={`wish-note wish-note-${index % 4} wish-scatter-${index % 3} wish-${presentation} ${index > 1 ? 'wish-note--mobile-hidden' : ''}`}
       role="button"
       tabIndex={0}
       aria-label={`Open ${wish.name}'s birthday wish`}
@@ -260,6 +260,7 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
 export const WishesSection: React.FC = () => {
   const reduced = useReducedMotion();
   const items = sortByOrder(filterEnabled(wishes));
+  const sceneItems = items.slice(0, 3);
   const navigate = useNavigate();
   const location = useLocation();
   const { pauseAll, register, unregister } = useMediaRegistry();
@@ -286,8 +287,8 @@ export const WishesSection: React.FC = () => {
             <p className="max-w-md font-body leading-relaxed text-ink/65">Every note here will be shared by the person who wrote it.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-7 lg:gap-8">
-            {items.map((wish, i) => (
+          <div className="wishes-scatter grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-7">
+            {sceneItems.map((wish, i) => (
               <WishCard
                 key={wish.id}
                 wish={wish}

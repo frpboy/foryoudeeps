@@ -666,3 +666,144 @@ npm run test:e2e
 - Vitest: 4 files / 17 tests passed. Playwright: 14 desktop/mobile tests
   passed after its gallery-history assertion was updated for the new first
   item and the expanded no-overflow route matrix.
+
+---
+
+## 2026-08-12 - Editable wishes-wall preview content
+
+### Implemented
+
+- Added six text-only, clearly generic draft wishes so the wishes wall and its
+  routed detail views can be reviewed with realistic colleague/bestie density.
+- Used only editable labels such as `A colleague` and `A bestie`; no names,
+  identities, personal media, or claims of authorship were fabricated.
+- Each draft is marked in source as visual-only starter content and must be
+  replaced with contributor-approved names and wording before publishing.
+
+### Remaining input
+
+- Supply the real contributor names and approved messages (and optional media)
+  to replace these draft entries.
+
+### Verification
+
+- Visually inspected the completed index and detail treatment at 390x844 and
+  1366x768. The index deliberately shows two notes on mobile and three on
+  desktop to preserve the full-screen scene; all six drafts remain reachable
+  through wish-detail navigation.
+- `npm run typecheck`, `npm run lint`, `npm run validate-content`, `npm run
+  test`, `npm run build`, and `npm run test:e2e` passed.
+- Vitest: 4 files / 17 tests passed. Playwright: all 14 desktop/mobile tests
+  passed, including the route-by-route no-overflow matrix.
+
+---
+
+## 2026-08-12 - Scattered wishes composition
+
+### Implemented
+
+- Gave the visible wishes a controlled scattered-note composition using stable
+  per-card rotations and small vertical offsets. This creates a casual,
+  collected feel without random layout shifts or overlap.
+- Kept the two-note mobile and three-note desktop scene limits, along with the
+  existing detail-route access to every draft wish.
+
+### Verification
+
+- Visually inspected the finished wishes scene at 390x844 and 1366x768.
+- `npm run typecheck`, `npm run lint`, `npm run test`, and `npm run test:e2e`
+  passed: 17 Vitest tests and 14 desktop/mobile Playwright tests.
+
+---
+
+## 2026-08-12 - Photo-led gallery stack correction
+
+### Implemented
+
+- Removed the oversized rounded Polaroid panels that left each real photograph
+  small inside unused cream space.
+- Gallery photographs now form a deliberately overlapping, asymmetric stack:
+  a thin cream edge and short caption strip remain, but the real images occupy
+  nearly all of each card.
+
+### Verification
+
+- Visually checked at 412x915 and 1366x768.
+- `npm run typecheck`, `npm run lint`, `npm run test`, and `npm run test:e2e`
+  passed: 17 Vitest tests and 14 desktop/mobile Playwright tests.
+
+---
+
+## 2026-08-12 - Scattered gallery composition
+
+### Implemented
+
+- Made all three supplied gallery photographs visible in the index at every
+  viewport, including mobile.
+- Applied deterministic per-photo vertical offsets on top of the configured
+  scrapbook rotations, creating a balanced scattered composition without
+  cropping or changing any original photo.
+
+### Verification
+
+- Visually checked at 412x915 and 1366x768.
+- `npm run typecheck`, `npm run lint`, `npm run test`, and `npm run test:e2e`
+  passed: 17 Vitest tests and 14 desktop/mobile Playwright tests.
+
+---
+
+## 2026-08-12 - Final scene background seam correction
+
+### Implemented
+
+- Fixed the final route's background seam by giving its section explicit
+  viewport ownership. The final background now covers the full scene rather
+  than ending before the parent viewport and exposing a second dark band.
+
+### Verification
+
+- Visually checked at 412x915 and 1366x768; both render one continuous final
+  scene.
+- `npm run typecheck`, `npm run lint`, `npm run test`, and `npm run test:e2e`
+  passed: 17 Vitest tests and 14 desktop/mobile Playwright tests.
+
+---
+
+## 2026-08-12 - Named editable wishes
+
+### Implemented
+
+- Replaced generic visual-preview labels with the content-owner-supplied names:
+  Nikitha, Arun, Rahul, Althaf, Manju, Shabin, Amaya, Muzammil, Rafi, Sinan,
+  Asaru, Anshad, Shamil, and Jinshad.
+- Kept Deeps out of the sender list. The supporting messages remain editable
+  drafts, not claims that a named person wrote or approved that wording.
+
+---
+
+## 2026-08-12 - Sender exclusions
+
+### Implemented
+
+- Removed Shabin and Rafi from all active wish data and current requirement/
+  design documentation at the content owner's request. They no longer render
+  as wish senders or appear in current contributor lists.
+- Earlier audit entries remain unchanged because this root log is append-only.
+
+---
+
+## 2026-08-12 - Corrected wishes scatter layout
+
+### Implemented
+
+- Removed the featured card's desktop two-column span that was causing the
+  wishes to stack vertically at tablet/desktop widths.
+- The visible wishes now use a true three-column composition with independent,
+  deterministic offsets and rotations, making them read as separate scattered
+  notes rather than a stacked feed.
+
+### Verification
+
+- Visually checked at 1000x590 and 1366x768.
+- `npm run typecheck`, `npm run lint`, `npm run test`, and `npm run test:e2e`
+  passed: 17 Vitest tests and 14 desktop/mobile Playwright tests.
