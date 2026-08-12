@@ -30,4 +30,12 @@ describe('App birthday state', () => {
     expect(screen.getByText('LEVEL 31 UNLOCKED')).toBeInTheDocument();
     window.history.pushState({}, '', '/');
   });
+
+  it('accepts the short preview-birthday testing URL used in the handoff', () => {
+    window.history.pushState({}, '', '/?preview-birthday');
+    vi.spyOn(Date, 'now').mockReturnValue(new Date('2026-08-14T23:59:00+05:30').getTime());
+    render(<App />);
+    expect(screen.getByText('Birthday preview')).toBeInTheDocument();
+    window.history.pushState({}, '', '/');
+  });
 });

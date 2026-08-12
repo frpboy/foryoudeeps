@@ -214,3 +214,41 @@ npm run test:e2e
 
 - `npm run test:e2e` passed with 4 tests: full birthday journey and responsive
   replay/console checks in both desktop Chromium and Pixel 5 emulation.
+
+---
+
+## 2026-08-12 - Pre-birthday full-experience preview
+
+### Implemented
+
+- Added the explicit owner testing URL `/?preview=birthday`. It bypasses only
+  the birthday date gate and displays a small `Birthday preview` indicator.
+- The normal URL remains countdown-only before the configured 15 August 2026
+  IST boundary; removing the query parameter restores that visitor flow.
+- Documented the testing URL in `MEDIA_HANDOFF.md`.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, `npm run test`, and `npm run build`
+  passed.
+- Vitest: 4 files and 12 tests passed.
+- Playwright: 6 tests passed across desktop Chromium and Pixel 5 emulation,
+  including the preview URL before the birthday boundary.
+
+---
+
+## 2026-08-12 - Preview URL compatibility correction
+
+### Implemented
+
+- Added support for the short owner URL `/?preview-birthday` in addition to
+  `/?preview=birthday`, so the exact Vercel testing link works before the
+  birthday boundary.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, `npm run test`, and `npm run build`
+  passed.
+- Vitest: 4 files and 13 tests passed.
+- Playwright: 8 tests passed across desktop Chromium and Pixel 5 emulation,
+  including both accepted preview URLs.

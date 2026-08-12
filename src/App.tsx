@@ -11,7 +11,8 @@ import { siteConfig } from '@/data/site';
 import { isBirthday, getTargetTimestamp } from '@/lib/countdown';
 
 function isBirthdayPreview(): boolean {
-  return new URLSearchParams(window.location.search).get('preview') === 'birthday';
+  const params = new URLSearchParams(window.location.search);
+  return params.get('preview') === 'birthday' || params.has('preview-birthday');
 }
 
 const App: React.FC = () => {

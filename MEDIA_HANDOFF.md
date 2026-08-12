@@ -40,7 +40,7 @@ item in source without publishing it.
 ## Previewing before 15 August
 
 The normal homepage intentionally remains on the countdown until midnight IST.
-For owner testing, open `/?preview=birthday` after the site URL. This bypasses
-only the date gate and shows a small `Birthday preview` label; it does not
-change the normal visitor flow. Remove the query parameter to return to the
-countdown.
+For owner testing, open `/?preview-birthday` after the site URL (the
+equivalent `/?preview=birthday` also works). This bypasses only the date gate
+and shows a small `Birthday preview` label; it does not change the normal
+visitor flow. Remove the query parameter to return to the countdown.
