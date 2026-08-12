@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { IconButton, Play, Pause, Volume2, VolumeX } from '@/components/ui/primitives';
+import { IconButton, Play, Pause, SkipForward, Volume2, VolumeX } from '@/components/ui/primitives';
 import { motion, AnimatePresence } from 'motion/react';
 import { useReducedMotion } from '@/hooks';
 import { filterEnabled, sortByOrder } from '@/lib/media';
@@ -19,7 +19,9 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
   const [active, setActive] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
-  const trackIndex = useRef(0);
+  const [trackIndex, setTrackIndex] = useState(0);
+  const [resumeOnTrackChange, setResumeOnTrackChange] = useState(false);
+  const activeTrack = tracks[trackIndex];
 
   useEffect(() => {
     if (!userInteracted || !hasTracks) return;
@@ -36,6 +38,22 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
     }
   };
 
+  const selectNextTrack = (resume = !audioRef.current?.paused) => {
+    if (tracks.length < 2) return;
+    setResumeOnTrackChange(resume);
+    setTrackIndex((current) => (current + 1) % tracks.length);
+  };
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.load();
+    if (resumeOnTrackChange) {
+      audio.play().catch(() => setPlaying(false));
+      setResumeOnTrackChange(false);
+    }
+  }, [trackIndex, resumeOnTrackChange]);
+
   if (!hasTracks || !active) return null;
 
   return (
@@ -49,24 +67,20 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
       >
         <audio
           ref={audioRef}
-          src={tracks[trackIndex.current]?.src}
+          src={activeTrack?.src}
           muted={muted}
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
           onEnded={() => {
-            trackIndex.current = (trackIndex.current + 1) % tracks.length;
-            const a = audioRef.current;
-            if (a) {
-              a.src = tracks[trackIndex.current].src;
-              a.play().catch(() => setPlaying(false));
-            }
+            if (tracks.length > 1) selectNextTrack(true);
           }}
+          onError={() => setPlaying(false)}
           preload="metadata"
           loop={tracks.length === 1}
         />
         <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-matcha-900/85 backdrop-blur-xl border border-cream-100/10 shadow-card">
           <span className="hidden sm:block font-handwritten text-deepred-400 text-lg leading-none pr-1">
-            {tracks[trackIndex.current]?.title}
+            {activeTrack?.title}
           </span>
           <IconButton
             icon={playing ? Pause : Play}
@@ -76,6 +90,16 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
             onClick={togglePlayback}
             className="!w-9 !h-9"
           />
+          {tracks.length > 1 && (
+            <IconButton
+              icon={SkipForward}
+              size="sm"
+              variant="ghost"
+              label="Next track"
+              className="!w-9 !h-9 opacity-70 hover:opacity-100"
+              onClick={() => selectNextTrack()}
+            />
+          )}
           <IconButton
             icon={muted ? VolumeX : Volume2}
             size="sm"

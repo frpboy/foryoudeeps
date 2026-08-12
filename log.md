@@ -372,3 +372,23 @@ npm run test:e2e
   test`, `npm run build`, and `npm run test:e2e` passed.
 - Vitest: 4 files and 16 tests passed, including the failed-audio regression.
 - Playwright: 12 browser tests passed across desktop and mobile Chromium.
+
+---
+
+## 2026-08-12 - Optional multi-track music completion
+
+### Implemented
+
+- Completed the future multi-track music controller: its displayed title now
+  follows the active track, an accessible next-track action appears when more
+  than one approved track exists, and automatic progression resumes playback
+  after a track ends.
+- Preserved the initial interaction requirement, mute control, disabled/no-
+  tracks behavior, and failure-safe playback state.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, `npm run validate-content`, `npm run
+  test`, `npm run build`, and `npm run test:e2e` passed.
+- Vitest: 4 files and 16 tests passed.
+- Playwright: 12 browser tests passed across desktop and mobile Chromium.
