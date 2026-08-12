@@ -482,3 +482,20 @@ npm run test:e2e
 - Playwright: 8 desktop/mobile route tests passed, covering pre-birthday
   guards, preview persistence, direct detail refresh, gallery history, no full
   reload, keyboard navigation, and edge-tap navigation.
+
+---
+
+## 2026-08-12 - Gallery detail gesture scope
+
+### Implemented
+
+- Added gallery-detail-specific horizontal swipe and ArrowLeft/ArrowRight
+  navigation between gallery entries. Detail gestures stay inside the gallery
+  sequence and do not advance the major birthday story.
+- Gestures that begin on links, buttons, video/audio controls, sliders, or
+  form controls remain protected from route changes.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, and `npm run test:e2e` passed.
+- Playwright: 8 desktop/mobile route tests passed.

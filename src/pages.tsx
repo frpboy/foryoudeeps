@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowDown, ChevronLeft, ChevronRight } from '@/components/ui/primitives';
@@ -30,9 +30,19 @@ export const RoutedGalleryDetail: React.FC<{ to: (path: string) => string }> = (
   const item = items[index];
   const prev = index > 0 ? items[index - 1] : undefined;
   const next = index < items.length - 1 ? items[index + 1] : undefined;
+  const start = useRef<{ x: number; y: number; blocked: boolean } | null>(null);
+  const isInteractive = (target: EventTarget | null) => target instanceof Element && Boolean(target.closest('button, a, video, audio, input, textarea, select, [role="slider"]'));
+  const move = useCallback((direction: -1 | 1) => {
+    const candidate = direction < 0 ? prev : next;
+    if (candidate) navigate(to(`/gallery/${candidate.id}`));
+  }, [navigate, next, prev, to]);
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => { if (!isInteractive(event.target) && event.key === 'ArrowLeft') move(-1); else if (!isInteractive(event.target) && event.key === 'ArrowRight') move(1); };
+    window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey);
+  }, [move]);
   useEffect(() => { if (next?.media.type === 'image') { const preload = new Image(); preload.src = next.media.src; } }, [next]);
   if (!item) return <StoryFallback birthdayAvailable to={to} />;
-  return <StoryPage><section className="gallery-atmosphere min-h-[100svh] px-5 py-10 md:px-12 md:py-16"><div className="mx-auto max-w-6xl"><Link to={to('/gallery')} className="inline-flex items-center gap-2 font-body text-sm text-cream-200/70 hover:text-cream-50"><ChevronLeft size={17} /> back to memories</Link><div className="mt-10 overflow-hidden bg-matcha-950 shadow-modal"><GalleryMedia item={item} /></div><div className="mt-7 flex flex-wrap items-end justify-between gap-5"><div>{item.dateLabel && <p className="font-handwritten text-xl text-deepred-300">{item.dateLabel}</p>}{item.caption && <p className="mt-2 max-w-xl font-body leading-relaxed text-cream-100">{item.caption}</p>}</div><p className="font-mono text-xs text-cream-200/45">{index + 1} / {items.length}</p></div><div className="mt-12 flex justify-between"><button type="button" disabled={!prev} onClick={() => prev && navigate(to(`/gallery/${prev.id}`))} className="inline-flex items-center gap-2 font-body text-sm text-cream-200/70 disabled:opacity-20"><ChevronLeft size={18} /> previous</button><button type="button" disabled={!next} onClick={() => next && navigate(to(`/gallery/${next.id}`))} className="inline-flex items-center gap-2 font-body text-sm text-cream-200/70 disabled:opacity-20">next <ChevronRight size={18} /></button></div></div></section></StoryPage>;
+  return <StoryPage><section onTouchStart={(e) => { start.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, blocked: isInteractive(e.target) }; }} onTouchEnd={(e) => { const gesture = start.current; start.current = null; if (!gesture || gesture.blocked) return; const dx = e.changedTouches[0].clientX - gesture.x; const dy = e.changedTouches[0].clientY - gesture.y; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) move(dx < 0 ? 1 : -1); }} className="gallery-atmosphere min-h-[100svh] px-5 py-10 md:px-12 md:py-16"><div className="mx-auto max-w-6xl"><Link to={to('/gallery')} className="inline-flex items-center gap-2 font-body text-sm text-cream-200/70 hover:text-cream-50"><ChevronLeft size={17} /> back to memories</Link><div className="mt-10 overflow-hidden bg-matcha-950 shadow-modal"><GalleryMedia item={item} /></div><div className="mt-7 flex flex-wrap items-end justify-between gap-5"><div>{item.dateLabel && <p className="font-handwritten text-xl text-deepred-300">{item.dateLabel}</p>}{item.caption && <p className="mt-2 max-w-xl font-body leading-relaxed text-cream-100">{item.caption}</p>}</div><p className="font-mono text-xs text-cream-200/45">{index + 1} / {items.length}</p></div><div className="mt-12 flex justify-between"><button type="button" disabled={!prev} onClick={() => move(-1)} className="inline-flex items-center gap-2 font-body text-sm text-cream-200/70 disabled:opacity-20"><ChevronLeft size={18} /> previous</button><button type="button" disabled={!next} onClick={() => move(1)} className="inline-flex items-center gap-2 font-body text-sm text-cream-200/70 disabled:opacity-20">next <ChevronRight size={18} /></button></div></div></section></StoryPage>;
 };
 
 export const RoutedWishDetail: React.FC<{ to: (path: string) => string }> = ({ to }) => {
