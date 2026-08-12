@@ -10,9 +10,13 @@ import { MusicController } from '@/components/music/MusicController';
 import { siteConfig } from '@/data/site';
 import { isBirthday, getTargetTimestamp } from '@/lib/countdown';
 
+function isBirthdayPreview(): boolean {
+  return new URLSearchParams(window.location.search).get('preview') === 'birthday';
+}
+
 const App: React.FC = () => {
   const [isBirthdayState, setIsBirthdayState] = useState<boolean>(() =>
-    isBirthday(getTargetTimestamp(siteConfig.birthdayDate))
+    isBirthdayPreview() || isBirthday(getTargetTimestamp(siteConfig.birthdayDate))
   );
   const [userInteracted, setUserInteracted] = useState(false);
   const [, setReplayTrigger] = useState(0);
@@ -21,7 +25,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const check = () => {
-      setIsBirthdayState(isBirthday(getTargetTimestamp(siteConfig.birthdayDate)));
+      setIsBirthdayState(isBirthdayPreview() || isBirthday(getTargetTimestamp(siteConfig.birthdayDate)));
     };
     const onBirthday = () => {
       setIsBirthdayState(true);
@@ -60,6 +64,11 @@ const App: React.FC = () => {
 
   return (
     <div className="relative min-h-screen bg-matcha-900">
+      {isBirthdayPreview() && (
+        <div className="fixed left-1/2 top-3 z-[60] -translate-x-1/2 rounded-full border border-cream-100/15 bg-matcha-950/90 px-3 py-1 font-body text-xs text-cream-200/80 shadow-soft backdrop-blur">
+          Birthday preview
+        </div>
+      )}
       {showCountdown ? (
         <CountdownSection onEnter={markInteracted} userHasInteracted={userInteracted} />
       ) : (

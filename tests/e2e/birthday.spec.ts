@@ -24,6 +24,12 @@ test('renders the birthday journey with intentional empty media states', async (
   await expect(page.getByRole('button', { name: /replay the experience/i })).toBeVisible();
 });
 
+test('opens the birthday journey through the explicit preview URL before the date', async ({ page }) => {
+  await page.goto('/?preview=birthday');
+  await expect(page.getByText('Birthday preview')).toBeVisible();
+  await expect(page.getByText('LEVEL 31 UNLOCKED')).toBeVisible();
+});
+
 test('keeps the responsive birthday journey free of horizontal overflow and console errors', async ({ page }) => {
   const errors: string[] = [];
   page.on('console', (message) => {

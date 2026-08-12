@@ -21,4 +21,13 @@ describe('App birthday state', () => {
     expect(screen.getByText('Words worth waiting for')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /replay the experience/i })).toBeInTheDocument();
   });
+
+  it('opens the birthday experience with the explicit testing preview URL', () => {
+    window.history.pushState({}, '', '/?preview=birthday');
+    vi.spyOn(Date, 'now').mockReturnValue(new Date('2026-08-14T23:59:00+05:30').getTime());
+    render(<App />);
+    expect(screen.getByText('Birthday preview')).toBeInTheDocument();
+    expect(screen.getByText('LEVEL 31 UNLOCKED')).toBeInTheDocument();
+    window.history.pushState({}, '', '/');
+  });
 });

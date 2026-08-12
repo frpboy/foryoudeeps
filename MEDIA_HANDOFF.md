@@ -36,3 +36,11 @@ item in source without publishing it.
 4. Add or enable the corresponding typed data item.
 5. Run `npm run validate-content`, `npm run test`, and `npm run build`.
 6. Verify the item in desktop and mobile browsers before release.
+
+## Previewing before 15 August
+
+The normal homepage intentionally remains on the countdown until midnight IST.
+For owner testing, open `/?preview=birthday` after the site URL. This bypasses
+only the date gate and shows a small `Birthday preview` label; it does not
+change the normal visitor flow. Remove the query parameter to return to the
+countdown.
