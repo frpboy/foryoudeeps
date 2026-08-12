@@ -454,3 +454,31 @@ npm run test:e2e
 - Vitest: 4 files and 16 tests passed.
 - Playwright: 14 tests passed across desktop and mobile Chromium, including
   the real gallery lightbox journey.
+
+---
+
+## 2026-08-12 - Routed story navigation
+
+### Implemented
+
+- Converted the long-scroll birthday experience into guarded React Router
+  views: landing/countdown, birthday, memories, gallery, gallery detail,
+  wishes, wish detail, daughter, final, and a personal unknown-route fallback.
+- Preserved `?preview=birthday` across internal navigation and added Vercel
+  SPA rewrites for direct routed URLs.
+- Replaced gallery modal navigation with client-side `/gallery/:id` detail
+  routes, including back, next/previous, next-image preloading, browser
+  history support, and no document reload.
+- Added story-like major-page navigation through subtle progress marks,
+  invisible 5% edge taps, deliberate horizontal swipe detection, and
+  ArrowLeft/ArrowRight keyboard support. Interactive/media origins are ignored
+  so normal controls and vertical scrolling remain usable.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, `npm run test`, `npm run
+  validate-content`, and `npm run build` passed.
+- Vitest: 4 files and 16 tests passed.
+- Playwright: 8 desktop/mobile route tests passed, covering pre-birthday
+  guards, preview persistence, direct detail refresh, gallery history, no full
+  reload, keyboard navigation, and edge-tap navigation.

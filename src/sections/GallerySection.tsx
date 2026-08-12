@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React from 'react';
 import { motion } from 'motion/react';
-import { SectionHeading, IconButton, Play, ChevronLeft, ChevronRight, DecorativeHeart } from '@/components/ui/primitives';
-import { Modal } from '@/components/ui/Modal';
-import { ResponsiveImage, MediaFallback } from '@/components/ui/Media';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { SectionHeading, Play, DecorativeHeart } from '@/components/ui/primitives';
+import { ResponsiveImage } from '@/components/ui/Media';
 import { FutureContent } from '@/components/ui/FutureContent';
 import { useReducedMotion, useIntersectionObserver } from '@/hooks';
 import { filterEnabled, sortByOrder } from '@/lib/media';
@@ -14,10 +14,10 @@ interface GalleryCardProps {
   index: number;
   total: number;
   reduced: boolean;
-  onClick: () => void;
+  onOpen: () => void;
 }
 
-const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, total, reduced, onClick }) => {
+const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, total, reduced, onOpen }) => {
   const { ref, visible } = useIntersectionObserver<HTMLButtonElement>();
   const isVideo = item.media.type === 'video';
   const spans: Record<number, string> = {
@@ -31,7 +31,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, total, reduced, 
   return (
     <motion.button
       ref={ref as React.RefObject<HTMLButtonElement>}
-      onClick={onClick}
+      onClick={onOpen}
       initial={reduced || !visible ? {} : { opacity: 0, y: 24 }}
       animate={visible ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.55, delay: Math.min(index * 0.05, 0.4), ease: [0.22, 1, 0.36, 1] }}
@@ -85,150 +85,11 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, total, reduced, 
   );
 };
 
-interface LightboxContentProps {
-  items: GalleryItem[];
-  index: number;
-  onPrev: () => void;
-  onNext: () => void;
-}
-
-const LightboxContent: React.FC<LightboxContentProps> = ({ items, index, onPrev, onNext }) => {
-  const item = items[index];
-  const touchStartX = useRef<number | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [mediaFailed, setMediaFailed] = useState(false);
-
-  useEffect(() => setMediaFailed(false), [item.id]);
-
-  const onTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  const onTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current == null) return;
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
-    if (Math.abs(dx) > 48) {
-      if (dx < 0) onNext();
-      else onPrev();
-    }
-    touchStartX.current = null;
-  };
-
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') onPrev();
-      if (e.key === 'ArrowRight') onNext();
-    };
-    document.addEventListener('keydown', handleKey);
-    return () => document.removeEventListener('keydown', handleKey);
-  }, [onPrev, onNext]);
-
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    return () => {
-      try {
-        v.pause();
-      } catch {
-        /* noop */
-      }
-    };
-  }, [index]);
-
-  return (
-    <div
-      className="flex flex-col min-h-[60svh]"
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-    >
-      <div className="relative flex items-center justify-center aspect-video max-h-[75svh] w-full overflow-hidden bg-matcha-950 rounded-t-3xl">
-        <h2 id="lightbox-title" className="sr-only">Gallery memory {index + 1}</h2>
-        {mediaFailed ? (
-          <MediaFallback className="w-full h-full rounded-none" />
-        ) : item.media.type === 'video' ? (
-          <video
-            ref={videoRef}
-            key={item.id}
-            src={item.media.src}
-            poster={item.media.poster}
-            controls
-            playsInline
-            preload="metadata"
-            className="w-full h-full object-contain"
-            onError={() => setMediaFailed(true)}
-          />
-        ) : (
-          <img
-            key={item.id}
-            src={item.media.src}
-            alt={item.media.alt || ''}
-            className="w-full h-full object-contain"
-            onError={() => setMediaFailed(true)}
-          />
-        )}
-
-        {index > 0 && (
-          <div className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-10">
-            <IconButton
-              icon={ChevronLeft}
-              size="lg"
-              variant="solid"
-              label="Previous"
-              onClick={onPrev}
-              className="!w-12 !h-12 md:!w-14 md:!h-14"
-            />
-          </div>
-        )}
-        {index < items.length - 1 && (
-          <div className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 z-10">
-            <IconButton
-              icon={ChevronRight}
-              size="lg"
-              variant="solid"
-              label="Next"
-              onClick={onNext}
-              className="!w-12 !h-12 md:!w-14 md:!h-14"
-            />
-          </div>
-        )}
-      </div>
-
-      <div className="px-6 py-5 md:px-10 md:py-7 border-t border-cream-100/5">
-        <div className="flex flex-wrap items-start justify-between gap-4 mb-3">
-          <div className="flex flex-col gap-1">
-            {item.dateLabel && (
-              <span className="font-handwritten text-deepred-500 text-xl leading-none">
-                {item.dateLabel}
-              </span>
-            )}
-            {(item.caption || item.media.caption) && (
-              <p className="font-body text-cream-100 leading-relaxed max-w-2xl">
-                {item.caption || item.media.caption}
-              </p>
-            )}
-          </div>
-          <span className="font-mono text-xs text-cream-200/40 shrink-0 pt-1">
-            {index + 1} / {items.length}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export const GallerySection: React.FC = () => {
   const reduced = useReducedMotion();
+  const navigate = useNavigate();
+  const location = useLocation();
   const items = sortByOrder(filterEnabled(galleryItems)).filter((item) => item.media.enabled);
-  const [open, setOpen] = useState(false);
-  const [index, setIndex] = useState(0);
-
-  const onPrev = useCallback(() => {
-    setIndex((i) => Math.max(0, i - 1));
-  }, []);
-
-  const onNext = useCallback(() => {
-    setIndex((i) => Math.min(items.length - 1, i + 1));
-  }, [items.length]);
 
   return (
     <section id="gallery" className="story-section gallery-atmosphere">
@@ -255,30 +116,12 @@ export const GallerySection: React.FC = () => {
                 index={i}
                 total={items.length}
                 reduced={reduced}
-                onClick={() => {
-                  setIndex(i);
-                  setOpen(true);
-                }}
+                onOpen={() => navigate(`/gallery/${item.id}${location.search}`)}
               />
             ))}
           </div>
         )}
       </div>
-
-      {items.length > 0 && <Modal
-        open={open}
-        onClose={() => setOpen(false)}
-        labelledBy="lightbox-title"
-        showClose
-        className="!p-0 !overflow-hidden !max-w-6xl"
-      >
-        <LightboxContent
-          items={items}
-          index={index}
-          onPrev={onPrev}
-          onNext={onNext}
-        />
-      </Modal>}
     </section>
   );
 };
