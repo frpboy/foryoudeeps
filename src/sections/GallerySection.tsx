@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { SectionHeading, Play, DecorativeHeart } from '@/components/ui/primitives';
-import { ResponsiveImage } from '@/components/ui/Media';
 import { FutureContent } from '@/components/ui/FutureContent';
 import { AmbientParticles } from '@/components/ui/AmbientParticles';
 import { AgeMotif } from '@/components/ui/AgeMotif';
@@ -14,21 +13,16 @@ import type { GalleryItem } from '@/types';
 interface GalleryCardProps {
   item: GalleryItem;
   index: number;
-  total: number;
   reduced: boolean;
   onOpen: () => void;
 }
 
-const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, total, reduced, onOpen }) => {
+const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, reduced, onOpen }) => {
   const { ref, visible } = useIntersectionObserver<HTMLButtonElement>();
   const isVideo = item.media.type === 'video';
-  const spans: Record<number, string> = {
-    0: 'md:col-span-2 md:row-span-2',
-    3: 'md:col-span-2',
-    5: 'md:row-span-2',
-  };
-  const spanClass = spans[index % total] || '';
   const rotation = item.rotation ?? (((index * 7) % 5) - 2) * 0.7;
+  const photoRatio = item.media.width && item.media.height ? item.media.width / item.media.height : 0.7;
+  const polaroidRatio = photoRatio * 0.9 + 0.02;
 
   return (
     <motion.button
@@ -39,18 +33,17 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, total, reduced, 
       transition={{ duration: 0.66, delay: Math.min(index * 0.07, 0.48), ease: [0.22, 1, 0.36, 1] }}
       whileHover={reduced ? {} : { scale: 1.02, y: -5, rotate: rotation + (index % 2 ? 0.8 : -0.8) }}
       whileTap={reduced ? {} : { scale: 0.98 }}
-      className={`gallery-memory gallery-polaroid group relative block w-full overflow-hidden text-left ${spanClass}`}
-      style={{ transform: `rotate(${rotation}deg)` }}
+      className={`gallery-memory gallery-polaroid ${item.featured ? 'gallery-polaroid--featured' : 'gallery-polaroid--supporting'} ${index > 1 ? 'gallery-polaroid--mobile-hidden' : ''} group relative block overflow-hidden text-left`}
+      style={{ transform: `rotate(${rotation}deg)`, aspectRatio: polaroidRatio }}
       aria-label={`Open gallery item ${index + 1}`}
     >
-      <div className={item.featured ? 'aspect-[4/5]' : 'aspect-square md:aspect-auto md:h-full'}>
-        <ResponsiveImage
+      <div className="gallery-polaroid__photo">
+        <img
           src={item.media.poster || item.media.src}
           alt={item.media.alt || ''}
-          rounded="none"
-          aspect={undefined}
-          lazy={index > 1}
-          className="w-full h-full"
+          loading={index > 1 ? 'lazy' : 'eager'}
+          decoding="async"
+          className="gallery-polaroid__image"
         />
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-matcha-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -113,13 +106,12 @@ export const GallerySection: React.FC = () => {
             message="Real photographs and small films will live here, exactly as they happened."
           />
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 auto-rows-[minmax(120px,auto)] md:auto-rows-[180px]">
+          <div className="gallery-composition">
             {sceneItems.map((item, i) => (
               <GalleryCard
                 key={item.id}
                 item={item}
                 index={i}
-                total={sceneItems.length}
                 reduced={reduced}
                 onOpen={() => navigate(`/gallery/${item.id}${location.search}`)}
               />

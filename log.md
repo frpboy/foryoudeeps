@@ -604,3 +604,65 @@ npm run test:e2e
 - Visually inspected fresh production screenshots for birthday, gallery,
   gallery detail, wishes, daughter, and final. The wishes scene action is
   readable and its content remains contained.
+
+---
+
+## 2026-08-12 - Gallery index proportional-photo correction
+
+### Implemented
+
+- Reworked the gallery index cards so their geometry is derived from the two
+  supplied photographs' actual dimensions (901x1600 and 1158x1544), rather
+  than a fixed oversized panel.
+- Kept each real image as the primary visible element inside a compact
+  Polaroid frame with a small caption strip; the images preserve their full
+  aspect ratios using direct image elements and `object-fit: contain`.
+- Kept the two-card asymmetric composition, deterministic rotations, the
+  subordinate gallery `31`, and the behind-content particle layer. Removed
+  the large desktop gallery-index arrows while retaining route detail
+  navigation and major edge navigation.
+- Added the same ambient particle treatment to the gallery and wishes detail
+  routes for continuity with the scene system.
+
+### Verification
+
+- Visually inspected the preview gallery at 390x844, 768x1024, 1366x768, and
+  1920x1080. Both supplied photographs are fully visible, proportional, and
+  remain inside the viewport without the previous empty oversized panels.
+- `npm run typecheck`, `npm run lint`, `npm run validate-content`, `npm run
+  test`, `npm run build`, and `npm run test:e2e` passed.
+- Vitest: 4 files / 17 tests passed. Playwright: all 14 desktop/mobile tests
+  passed, including direct routing, gallery detail history navigation,
+  reduced-motion, edge/keyboard navigation, and the no-overflow viewport
+  matrix.
+
+---
+
+## 2026-08-12 - Authoritative Deeps portrait added
+
+### Implemented
+
+- Added the supplied full-body portrait of Deeps as the unmodified source
+  asset at `public/media/gallery/deeps-gallery-003.jpeg` (960x1280).
+- Registered it as the featured gallery item with a portrait-proportional
+  Polaroid treatment; its original file remains available in the routed
+  gallery detail view.
+- No generated substitute, face/appearance modification, beauty retouching,
+  aggressive grading, or fixed landscape crop was introduced.
+
+### Remaining verification
+
+- Re-run the gallery visual viewport audit after the third real portrait is
+  included in the compact index composition.
+
+### Verification completed
+
+- Visually inspected the finished gallery at 390x844 and 1366x768: mobile
+  shows the featured Deeps portrait plus one supporting photo, while desktop
+  shows all three real images. The detail route shows the entire original
+  960x1280 portrait with no crop.
+- `npm run build`, `npm run typecheck`, `npm run lint`,
+  `npm run validate-content`, `npm run test`, and `npm run test:e2e` passed.
+- Vitest: 4 files / 17 tests passed. Playwright: 14 desktop/mobile tests
+  passed after its gallery-history assertion was updated for the new first
+  item and the expanded no-overflow route matrix.

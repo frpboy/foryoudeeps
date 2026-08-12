@@ -243,10 +243,11 @@ body.no-scroll {
 .wishes-atmosphere > .mx-auto { display: flex; flex-direction: column; }
 .journey-atmosphere .editorial-empty,
 .wishes-atmosphere .editorial-empty { flex: 1 1 auto; min-height: 0; }
-.gallery-atmosphere .grid { min-height: 0; flex: 1 1 auto; align-content: center; }
-.gallery-atmosphere .gallery-polaroid { max-height: min(42dvh, 430px); }
-.gallery-atmosphere .gallery-polaroid > div:first-child { max-height: calc(min(42dvh, 430px) - 2.8rem); }
-.gallery-atmosphere .gallery-polaroid img { object-fit: cover; }
+.gallery-composition { display: flex; min-height: 0; flex: 1 1 auto; align-items: center; justify-content: center; gap: clamp(.8rem, 3vw, 3.5rem); }
+.gallery-composition .gallery-polaroid { width: clamp(6.5rem, 16vw, 14rem); height: auto; max-width: none; flex: 0 0 auto; }
+.gallery-composition .gallery-polaroid--featured { width: clamp(7rem, 17vw, 15rem); }
+.gallery-polaroid__photo { display: flex; height: calc(100% - 2.35rem); align-items: center; justify-content: center; overflow: hidden; }
+.gallery-polaroid__image { display: block; width: auto; max-width: 100%; height: 100%; object-fit: contain; }
 .daughter-atmosphere > .mx-auto { max-height: 100%; justify-content: center; }
 .daughter-atmosphere .mt-20 { margin-top: clamp(1.5rem, 5vh, 4rem); }
 .daughter-atmosphere video { max-height: min(46dvh, 500px); object-fit: contain; }
@@ -353,6 +354,12 @@ body.no-scroll {
 .gallery-sticker { transform: rotate(3deg); border-radius: 2px 7px 3px 6px; }
 .wish-polaroid .paper-edge { padding: .55rem .55rem 2.5rem; }
 .wish-polaroid .paper-edge::after { content: '♡'; position: absolute; right: .8rem; bottom: .65rem; color: var(--rose-ink); font-family: 'Caveat', cursive; font-size: 1.45rem; }
+
+@media (max-width: 767px) {
+  .gallery-composition .gallery-polaroid { width: min(37vw, 12rem); }
+  .gallery-composition .gallery-polaroid--featured { width: min(42vw, 13.5rem); }
+  .gallery-composition .gallery-polaroid--mobile-hidden { display: none; }
+}
 .wish-chat .paper-edge { border-radius: 18px 18px 18px 4px; clip-path: none; }
 .wish-chat .paper-edge::before { content: ''; position: absolute; left: .8rem; bottom: -.5rem; border-top: .7rem solid currentColor; border-right: .7rem solid transparent; opacity: .14; }
 
@@ -384,8 +391,10 @@ body.no-scroll {
   .journey-atmosphere .mb-16,
   .gallery-atmosphere .mb-16,
   .wishes-atmosphere .mb-16 { margin-bottom: 1.25rem; }
-  .gallery-atmosphere .gallery-polaroid { max-height: 29dvh; padding-bottom: 1.7rem; }
-  .gallery-atmosphere .gallery-polaroid > div:first-child { max-height: calc(29dvh - 2rem); }
+  .gallery-composition { gap: .8rem; }
+  .gallery-composition .gallery-polaroid,
+  .gallery-composition .gallery-polaroid--featured { width: clamp(5.8rem, 27vw, 11rem); height: auto; max-width: none; padding-bottom: 1.7rem; }
+  .gallery-polaroid__photo { height: calc(100% - 1.7rem); }
   .daughter-atmosphere .mt-20 { margin-top: 1.25rem; }
   .daughter-atmosphere .text-4xl { font-size: 2rem; }
   .final-atmosphere .mt-12 { margin-top: 1rem; }

@@ -13,12 +13,12 @@ test('uses client-side gallery detail routes with history navigation', async ({ 
   page.on('load', () => { loads += 1; });
   await page.goto('/gallery?preview=birthday');
   await page.getByRole('button', { name: 'Open gallery item 1' }).click();
-  await expect(page).toHaveURL(/\/gallery\/gallery-001\?preview=birthday$/);
+  await expect(page).toHaveURL(/\/gallery\/gallery-003\?preview=birthday$/);
   await expect(page.getByRole('link', { name: /back to memories/i })).toBeVisible();
   await page.getByRole('button', { name: /next/i }).click();
-  await expect(page).toHaveURL(/\/gallery\/gallery-002\?preview=birthday$/);
-  await page.goBack();
   await expect(page).toHaveURL(/\/gallery\/gallery-001\?preview=birthday$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/\/gallery\/gallery-003\?preview=birthday$/);
   await page.goBack();
   await expect(page).toHaveURL(/\/gallery\?preview=birthday$/);
   expect(loads).toBe(1);
@@ -69,7 +69,7 @@ test('keeps every routed scene inside the visual viewport', async ({ page }) => 
     [320, 568], [360, 640], [375, 667], [390, 844], [414, 896], [430, 932],
     [768, 1024], [1024, 768], [1280, 720], [1366, 768], [1440, 900], [1920, 1080],
   ] as const;
-  const routes = ['/', '/birthday?preview=birthday', '/memories?preview=birthday', '/gallery?preview=birthday', '/gallery/gallery-001?preview=birthday', '/wishes?preview=birthday', '/wishes/missing?preview=birthday', '/daughter?preview=birthday', '/final?preview=birthday'];
+  const routes = ['/', '/birthday?preview=birthday', '/memories?preview=birthday', '/gallery?preview=birthday', '/gallery/gallery-003?preview=birthday', '/gallery/gallery-001?preview=birthday', '/wishes?preview=birthday', '/wishes/missing?preview=birthday', '/daughter?preview=birthday', '/final?preview=birthday'];
   for (const [width, height] of viewports) {
     await page.setViewportSize({ width, height });
     for (const route of routes) {
