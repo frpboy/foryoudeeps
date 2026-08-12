@@ -252,3 +252,21 @@ npm run test:e2e
 - Vitest: 4 files and 13 tests passed.
 - Playwright: 8 tests passed across desktop Chromium and Pixel 5 emulation,
   including both accepted preview URLs.
+
+---
+
+## 2026-08-12 - Vercel custom-domain handoff
+
+### Production evidence
+
+- `https://foryoudeeps.vercel.app/?preview-birthday` returned HTTP 200 and
+  its deployed JavaScript bundle contained the short preview URL support.
+- `foryoudeeps.frpboy.in` resolves to Vercel infrastructure but returned a
+  Vercel 404. This indicates project-domain association is missing externally,
+  not an application build failure.
+
+### Prepared
+
+- Added `vercel.json` with production response security headers.
+- Added `VERCEL_DEPLOYMENT.md` with the one-time Vercel dashboard action to
+  attach `foryoudeeps.frpboy.in` to the project.

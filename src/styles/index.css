@@ -36,6 +36,8 @@
   --duration-fast: 150ms;
   --duration-normal: 300ms;
   --duration-slow: 600ms;
+  --paper: #f4ead2;
+  --rose-ink: #b83d4d;
 }
 
 * {
@@ -57,6 +59,16 @@ body {
   overflow-x: hidden;
   min-height: 100vh;
   min-height: 100svh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");
 }
 
 body.no-scroll {
@@ -121,7 +133,7 @@ body.no-scroll {
   }
 
   .card-cream {
-    background: linear-gradient(145deg, #FFFDF5 0%, #F8F0DD 100%);
+    background: linear-gradient(145deg, #fffdf5 0%, #f4ead2 100%);
     color: var(--color-ink);
   }
 
@@ -142,6 +154,118 @@ body.no-scroll {
   .aspect-video {
     aspect-ratio: 16 / 9;
   }
+
+  .paper-edge {
+    clip-path: polygon(0 1%, 4% 0, 10% 1%, 18% 0, 26% 1%, 34% 0, 43% 1%, 52% 0, 62% 1%, 70% 0, 78% 1%, 88% 0, 95% 1%, 100% 0, 100% 99%, 94% 100%, 87% 99%, 79% 100%, 68% 99%, 59% 100%, 49% 99%, 39% 100%, 30% 99%, 20% 100%, 10% 99%, 0 100%);
+  }
+
+  .story-section {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(7rem, 14vw, 12rem) 1.5rem;
+  }
+
+  .story-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .story-section > * { position: relative; z-index: 1; }
+
+  .story-kicker {
+    font-family: 'Caveat', cursive;
+    color: var(--rose-ink);
+    font-size: clamp(1.5rem, 3vw, 2.15rem);
+    line-height: 1;
+  }
+
+  .story-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2.65rem, 6vw, 5.4rem);
+    line-height: .98;
+    letter-spacing: -.045em;
+    text-wrap: balance;
+  }
+
+  .story-intro {
+    max-width: 29rem;
+    font-size: clamp(1rem, 1.7vw, 1.2rem);
+    line-height: 1.65;
+  }
+
+  .editorial-empty {
+    min-height: 15rem;
+    border-top: 1px solid rgba(248, 240, 221, .18);
+    border-bottom: 1px solid rgba(248, 240, 221, .18);
+    padding: 3rem 0;
+  }
+
+  .editorial-empty--paper { border-color: rgba(7, 21, 15, .18); }
+}
+
+.countdown-stage,
+.reveal-stage {
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 46%, rgba(153, 36, 48, .13), transparent 64%),
+    radial-gradient(ellipse 65% 42% at 14% 90%, rgba(47, 102, 71, .26), transparent 65%),
+    linear-gradient(150deg, #06150e 0%, #0a2418 48%, #071a11 100%);
+}
+
+.countdown-stage::before,
+.reveal-stage::before {
+  content: '';
+  position: absolute;
+  inset: 1.4rem;
+  z-index: -1;
+  border: 1px solid rgba(248, 240, 221, .12);
+  border-radius: 50% 47% 52% 46% / 44% 52% 46% 54%;
+  opacity: .65;
+}
+
+.countdown-stage::after,
+.reveal-stage::after {
+  content: '31';
+  position: absolute;
+  right: -1.3rem;
+  bottom: -2.8rem;
+  z-index: -1;
+  color: rgba(248, 240, 221, .035);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(15rem, 52vw, 35rem);
+  line-height: 1;
+}
+
+.countdown-clock { letter-spacing: -.065em; }
+.countdown-separator { color: rgba(201, 74, 85, .7); font-family: 'Playfair Display', Georgia, serif; }
+
+.reveal-name {
+  font-size: clamp(5.4rem, 21vw, 12.5rem);
+  line-height: .75;
+  letter-spacing: -.085em;
+}
+
+.level-seal {
+  border-top: 1px solid rgba(201, 74, 85, .8);
+  border-bottom: 1px solid rgba(201, 74, 85, .8);
+  letter-spacing: .25em;
+}
+
+.journey-atmosphere { background: linear-gradient(155deg, #123324 0%, #0b2117 62%, #0a1c13 100%); }
+.journey-atmosphere::before { background: radial-gradient(ellipse 55% 45% at 92% 12%, rgba(201, 74, 85, .11), transparent 70%); }
+.gallery-atmosphere { background: #081810; }
+.gallery-atmosphere::before { background: radial-gradient(ellipse 65% 46% at 12% 12%, rgba(48, 104, 75, .23), transparent 72%); }
+.wishes-atmosphere { color: #07150f; background: var(--paper); }
+.wishes-atmosphere::before { background-image: radial-gradient(rgba(92,17,25,.1) .7px, transparent .7px); background-size: 8px 8px; opacity: .22; }
+.daughter-atmosphere { background: linear-gradient(180deg, #0d2419 0%, #07150f 100%); }
+.final-atmosphere { background: radial-gradient(ellipse 65% 55% at 50% 48%, #102a1d 0%, #06140d 74%); }
+
+.section-rule { width: min(7rem, 25vw); height: 1px; background: currentColor; opacity: .34; }
+
+@media (min-width: 768px) {
+  .story-section { padding-left: 3rem; padding-right: 3rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
