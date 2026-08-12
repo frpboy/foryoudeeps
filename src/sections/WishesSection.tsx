@@ -84,10 +84,10 @@ interface WishCardProps {
 export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseAllMedia, registerMedia, unregisterMedia }) => {
   const { ref, visible } = useIntersectionObserver<HTMLDivElement>();
   const variant = getWishVariant(wish);
-  const hasPhoto = Boolean(wish.photo);
+  const hasPhoto = Boolean(wish.photo?.enabled && wish.photo.src);
   const hasText = Boolean(wish.text?.trim());
-  const hasAudio = Boolean(wish.audio?.src);
-  const hasVideo = Boolean(wish.video?.src);
+  const hasAudio = Boolean(wish.audio?.enabled && wish.audio.src);
+  const hasVideo = Boolean(wish.video?.enabled && wish.video.src);
   const toneCream = index % 3 !== 1 || wish.featured;
   const rotation = wish.featured ? 0 : ((index % 5) - 2) * 0.4;
 

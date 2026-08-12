@@ -22,4 +22,10 @@ describe('media utilities', () => {
     expect(isWishEmpty(baseWish)).toBe(true);
     expect(isWishEmpty({ ...baseWish, text: 'Approved note' })).toBe(false);
   });
+
+  it('does not publish disabled wish media', () => {
+    const disabledPhoto = { id: 'photo', type: 'image' as const, src: '/media/wishes/photo.webp', alt: 'A', order: 1, enabled: false };
+    expect(getWishVariant({ ...baseWish, photo: disabledPhoto })).toBe('text-only');
+    expect(isWishEmpty({ ...baseWish, photo: disabledPhoto })).toBe(true);
+  });
 });

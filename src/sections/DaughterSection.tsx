@@ -22,7 +22,7 @@ export const DaughterSection: React.FC = () => {
   const reduced = useReducedMotion();
   const { ref, visible } = useIntersectionObserver<HTMLElement>();
   const [started, setStarted] = React.useState(false);
-  const [missing, setMissing] = React.useState(!daughterMessage.video?.src);
+  const [missing, setMissing] = React.useState(!daughterMessage.video?.enabled || !daughterMessage.video.src);
   const videoRef = useRef<HTMLVideoElement>(null);
   const { pauseAll, registerVideo, unregisterVideo } = useMediaPlayback();
   useEffect(() => { const video = videoRef.current; if (!video) return; registerVideo(video); return () => unregisterVideo(video); }, [started, registerVideo, unregisterVideo]);

@@ -2,9 +2,9 @@ import type { MediaAsset, Wish, WishVariant } from '@/types';
 
 export function getWishVariant(wish: Wish): WishVariant {
   const hasText = Boolean(wish.text?.trim());
-  const hasPhoto = Boolean(wish.photo?.src);
-  const hasAudio = Boolean(wish.audio?.src);
-  const hasVideo = Boolean(wish.video?.src);
+  const hasPhoto = Boolean(wish.photo?.enabled && wish.photo.src);
+  const hasAudio = Boolean(wish.audio?.enabled && wish.audio.src);
+  const hasVideo = Boolean(wish.video?.enabled && wish.video.src);
 
   if (hasText && hasPhoto && hasAudio) return 'photo-text-audio';
   if (hasText && hasPhoto && hasVideo) return 'photo-text-video';
@@ -22,9 +22,9 @@ export function getWishVariant(wish: Wish): WishVariant {
 export function isWishEmpty(wish: Wish): boolean {
   return (
     !wish.text?.trim() &&
-    !wish.photo?.src &&
-    !wish.audio?.src &&
-    !wish.video?.src
+    !(wish.photo?.enabled && wish.photo.src) &&
+    !(wish.audio?.enabled && wish.audio.src) &&
+    !(wish.video?.enabled && wish.video.src)
   );
 }
 

@@ -330,3 +330,26 @@ npm run test:e2e
 - Playwright: 12 tests passed across desktop Chromium and mobile Chromium;
   the focused mobile console/network check also passed three concurrent repeat
   runs after a transient Vite-development-server 404 was observed.
+
+---
+
+## 2026-08-12 - Nested media publication safeguards
+
+### Implemented
+
+- Enforced the `enabled` flag on nested gallery, journey, wish, and daughter
+  media assets, not just their parent records. Disabled media now cannot leak
+  into an otherwise enabled item.
+- Completed the existing typed journey-video path with native controls,
+  `playsInline`, metadata-only preload, poster support, and graceful fallback
+  on playback failure.
+- Updated wish variant selection and empty-content detection to treat disabled
+  media as unpublished; this keeps future content controls truthful.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, `npm run validate-content`, `npm run
+  test`, `npm run build`, and `npm run test:e2e` passed.
+- Vitest: 4 files and 15 tests passed.
+- Playwright: 12 tests passed across desktop and mobile Chromium, including
+  the complete 320px through 1920px responsive overflow matrix.

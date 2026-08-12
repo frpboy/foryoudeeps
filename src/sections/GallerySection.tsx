@@ -211,7 +211,7 @@ const LightboxContent: React.FC<LightboxContentProps> = ({ items, index, onPrev,
 
 export const GallerySection: React.FC = () => {
   const reduced = useReducedMotion();
-  const items = sortByOrder(filterEnabled(galleryItems));
+  const items = sortByOrder(filterEnabled(galleryItems)).filter((item) => item.media.enabled);
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 

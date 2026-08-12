@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { SectionHeading, PaperNote, DecorativeLeaf } from '@/components/ui/primitives';
-import { ResponsiveImage } from '@/components/ui/Media';
+import { MediaFallback, ResponsiveImage } from '@/components/ui/Media';
 import { FutureContent } from '@/components/ui/FutureContent';
 import { useReducedMotion, useIntersectionObserver } from '@/hooks';
 import { filterEnabled, sortByOrder } from '@/lib/media';
@@ -18,6 +18,9 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ item, index, reduced }) => {
   const { ref, visible } = useIntersectionObserver<HTMLDivElement>();
   const isLeft = index % 2 === 0;
   const rotation = (index % 3 - 1) * 0.8;
+  const [videoFailed, setVideoFailed] = React.useState(false);
+
+  React.useEffect(() => setVideoFailed(false), [item.id, item.video?.src]);
 
   return (
     <motion.div
@@ -29,7 +32,7 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ item, index, reduced }) => {
     >
       <PaperNote tone={isLeft ? 'cream' : 'matcha'} rotation={rotation} className="h-full">
         <div className="flex flex-col gap-4 h-full">
-          {item.image && (
+          {item.image?.enabled && (
             <ResponsiveImage
               src={item.image.src}
               alt={item.image.alt || ''}
@@ -37,6 +40,21 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ item, index, reduced }) => {
               rounded="md"
               lazy={index > 0}
             />
+          )}
+          {item.video?.enabled && (
+            videoFailed ? (
+              <MediaFallback className="aspect-video rounded-xl" />
+            ) : (
+              <video
+                src={item.video.src}
+                poster={item.video.poster}
+                controls
+                playsInline
+                preload="metadata"
+                className="aspect-video w-full rounded-xl bg-matcha-800/30 object-cover"
+                onError={() => setVideoFailed(true)}
+              />
+            )
           )}
           <div className="flex flex-col gap-2">
             {item.dateLabel && (
@@ -59,7 +77,7 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ item, index, reduced }) => {
 
 export const JourneySection: React.FC = () => {
   const reduced = useReducedMotion();
-  const items = sortByOrder(filterEnabled(journeyItems));
+  const items = sortByOrder(filterEnabled(journeyItems)).filter((item) => item.image?.enabled || item.video?.enabled || item.caption);
 
   return (
     <section
