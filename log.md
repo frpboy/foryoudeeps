@@ -392,3 +392,26 @@ npm run test:e2e
   test`, `npm run build`, and `npm run test:e2e` passed.
 - Vitest: 4 files and 16 tests passed.
 - Playwright: 12 browser tests passed across desktop and mobile Chromium.
+
+---
+
+## 2026-08-12 - Deterministic scrapbook presentation layer
+
+### Implemented
+
+- Added optional, data-driven scrapbook fields for gallery items: deterministic
+  rotation, handwritten caption treatment, and a small owner-supplied sticker.
+  Gallery memories retain the existing accessible lightbox.
+- Added explicit wish presentation styles (`note`, `polaroid`, `chat`,
+  `audio`, `video`, and `mixed`) plus an optional generic timestamp label for
+  creative chat-style wishes. Nothing is randomly assigned or fabricated.
+- Applied the reference inspiration only to future memory-bearing sections:
+  warm-cream Polaroid edges, restrained tape/paper effects, and a generic chat
+  bubble treatment. The dark-matcha hero/countdown identity remains unchanged.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, `npm run validate-content`, `npm run
+  test`, `npm run build`, and `npm run test:e2e` passed.
+- Vitest: 4 files and 16 tests passed.
+- Playwright: 12 browser tests passed across desktop and mobile Chromium.

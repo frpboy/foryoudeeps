@@ -26,6 +26,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, total, reduced, 
     5: 'md:row-span-2',
   };
   const spanClass = spans[index % total] || '';
+  const rotation = item.rotation ?? (((index * 7) % 5) - 2) * 0.7;
 
   return (
     <motion.button
@@ -36,7 +37,8 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, total, reduced, 
       transition={{ duration: 0.55, delay: Math.min(index * 0.05, 0.4), ease: [0.22, 1, 0.36, 1] }}
       whileHover={reduced ? {} : { scale: 1.015, y: -2 }}
       whileTap={reduced ? {} : { scale: 0.98 }}
-      className={`gallery-memory group relative block w-full overflow-hidden text-left ${spanClass}`}
+      className={`gallery-memory gallery-polaroid group relative block w-full overflow-hidden text-left ${spanClass}`}
+      style={{ transform: `rotate(${rotation}deg)` }}
       aria-label={`Open gallery item ${index + 1}`}
     >
       <div className={item.featured ? 'aspect-[4/5]' : 'aspect-square md:aspect-auto md:h-full'}>
@@ -63,11 +65,16 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, total, reduced, 
             </span>
           )}
           {item.caption && (
-            <p className="font-body text-cream-100 text-sm md:text-base leading-snug">
+            <p className={`${item.handwrittenCaption ? 'font-handwritten text-xl leading-none' : 'font-body text-sm md:text-base leading-snug'} text-cream-100`}>
               {item.caption}
             </p>
           )}
         </div>
+      )}
+      {item.sticker && (
+        <span className="gallery-sticker absolute right-3 top-3 max-w-[60%] bg-cream-50 px-2 py-1 font-handwritten text-base leading-none text-deepred-700 shadow-soft">
+          {item.sticker}
+        </span>
       )}
       {item.featured && (
         <div className="absolute top-3 left-3">

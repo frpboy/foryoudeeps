@@ -40,6 +40,8 @@ export interface Wish {
   caption?: string;
   order: number;
   featured?: boolean;
+  presentationStyle?: 'note' | 'polaroid' | 'chat' | 'audio' | 'video' | 'mixed';
+  timestampLabel?: string;
   enabled: boolean;
 }
 
@@ -61,6 +63,9 @@ export interface GalleryItem {
   dateLabel?: string;
   order: number;
   featured?: boolean;
+  handwrittenCaption?: boolean;
+  sticker?: string;
+  rotation?: number;
   enabled: boolean;
 }
 

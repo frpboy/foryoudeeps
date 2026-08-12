@@ -116,6 +116,7 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
   const hasVideo = Boolean(wish.video?.enabled && wish.video.src);
   const toneCream = index % 3 !== 1 || wish.featured;
   const rotation = wish.featured ? 0 : ((index % 5) - 2) * 0.4;
+  const presentation = wish.presentationStyle ?? (hasAudio ? 'audio' : hasVideo ? 'video' : hasPhoto ? 'polaroid' : 'note');
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoFailed, setVideoFailed] = React.useState(false);
@@ -191,7 +192,7 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
       initial={reduced || !visible ? {} : { opacity: 0, y: 32, rotate: rotation * 2 }}
       animate={visible ? { opacity: 1, y: 0, rotate: rotation } : {}}
       transition={{ duration: 0.6, delay: Math.min((index % 6) * 0.08, 0.45), ease: [0.22, 1, 0.36, 1] }}
-      className={`wish-note wish-note-${index % 4} ${wish.featured ? 'md:col-span-2' : ''}`}
+      className={`wish-note wish-note-${index % 4} wish-${presentation} ${wish.featured ? 'md:col-span-2' : ''}`}
     >
       <PaperNote tone={toneCream ? 'cream' : 'matcha'} rotation={rotation} className="h-full">
         {wish.featured && (
@@ -222,6 +223,9 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
               </span>
             )}
           </div>
+          {presentation === 'chat' && wish.timestampLabel && (
+            <span className={`font-body text-xs ${toneCream ? 'text-ink/50' : 'text-cream-100/50'}`}>{wish.timestampLabel}</span>
+          )}
         </div>
 
         {hasPhoto && variant === ('photo-only' as WishVariant) ? (
