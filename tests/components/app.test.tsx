@@ -17,7 +17,7 @@ describe('App birthday state', () => {
     render(<App />);
     expect(screen.getByText('LEVEL 31 UNLOCKED')).toBeInTheDocument();
     expect(screen.getByText('A few memories, held close')).toBeInTheDocument();
-    expect(screen.getByText('The album is ready')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Open gallery item 1' })).toBeInTheDocument();
     expect(screen.getByText('Words worth waiting for')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /start again/i })).toBeInTheDocument();
   });

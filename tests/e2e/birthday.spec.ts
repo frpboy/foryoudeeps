@@ -29,13 +29,23 @@ test.beforeEach(async ({ page }) => {
   }, birthdayNow);
 });
 
-test('renders the birthday journey with intentional empty media states', async ({ page }) => {
+test('renders the birthday journey with the approved gallery memories', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByText('LEVEL 31 UNLOCKED')).toBeVisible();
   await expect(page.getByText('A few memories, held close')).toBeVisible();
-  await expect(page.getByText('The album is ready')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Open gallery item 1' })).toBeVisible();
   await expect(page.getByText('Words worth waiting for')).toBeVisible();
     await expect(page.getByRole('button', { name: /start again/i })).toBeVisible();
+});
+
+test('opens, navigates, and closes the gallery lightbox accessibly', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Open gallery item 1' }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.getByText('2 / 2')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).not.toBeVisible();
 });
 
 test('keeps the pre-birthday experience a secret waiting room', async ({ page }) => {

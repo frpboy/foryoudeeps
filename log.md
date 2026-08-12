@@ -432,3 +432,25 @@ npm run test:e2e
   test`, `npm run build`, and `npm run test:e2e` passed.
 - Vitest: 4 files and 16 tests passed.
 - Playwright: 12 browser tests passed across desktop and mobile Chromium.
+
+---
+
+## 2026-08-12 - First approved gallery photographs
+
+### Added
+
+- Added two supplied, reviewed photographs under `public/media/gallery/` as
+  `deeps-gallery-001.jpeg` and `deeps-gallery-002.jpeg`.
+- Published them through the typed gallery data with deterministic ordering,
+  descriptive alt text, and no invented captions, dates, labels, or personal
+  context.
+- Extended browser coverage for opening the gallery, keyboard next navigation,
+  and Escape closing in the existing accessible lightbox.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, `npm run validate-content`, `npm run
+  test`, `npm run build`, and `npm run test:e2e` passed.
+- Vitest: 4 files and 16 tests passed.
+- Playwright: 14 tests passed across desktop and mobile Chromium, including
+  the real gallery lightbox journey.
