@@ -27,6 +27,16 @@ export function isBirthday(targetMs: number): boolean {
   return Date.now() >= targetMs;
 }
 
+/**
+ * A bounded visual progression for the age-transition artwork. It uses the
+ * same target/remaining countdown values as the clock; this is deliberately
+ * not another timer or a date-specific collection of thresholds.
+ */
+export function calculateAgeTransitionProgress(remainingMs: number, transitionWindowMs = 3 * 86400000): number {
+  if (transitionWindowMs <= 0) return remainingMs <= 0 ? 1 : 0;
+  return Math.min(1, Math.max(0, 1 - remainingMs / transitionWindowMs));
+}
+
 export function padZero(value: number, length = 2): string {
   return value.toString().padStart(length, '0');
 }

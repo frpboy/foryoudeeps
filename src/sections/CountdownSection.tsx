@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useCountdown, useReducedMotion } from '@/hooks';
-import { formatCountdownDate, padZero } from '@/lib/countdown';
+import { calculateAgeTransitionProgress, formatCountdownDate, padZero } from '@/lib/countdown';
 import { DecorativeHeart } from '@/components/ui/primitives';
 import { siteConfig } from '@/data/site';
 
@@ -25,6 +25,9 @@ const CountdownUnit: React.FC<CountdownUnitProps> = ({ value, label, delay, redu
 export const CountdownSection: React.FC<CountdownSectionProps> = () => {
   const countdown = useCountdown(siteConfig.birthdayDate);
   const reduced = useReducedMotion();
+  const ageProgress = countdown.isZero ? 1 : calculateAgeTransitionProgress(countdown.totalMs);
+  const age30Opacity = 0.115 * Math.pow(1 - ageProgress, 1.35);
+  const age31Opacity = 0.018 + 0.11 * Math.pow(ageProgress, 1.45);
 
   useEffect(() => {
     if (!countdown.isZero) return;
@@ -34,6 +37,20 @@ export const CountdownSection: React.FC<CountdownSectionProps> = () => {
 
   return (
     <section id="countdown" className="countdown-stage relative flex min-h-[100svh] items-center justify-center overflow-hidden safe-top safe-bottom">
+      <div aria-hidden="true" className="countdown-age-transition">
+        <span
+          className="countdown-age countdown-age--past"
+          style={{ opacity: age30Opacity, transform: `translate3d(${-ageProgress * 10}px, ${ageProgress * 8}px, 0) scale(${1 - ageProgress * 0.025})`, filter: `blur(${ageProgress * 2.2}px)` }}
+        >
+          {siteConfig.turningAge - 1}
+        </span>
+        <span
+          className="countdown-age countdown-age--arriving"
+          style={{ opacity: age31Opacity, transform: `translate3d(${(1 - ageProgress) * 10}px, ${(1 - ageProgress) * -8}px, 0) scale(${0.97 + ageProgress * 0.03})`, filter: `blur(${(1 - ageProgress) * 1.8}px)` }}
+        >
+          {siteConfig.turningAge}
+        </span>
+      </div>
       <div className="relative z-10 flex w-full max-w-2xl flex-col items-center px-6 py-16 text-center">
         <motion.div initial={reduced ? {} : { opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }} className="flex flex-col items-center gap-2">
           <span className="font-handwritten text-3xl leading-none text-deepred-500 md:text-4xl">for you,</span>

@@ -46,3 +46,20 @@ test('moves through the major story pages with edge taps and keyboard navigation
   await page.mouse.click(viewport.width - 1, 200);
   await expect(page).toHaveURL(/\/gallery\?preview=birthday$/);
 });
+
+test('keeps the countdown age artwork contained across target viewport widths', async ({ page }) => {
+  for (const width of [320, 360, 375, 390, 414, 430, 768, 1024, 1280, 1440, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+    await expect(page.locator('.countdown-age--past')).toBeVisible();
+    await expect(page.locator('.countdown-age--arriving')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  }
+});
+
+test('stops ambient movement for reduced-motion users', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/birthday?preview=birthday');
+  await expect(page.locator('.ambient-particles--still')).toBeVisible();
+  await expect(page.locator('.ambient-particle').first()).toHaveCSS('animation-name', 'none');
+});

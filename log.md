@@ -499,3 +499,39 @@ npm run test:e2e
 
 - `npm run typecheck`, `npm run lint`, and `npm run test:e2e` passed.
 - Playwright: 8 desktop/mobile route tests passed.
+
+---
+
+## 2026-08-12 - Cinematic motion and age-transition pass
+
+### Implemented
+
+- Added a reusable, deterministic ambient-particle layer with mood-specific
+  hearts, dust, dots, sparkles, and doodle marks. It uses 40 bounded desktop
+  nodes and 18 mobile nodes, transform/opacity-only CSS animation, and becomes
+  still for reduced-motion users.
+- Applied distinct atmospheric intensity across birthday, memories, gallery,
+  wishes, daughter, and final routes; the daughter and final scenes remain
+  deliberately sparse and slow.
+- Staged the birthday reveal into a short cinematic sequence and added a
+  separate `LEVEL 31 UNLOCKED` scale overshoot/settle. Gallery Polaroids now
+  settle from deterministic temporary rotations into their existing configured
+  scrapbook rotations.
+- Replaced the static countdown backdrop with a synchronized `30 → 31` age
+  transition. Both oversized layers remain rendered; their opacity, transform,
+  and blur derive from the same remaining countdown value as the visible clock
+  over its final 72-hour normalized window. The timer remains above the artwork
+  and birthday/preview state continues to render the completed `31` reveal.
+- Added scoped wish-detail previous/next, keyboard, and horizontal swipe
+  navigation, plus subtle accessible desktop previous/next story controls.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, `npm run validate-content`, `npm run
+  test`, `npm run build`, `npm run test:e2e`, and `git diff --check` passed.
+- Vitest: 4 files and 17 tests passed, including normalized age-transition
+  calculation coverage.
+- Playwright: 12 desktop/mobile browser tests passed, including direct routes,
+  browser history, gallery gestures, major-page edge/keyboard navigation,
+  reduced-motion particle stillness, and no horizontal overflow at 320, 360,
+  375, 390, 414, 430, 768, 1024, 1280, 1440, and 1920px widths.

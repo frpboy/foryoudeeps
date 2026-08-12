@@ -47,9 +47,24 @@ export const RoutedGalleryDetail: React.FC<{ to: (path: string) => string }> = (
 
 export const RoutedWishDetail: React.FC<{ to: (path: string) => string }> = ({ to }) => {
   const { id } = useParams();
-  const wish = filterEnabled(wishes).find((entry) => entry.id === id);
+  const navigate = useNavigate();
+  const entries = sortByOrder(filterEnabled(wishes));
+  const index = entries.findIndex((entry) => entry.id === id);
+  const wish = entries[index];
+  const previous = index > 0 ? entries[index - 1] : undefined;
+  const next = index < entries.length - 1 ? entries[index + 1] : undefined;
+  const start = useRef<{ x: number; y: number; blocked: boolean } | null>(null);
+  const isInteractive = (target: EventTarget | null) => target instanceof Element && Boolean(target.closest('button, a, video, audio, input, textarea, select, [role="slider"]'));
+  const move = useCallback((direction: -1 | 1) => {
+    const candidate = direction < 0 ? previous : next;
+    if (candidate) navigate(to(`/wishes/${candidate.id}`));
+  }, [navigate, next, previous, to]);
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => { if (!isInteractive(event.target) && event.key === 'ArrowLeft') move(-1); else if (!isInteractive(event.target) && event.key === 'ArrowRight') move(1); };
+    window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey);
+  }, [move]);
   if (!wish) return <StoryFallback birthdayAvailable to={to} />;
-  return <StoryPage><section className="wishes-atmosphere min-h-[100svh] px-5 py-12 md:px-12"><div className="mx-auto max-w-2xl"><Link to={to('/wishes')} className="inline-flex items-center gap-2 font-body text-sm text-ink/60 hover:text-ink"><ChevronLeft size={17} /> back to wishes</Link><article className="paper-edge card-cream mt-12 p-7 md:p-10"><h1 className="font-display text-4xl text-ink">{wish.name}</h1>{wish.relationship && <p className="mt-2 font-handwritten text-2xl text-deepred-700">{wish.relationship}</p>}{wish.photo?.enabled && <ResponsiveImage src={wish.photo.src} alt={wish.photo.alt || wish.name} className="mt-7" aspect="4 / 5" />}{wish.text && <p className="mt-7 font-body leading-relaxed text-ink">{wish.text}</p>}{wish.video?.enabled && <video src={wish.video.src} controls playsInline preload="metadata" className="mt-7 w-full" />}{wish.audio?.enabled && <audio src={wish.audio.src} controls preload="metadata" className="mt-7 w-full" />}</article></div></section></StoryPage>;
+  return <StoryPage><section onTouchStart={(event) => { start.current = { x: event.touches[0].clientX, y: event.touches[0].clientY, blocked: isInteractive(event.target) }; }} onTouchEnd={(event) => { const gesture = start.current; start.current = null; if (!gesture || gesture.blocked) return; const dx = event.changedTouches[0].clientX - gesture.x; const dy = event.changedTouches[0].clientY - gesture.y; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) move(dx < 0 ? 1 : -1); }} className="wishes-atmosphere min-h-[100svh] px-5 py-12 md:px-12"><div className="mx-auto max-w-2xl"><Link to={to('/wishes')} className="inline-flex items-center gap-2 font-body text-sm text-ink/60 hover:text-ink"><ChevronLeft size={17} /> back to wishes</Link><article className="paper-edge card-cream mt-12 p-7 md:p-10"><h1 className="font-display text-4xl text-ink">{wish.name}</h1>{wish.relationship && <p className="mt-2 font-handwritten text-2xl text-deepred-700">{wish.relationship}</p>}{wish.photo?.enabled && <ResponsiveImage src={wish.photo.src} alt={wish.photo.alt || wish.name} className="mt-7" aspect="4 / 5" />}{wish.text && <p className="mt-7 font-body leading-relaxed text-ink">{wish.text}</p>}{wish.video?.enabled && <video src={wish.video.src} controls playsInline preload="metadata" className="mt-7 w-full" />}{wish.audio?.enabled && <audio src={wish.audio.src} controls preload="metadata" className="mt-7 w-full" />}</article><nav aria-label="Wish navigation" className="mt-10 flex justify-between"><button type="button" disabled={!previous} onClick={() => move(-1)} className="inline-flex items-center gap-2 font-body text-sm text-ink/65 disabled:opacity-25"><ChevronLeft size={18} /> previous</button><button type="button" disabled={!next} onClick={() => move(1)} className="inline-flex items-center gap-2 font-body text-sm text-ink/65 disabled:opacity-25">next <ChevronRight size={18} /></button></nav></div></section></StoryPage>;
 };
 
 export const StoryFallback: React.FC<{ birthdayAvailable: boolean; to: (path: string) => string }> = ({ birthdayAvailable, to }) => <StoryPage><section className="final-atmosphere flex min-h-[100svh] items-center justify-center px-6 text-center"><div><p className="font-handwritten text-3xl text-deepred-300">a small wrong turn</p><h1 className="mt-5 font-display text-5xl text-cream-50">Looks like you wandered somewhere that isn’t part of the surprise.</h1><Link to={birthdayAvailable ? to('/birthday') : '/'} className="mt-10 inline-block font-body text-cream-200/70 hover:text-cream-50">take me back</Link></div></section></StoryPage>;

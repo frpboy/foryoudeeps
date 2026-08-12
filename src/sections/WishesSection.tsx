@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { SectionHeading, IconButton, Play, Pause, DecorativeHeart, PaperNote } from '@/components/ui/primitives';
 import { MediaFallback, ResponsiveImage } from '@/components/ui/Media';
+import { AmbientParticles } from '@/components/ui/AmbientParticles';
 import { useReducedMotion, useIntersectionObserver, useMediaRegistry } from '@/hooks';
 import { filterEnabled, sortByOrder, getWishVariant } from '@/lib/media';
 import { wishes } from '@/data/wishes';
@@ -194,6 +195,7 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
       transition={{ duration: 0.6, delay: Math.min((index % 6) * 0.08, 0.45), ease: [0.22, 1, 0.36, 1] }}
       className={`wish-note wish-note-${index % 4} wish-${presentation} ${wish.featured ? 'md:col-span-2' : ''}`}
     >
+      <AmbientParticles mood="wishes" />
       <PaperNote tone={toneCream ? 'cream' : 'matcha'} rotation={rotation} className="h-full">
         {wish.featured && (
           <div className="absolute -top-3 right-4">

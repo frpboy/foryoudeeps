@@ -15,6 +15,8 @@ describe('App birthday state', () => {
     renderApp();
     expect(screen.getByRole('heading', { name: /deeps/i })).toBeInTheDocument();
     expect(screen.getByText('Days')).toBeInTheDocument();
+    expect(screen.getByText('30')).toBeInTheDocument();
+    expect(screen.getByText('31')).toBeInTheDocument();
   });
 
   it('renders the complete available birthday journey after the boundary', () => {

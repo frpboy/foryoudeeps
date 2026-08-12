@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { SectionHeading, PaperNote, DecorativeLeaf } from '@/components/ui/primitives';
 import { MediaFallback, ResponsiveImage } from '@/components/ui/Media';
 import { FutureContent } from '@/components/ui/FutureContent';
+import { AmbientParticles } from '@/components/ui/AmbientParticles';
 import { useReducedMotion, useIntersectionObserver } from '@/hooks';
 import { filterEnabled, sortByOrder } from '@/lib/media';
 import { journeyItems } from '@/data/journey';
@@ -25,11 +26,12 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ item, index, reduced }) => {
   return (
     <motion.div
       ref={ref}
-      initial={reduced || !visible ? {} : { opacity: 0, y: 40, x: isLeft ? -30 : 30 }}
-      animate={visible ? { opacity: 1, y: 0, x: 0 } : {}}
+      initial={reduced || !visible ? {} : { opacity: 0, y: 40, x: isLeft ? -30 : 30, rotate: rotation * 2 }}
+      animate={visible ? { opacity: 1, y: 0, x: 0, rotate: rotation } : {}}
       transition={{ duration: 0.7, delay: (index % 3) * 0.1, ease: [0.22, 1, 0.36, 1] }}
       className={`relative w-full ${item.emphasis === 'featured' ? 'lg:col-span-2' : ''}`}
     >
+      <AmbientParticles mood="memories" />
       <PaperNote tone={isLeft ? 'cream' : 'matcha'} rotation={rotation} className="h-full">
         <div className="flex flex-col gap-4 h-full">
           {item.image?.enabled && (

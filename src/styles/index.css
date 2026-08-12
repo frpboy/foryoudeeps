@@ -225,7 +225,6 @@ body.no-scroll {
   opacity: .65;
 }
 
-.countdown-stage::after,
 .reveal-stage::after {
   content: '31';
   position: absolute;
@@ -237,6 +236,11 @@ body.no-scroll {
   font-size: clamp(15rem, 52vw, 35rem);
   line-height: 1;
 }
+
+.countdown-age-transition { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.countdown-age { position: absolute; right: -1.8rem; bottom: -3.3rem; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(15rem, 52vw, 35rem); line-height: 1; letter-spacing: -.1em; will-change: transform, opacity, filter; transition: opacity 950ms linear, transform 950ms ease-out, filter 950ms ease-out; }
+.countdown-age--past { color: var(--color-cream-100); }
+.countdown-age--arriving { color: var(--color-cream-100); text-shadow: 0 0 36px rgba(201,74,85,.22), 0 0 70px rgba(248,240,221,.08); }
 
 .countdown-clock { letter-spacing: -.065em; }
 .countdown-separator { color: rgba(201, 74, 85, .7); font-family: 'Playfair Display', Georgia, serif; }
@@ -261,6 +265,21 @@ body.no-scroll {
 .wishes-atmosphere::before { background-image: radial-gradient(rgba(92,17,25,.1) .7px, transparent .7px); background-size: 8px 8px; opacity: .22; }
 .daughter-atmosphere { background: linear-gradient(180deg, #0d2419 0%, #07150f 100%); }
 .final-atmosphere { background: radial-gradient(ellipse 65% 55% at 50% 48%, #102a1d 0%, #06140d 74%); }
+
+.ambient-particles { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.ambient-particle { position: absolute; left: var(--particle-left); top: var(--particle-top); width: 4px; height: 4px; opacity: .42; color: var(--color-red-500); transform: translate3d(0, 0, 0); animation: ambient-drift var(--particle-duration) ease-in-out var(--particle-delay) infinite alternate; will-change: transform, opacity; }
+.ambient-particle--dot, .ambient-particle--dust { border-radius: 999px; background: currentColor; box-shadow: 0 0 12px currentColor; }
+.ambient-particle--dust { width: 2px; height: 2px; color: rgba(248,240,221,.72); box-shadow: none; opacity: .35; }
+.ambient-particle--heart::before { content: '♥'; display: block; font-size: 10px; line-height: 1; text-shadow: 0 0 12px rgba(201,74,85,.45); }
+.ambient-particle--sparkle::before { content: '✦'; display: block; font-size: 11px; line-height: 1; color: var(--color-cream-100); text-shadow: 0 0 12px rgba(248,240,221,.55); }
+.ambient-particle--doodle::before { content: '·'; display: block; font-family: 'Caveat', cursive; font-size: 17px; line-height: .4; color: var(--color-red-500); }
+.ambient-particles--gallery .ambient-particle { opacity: .2; }
+.ambient-particles--daughter .ambient-particle { opacity: .23; animation-duration: calc(var(--particle-duration) * 1.8); }
+.ambient-particles--final .ambient-particle { opacity: .18; animation-duration: calc(var(--particle-duration) * 2); }
+.ambient-particles--wishes .ambient-particle--heart { color: var(--color-red-700); }
+.ambient-particles--still .ambient-particle { animation: none; }
+@keyframes ambient-drift { 0% { transform: translate3d(-2px, 4px, 0) scale(.85); opacity: .14; } 48% { opacity: .52; } 100% { transform: translate3d(3px, -7px, 0) scale(1.08); opacity: .22; } }
+@media (max-width: 767px) { .ambient-particle:nth-child(n + 19) { display: none; } }
 
 .section-rule { width: min(7rem, 25vw); height: 1px; background: currentColor; opacity: .34; }
 

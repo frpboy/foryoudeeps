@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { SectionHeading, Play, DecorativeHeart } from '@/components/ui/primitives';
 import { ResponsiveImage } from '@/components/ui/Media';
 import { FutureContent } from '@/components/ui/FutureContent';
+import { AmbientParticles } from '@/components/ui/AmbientParticles';
 import { useReducedMotion, useIntersectionObserver } from '@/hooks';
 import { filterEnabled, sortByOrder } from '@/lib/media';
 import { galleryItems } from '@/data/gallery';
@@ -32,10 +33,10 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, total, reduced, 
     <motion.button
       ref={ref as React.RefObject<HTMLButtonElement>}
       onClick={onOpen}
-      initial={reduced || !visible ? {} : { opacity: 0, y: 24 }}
-      animate={visible ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.55, delay: Math.min(index * 0.05, 0.4), ease: [0.22, 1, 0.36, 1] }}
-      whileHover={reduced ? {} : { scale: 1.015, y: -2 }}
+      initial={reduced || !visible ? {} : { opacity: 0, y: -24, scale: 0.96, rotate: rotation + (index % 2 ? 2.2 : -2.2) }}
+      animate={visible ? { opacity: 1, y: 0, scale: 1, rotate: rotation } : {}}
+      transition={{ duration: 0.66, delay: Math.min(index * 0.07, 0.48), ease: [0.22, 1, 0.36, 1] }}
+      whileHover={reduced ? {} : { scale: 1.02, y: -5, rotate: rotation + (index % 2 ? 0.8 : -0.8) }}
       whileTap={reduced ? {} : { scale: 0.98 }}
       className={`gallery-memory gallery-polaroid group relative block w-full overflow-hidden text-left ${spanClass}`}
       style={{ transform: `rotate(${rotation}deg)` }}
@@ -93,6 +94,7 @@ export const GallerySection: React.FC = () => {
 
   return (
     <section id="gallery" className="story-section gallery-atmosphere">
+      <AmbientParticles mood="gallery" />
       <div className="mx-auto w-full max-w-7xl">
         <div className="mb-16 md:mb-24">
           <SectionHeading

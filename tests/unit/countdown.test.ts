@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { calculateCountdown, formatCountdownDate, getTargetTimestamp, isBirthday, padZero } from '@/lib/countdown';
+import { calculateAgeTransitionProgress, calculateCountdown, formatCountdownDate, getTargetTimestamp, isBirthday, padZero } from '@/lib/countdown';
 
 describe('countdown utilities', () => {
   it('calculates an IST countdown without negative values', () => {
@@ -20,5 +20,12 @@ describe('countdown utilities', () => {
   it('formats configured dates and padded values consistently', () => {
     expect(formatCountdownDate('2026-08-15T00:00:00+05:30')).toBe('15 August 2026');
     expect(padZero(7)).toBe('07');
+  });
+
+  it('derives the age artwork progression from the same remaining countdown time', () => {
+    expect(calculateAgeTransitionProgress(3 * 86400000)).toBe(0);
+    expect(calculateAgeTransitionProgress(36 * 3600000)).toBeCloseTo(0.5);
+    expect(calculateAgeTransitionProgress(0)).toBe(1);
+    expect(calculateAgeTransitionProgress(-1)).toBe(1);
   });
 });
