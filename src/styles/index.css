@@ -279,6 +279,16 @@ body.no-scroll {
 .ambient-particles--wishes .ambient-particle--heart { color: var(--color-red-700); }
 .ambient-particles--still .ambient-particle { animation: none; }
 @keyframes ambient-drift { 0% { transform: translate3d(-2px, 4px, 0) scale(.85); opacity: .14; } 48% { opacity: .52; } 100% { transform: translate3d(3px, -7px, 0) scale(1.08); opacity: .22; } }
+.audio-waveform { display: flex; align-items: center; gap: 2px; height: 22px; }
+.audio-waveform__bar { width: 2px; height: 6px; border-radius: 999px; background: var(--color-red-500); opacity: .55; transform-origin: center; }
+.audio-waveform--playing .audio-waveform__bar { animation: waveform 620ms ease-in-out infinite alternate; }
+.audio-waveform--playing .audio-waveform__bar:nth-child(2) { animation-delay: -160ms; }
+.audio-waveform--playing .audio-waveform__bar:nth-child(3) { animation-delay: -320ms; }
+.audio-waveform--playing .audio-waveform__bar:nth-child(4) { animation-delay: -460ms; }
+.audio-waveform--playing .audio-waveform__bar:nth-child(5) { animation-delay: -250ms; }
+@keyframes waveform { from { transform: scaleY(.55); } to { transform: scaleY(2.1); } }
+.story-progress-active { animation: story-progress-pulse 2.8s ease-in-out infinite; }
+@keyframes story-progress-pulse { 50% { opacity: .65; transform: scaleX(1.12); } }
 @media (max-width: 767px) { .ambient-particle:nth-child(n + 19) { display: none; } }
 
 .section-rule { width: min(7rem, 25vw); height: 1px; background: currentColor; opacity: .34; }

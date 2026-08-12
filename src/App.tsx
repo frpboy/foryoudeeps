@@ -115,7 +115,7 @@ const App: React.FC = () => {
         <button type="button" aria-label="Next story page" disabled={!next} onClick={() => go(next)} className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-cream-100/15 bg-matcha-950/65 font-body text-lg text-cream-100/75 backdrop-blur transition hover:bg-matcha-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deepred-500 disabled:opacity-0">›</button>
       </nav>}
       {birthdayAvailable && journeyIndex >= 0 && <nav aria-label="Birthday story progress" className="pointer-events-none fixed left-1/2 top-5 z-50 flex -translate-x-1/2 items-center gap-1.5">
-        {journey.map((path, index) => <span key={path} className={`h-1 w-5 rounded-full ${index <= journeyIndex ? 'bg-deepred-500' : 'bg-cream-100/20'}`} />)}
+        {journey.map((path, index) => <span key={path} className={`h-1 w-5 rounded-full ${index <= journeyIndex ? 'bg-deepred-500' : 'bg-cream-100/20'} ${index === journeyIndex ? 'story-progress-active' : ''}`} />)}
       </nav>}
     </div>
   );

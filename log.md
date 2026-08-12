@@ -535,3 +535,21 @@ npm run test:e2e
   browser history, gallery gestures, major-page edge/keyboard navigation,
   reduced-motion particle stillness, and no horizontal overflow at 320, 360,
   375, 390, 414, 430, 768, 1024, 1280, 1440, and 1920px widths.
+
+---
+
+## 2026-08-12 - Playback-aware motion polish
+
+### Implemented
+
+- Added a compact waveform beside wish audio controls. It animates only while
+  the underlying audio is playing and remains static when paused.
+- Added a slow, restrained active-state pulse to the birthday story progress
+  marker.
+
+### Verification
+
+- `npm run typecheck`, `npm run lint`, `npm run test`, `npm run build`,
+  `npm run test:e2e`, and `git diff --check` passed.
+- Vitest: 4 files and 17 tests passed. Playwright: 12 desktop/mobile browser
+  tests passed.

@@ -84,6 +84,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, label, duration, pauseOt
         onClick={toggle}
         className="shrink-0"
       />
+      <div aria-hidden="true" className={`audio-waveform ${playing ? 'audio-waveform--playing' : ''}`}>
+        {[0, 1, 2, 3, 4].map((bar) => <span key={bar} className="audio-waveform__bar" />)}
+      </div>
       <div className="flex-1 h-1.5 rounded-full bg-matcha-800/60 overflow-hidden">
         <div
           className="h-full bg-deepred-500 rounded-full transition-all duration-150"
