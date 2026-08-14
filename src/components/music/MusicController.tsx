@@ -39,11 +39,26 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
   }, [ducked, hasTrack, muted, userInteracted]);
 
   useEffect(() => {
+    const startFromFirstGesture = () => {
+      const audio = audioRef.current;
+      if (!hasTrack || muted || !audio) return;
+      audio.volume = ducked ? DUCKED_VOLUME : 1;
+      void audio.play().catch(() => setPlaying(false));
+    };
+    window.addEventListener('pointerdown', startFromFirstGesture, { once: true, capture: true });
+    window.addEventListener('keydown', startFromFirstGesture, { once: true, capture: true });
+    return () => {
+      window.removeEventListener('pointerdown', startFromFirstGesture, true);
+      window.removeEventListener('keydown', startFromFirstGesture, true);
+    };
+  }, [ducked, hasTrack, muted]);
+
+  useEffect(() => {
     const syncDucking = () => setDucked(foregroundMedia.current.size > 0);
     const onMediaEvent = (event: Event) => {
       const media = event.target;
       if (!(media instanceof HTMLMediaElement) || media === audioRef.current) return;
-      if (event.type === 'play') foregroundMedia.current.add(media);
+      if (event.type === 'play' && !media.muted && media.volume > 0) foregroundMedia.current.add(media);
       else foregroundMedia.current.delete(media);
       syncDucking();
     };

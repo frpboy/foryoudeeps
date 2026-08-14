@@ -33,7 +33,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, reduced, onOpen 
     >
       <div className="gallery-tile__photo">
         {item.media.type === 'video' ? (
-          <video src={item.media.src} poster={item.media.poster} autoPlay muted loop playsInline preload="metadata" className="gallery-tile__image" aria-label={item.media.alt || 'Gallery video'} />
+          <video src={item.media.src} poster={item.media.poster} autoPlay muted loop playsInline preload="metadata" className="gallery-tile__image" aria-label={item.media.alt || 'Gallery video'} onLoadedMetadata={(event) => { event.currentTarget.muted = true; event.currentTarget.defaultMuted = true; event.currentTarget.volume = 0; }} />
         ) : (
           <img
             src={item.media.src}
