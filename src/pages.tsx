@@ -20,7 +20,7 @@ export const StoryAction: React.FC<{ to: string; children: React.ReactNode; tone
 );
 
 function GalleryMedia({ item }: { item: typeof galleryItems[number] }) {
-  if (item.media.type === 'video') return <video src={item.media.src} poster={item.media.poster} controls playsInline preload="metadata" className="max-h-[72svh] w-full object-contain" />;
+  if (item.media.type === 'video') return <video src={item.media.src} poster={item.media.poster} autoPlay muted loop playsInline preload="metadata" className="max-h-[72svh] w-full object-contain" />;
   return <ResponsiveImage src={item.media.src} alt={item.media.alt || ''} lazy={false} rounded="none" className="max-h-[72svh] w-full" />;
 }
 

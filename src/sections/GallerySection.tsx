@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { SectionHeading, Play, DecorativeHeart } from '@/components/ui/primitives';
+import { SectionHeading, DecorativeHeart } from '@/components/ui/primitives';
 import { FutureContent } from '@/components/ui/FutureContent';
 import { AmbientParticles } from '@/components/ui/AmbientParticles';
 import { AgeMotif } from '@/components/ui/AgeMotif';
@@ -19,8 +19,6 @@ interface GalleryCardProps {
 
 const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, reduced, onOpen }) => {
   const { ref, visible } = useIntersectionObserver<HTMLButtonElement>();
-  const isVideo = item.media.type === 'video';
-
   return (
     <motion.button
       ref={ref as React.RefObject<HTMLButtonElement>}
@@ -34,20 +32,19 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, reduced, onOpen 
       aria-label={`Open gallery item ${index + 1}`}
     >
       <div className="gallery-tile__photo">
-        <img
-          src={item.media.poster || item.media.src}
-          alt={item.media.alt || ''}
-          loading={index > 1 ? 'lazy' : 'eager'}
-          decoding="async"
-          className="gallery-tile__image"
-        />
+        {item.media.type === 'video' ? (
+          <video src={item.media.src} poster={item.media.poster} autoPlay muted loop playsInline preload="metadata" className="gallery-tile__image" aria-label={item.media.alt || 'Gallery video'} />
+        ) : (
+          <img
+            src={item.media.src}
+            alt={item.media.alt || ''}
+            loading={index > 1 ? 'lazy' : 'eager'}
+            decoding="async"
+            className="gallery-tile__image"
+          />
+        )}
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-matcha-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-      {isVideo && (
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-deepred-700/90 text-cream-50 flex items-center justify-center shadow-card backdrop-blur-sm">
-          <Play size={22} fill="currentColor" className="ml-1" />
-        </div>
-      )}
       {(item.caption || item.dateLabel) && (
         <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none">
           {item.dateLabel && (
