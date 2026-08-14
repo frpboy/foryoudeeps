@@ -32,11 +32,11 @@ export const LetterSection: React.FC = () => {
     setVisibleCharacters(0);
     const timer = window.setInterval(() => {
       setVisibleCharacters((current) => {
-        const next = Math.min(totalCharacters, current + 2);
+        const next = Math.min(totalCharacters, current + 1);
         if (next === totalCharacters) window.clearInterval(timer);
         return next;
       });
-    }, 24);
+    }, 48);
     return () => window.clearInterval(timer);
   }, [shouldWrite, totalCharacters, writingRun]);
 

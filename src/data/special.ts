@@ -1,9 +1,17 @@
 import type { DaughterMessage, FinalMessage, MusicTrack } from '@/types';
 
 export const daughterMessage: DaughterMessage = {
-  enabled: false,
-  heading: 'one more message...',
-  introText: 'A message made especially for you.',
+  enabled: true,
+  heading: 'a little birthday surprise...',
+  introText: 'One small voice, with all the love in the world.',
+  caption: 'the sweetest little wish ♡',
+  video: {
+    id: 'deepthi-kid-message',
+    type: 'video',
+    src: '/media/daughter/deepthi-kid-message.mp4',
+    order: 1,
+    enabled: true,
+  },
 };
 
 export const finalMessage: FinalMessage = {

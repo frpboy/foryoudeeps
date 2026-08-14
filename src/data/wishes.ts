@@ -9,7 +9,14 @@ export const wishes: Wish[] = [
     relationship: 'with love',
     text: 'Happy birthday, Deeps! Wishing you a year full of good things, gentle wins, and plenty of reasons to smile.',
     order: 1,
-    presentationStyle: 'note',
+    presentationStyle: 'audio',
+    audio: {
+      id: 'nikitha-voice-note',
+      type: 'audio',
+      src: '/media/wishes/nikitha-voice-note.opus',
+      order: 1,
+      enabled: true,
+    },
     enabled: true,
   },
   {
