@@ -223,10 +223,18 @@ body.no-scroll {
   min-height: 0;
   overflow: hidden;
   isolation: isolate;
+}
+.countdown-stage {
   background:
-    radial-gradient(ellipse 70% 45% at 50% 46%, rgba(153, 36, 48, .13), transparent 64%),
-    radial-gradient(ellipse 65% 42% at 14% 90%, rgba(47, 102, 71, .26), transparent 65%),
-    linear-gradient(150deg, #06150e 0%, #0a2418 48%, #071a11 100%);
+    linear-gradient(150deg, rgba(4, 19, 12, .72) 0%, rgba(5, 27, 17, .58) 54%, rgba(4, 18, 11, .78) 100%),
+    radial-gradient(ellipse 70% 45% at 50% 46%, rgba(153, 36, 48, .18), transparent 64%),
+    url('/media/gallery/deeps-gallery-004.jpg') center 8% / cover no-repeat;
+}
+.reveal-stage {
+  background:
+    linear-gradient(150deg, rgba(4, 19, 12, .74) 0%, rgba(5, 27, 17, .6) 54%, rgba(4, 18, 11, .8) 100%),
+    radial-gradient(ellipse 70% 45% at 50% 46%, rgba(153, 36, 48, .16), transparent 64%),
+    url('/media/gallery/deeps-gallery-004.jpg') center 8% / cover no-repeat;
 }
 
 .scene-page { position: relative; width: 100%; height: var(--scene-height, 100dvh); overflow: hidden; }
