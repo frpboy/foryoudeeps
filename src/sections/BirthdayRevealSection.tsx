@@ -36,7 +36,7 @@ export const BirthdayRevealSection: React.FC<BirthdayRevealSectionProps> = ({ on
         </motion.p>
         <motion.h1
           initial={reduced || !visible ? {} : { opacity: 0, letterSpacing: '-0.16em', scale: 1.06, clipPath: 'inset(0 50% 0 50%)' }}
-          animate={visible ? { opacity: 1, letterSpacing: '-0.085em', scale: 1, clipPath: 'inset(0 0% 0 0%)' } : {}}
+          animate={visible ? { opacity: 1, letterSpacing: '-0.025em', scale: 1, clipPath: 'inset(0 0% 0 0%)' } : {}}
           transition={{ delay: 1.35, duration: 1.08, ease: [0.22, 1, 0.36, 1] }}
           className="reveal-name mt-7 font-display font-medium text-cream-50"
         >

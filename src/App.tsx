@@ -72,6 +72,7 @@ const App: React.FC = () => {
   const guard = (content: React.ReactNode) => birthdayAvailable ? content : <Navigate to="/" replace />;
   const journey = ['/birthday', '/memories', '/gallery', '/wishes', '/letter', '/daughter', '/final'];
   const journeyIndex = journey.indexOf(location.pathname);
+  const progressPercent = ((journeyIndex + 1) / journey.length) * 100;
   const paperChapter = location.pathname === '/wishes' || location.pathname === '/letter';
   const previous = journeyIndex > 0 ? journey[journeyIndex - 1] : undefined;
   const next = journeyIndex >= 0 && journeyIndex < journey.length - 1 ? journey[journeyIndex + 1] : undefined;
@@ -131,7 +132,7 @@ const App: React.FC = () => {
       </nav>}
       {birthdayAvailable && journeyIndex >= 0 && <nav aria-label="Story progress" className={`story-chapter-progress ${preview ? 'story-chapter-progress--preview' : ''} ${paperChapter ? 'story-chapter-progress--paper' : ''}`}>
         <span className="story-chapter-progress__age">31</span>
-        <span className="story-chapter-progress__line" aria-hidden="true"><span key={location.pathname} /></span>
+        <span className="story-chapter-progress__line" aria-hidden="true"><span style={{ width: `${progressPercent}%` }} /></span>
       </nav>}
     </div>
   );
