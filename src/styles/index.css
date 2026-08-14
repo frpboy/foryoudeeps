@@ -242,10 +242,12 @@ body.no-scroll {
 .story-page--gallery { background: #081810; }
 .story-page--wishes, .story-page--letter { background: var(--paper); }
 .story-page--daughter, .story-page--final { background: #07150f; }
-@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
-  .story-page--paper-turn::after { content: ''; position: fixed; inset: 0; z-index: 70; pointer-events: none; background: linear-gradient(112deg, rgba(255,253,245,.18) 0 36%, rgba(255,253,245,.93) 47%, rgba(205,182,138,.7) 51%, rgba(255,253,245,.92) 55%, rgba(255,253,245,.08) 67%); clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); animation: paper-fold-arrival .86s cubic-bezier(.22,1,.36,1) both; }
-  @keyframes paper-fold-arrival { 0% { clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); opacity: 1; } 54% { clip-path: polygon(16% 0, 100% 0, 100% 100%, 65% 100%); opacity: 1; } 100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); opacity: 0; } }
-}
+.paper-corner-flip { position: fixed; right: -1px; bottom: -1px; z-index: 70; width: 164px; height: 224px; overflow: hidden; pointer-events: none; clip-path: polygon(100% 0, 100% 100%, 0 100%); transform: translate3d(0,0,0); }
+.paper-corner-flip__book { position: absolute !important; right: 0; bottom: 0; transform-origin: right bottom; }
+.paper-corner-flip__sheet { width: 164px; height: 224px; background: linear-gradient(135deg, #fffdf5 0%, #f0dfbc 100%); }
+.paper-corner-flip__sheet--front { background: linear-gradient(135deg, rgba(255,253,245,.96), rgba(232,207,163,.94)); }
+.paper-corner-flip__sheet--back { background: rgba(255,253,245,.01); }
+@media (min-width: 768px) { .paper-corner-flip { display: none; } }
 .scene-action { position: absolute; left: 50%; bottom: max(1rem, env(safe-area-inset-bottom)); z-index: 20; transform: translateX(-50%); }
 .scene-detail { position: relative; display: flex; height: var(--scene-height, 100dvh); min-height: 0; align-items: center; overflow: hidden; padding: max(3.5rem, env(safe-area-inset-top)) 1.25rem max(1.25rem, env(safe-area-inset-bottom)); }
 .scene-detail__content { position: relative; z-index: 10; display: flex; width: min(100%, 72rem); max-height: 100%; flex-direction: column; margin: 0 auto; }
@@ -394,8 +396,15 @@ body.no-scroll {
 .music-spectrum--playing i:nth-child(6) { animation-delay: -520ms; }
 .music-spectrum--playing i:nth-child(7) { animation-delay: -350ms; }
 @keyframes music-spectrum-wave { from { transform: scaleY(.5); } to { transform: scaleY(2.25); } }
-.story-progress-active { animation: story-progress-pulse 2.8s ease-in-out infinite; }
-@keyframes story-progress-pulse { 50% { opacity: .65; transform: scaleX(1.12); } }
+.story-chapter-progress { position: fixed; top: 1.25rem; left: 50%; z-index: 50; display: flex; align-items: center; gap: .7rem; transform: translateX(-50%); color: rgba(248,240,221,.72); pointer-events: none; }
+.story-chapter-progress--preview { top: 3.9rem; }
+.story-chapter-progress__age { font-family: 'Playfair Display', Georgia, serif; font-size: 1.35rem; line-height: 1; letter-spacing: -.06em; color: var(--color-cream-100); }
+.story-chapter-progress__line { display: block; width: clamp(4.7rem, 12vw, 8.5rem); height: 1px; overflow: hidden; background: rgba(248,240,221,.22); }
+.story-chapter-progress__line > span { display: block; height: 100%; background: var(--color-red-500); box-shadow: 0 0 8px rgba(201,74,85,.55); transition: width .75s cubic-bezier(.22,1,.36,1); }
+.story-chapter-progress__label { font-family: 'DM Sans', sans-serif; font-size: .61rem; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; white-space: nowrap; }
+.story-chapter-progress--paper { color: rgba(7,21,15,.55); }
+.story-chapter-progress--paper .story-chapter-progress__age { color: #07150f; }
+.story-chapter-progress--paper .story-chapter-progress__line { background: rgba(7,21,15,.18); }
 @media (max-width: 767px) { .ambient-particle:nth-child(n + 19) { display: none; } }
 
 .section-rule { width: min(7rem, 25vw); height: 1px; background: currentColor; opacity: .34; }

@@ -8,6 +8,7 @@ import { wishes } from '@/data/wishes';
 import { filterEnabled, sortByOrder } from '@/lib/media';
 import { useReducedMotion } from '@/hooks';
 import { AmbientParticles } from '@/components/ui/AmbientParticles';
+import { PaperCornerFlip } from '@/components/ui/PaperCornerFlip';
 
 export const StoryPage: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const reduced = useReducedMotion();
@@ -21,7 +22,7 @@ export const StoryPage: React.FC<{ children: React.ReactNode }> = ({ children })
       : section === 'daughter' || section === 'final'
         ? { opacity: 0, scale: 1.025, filter: 'brightness(.68)' }
         : { opacity: 0, y: 14, scale: 1.01 };
-  return <motion.main initial={reduced ? { opacity: 0 } : entrance} animate={{ opacity: 1, x: 0, y: 0, scale: 1, rotateY: 0, filter: 'blur(0px) brightness(1)' }} transition={{ duration: reduced ? .01 : isPaper ? .7 : .58, ease: [0.22, 1, 0.36, 1] }} className={`scene-page story-page story-page--${section}${isPaper ? ' story-page--paper-turn' : ''}`}>{children}</motion.main>;
+  return <motion.main initial={reduced ? { opacity: 0 } : entrance} animate={{ opacity: 1, x: 0, y: 0, scale: 1, rotateY: 0, filter: 'blur(0px) brightness(1)' }} transition={{ duration: reduced ? .01 : isPaper ? .7 : .58, ease: [0.22, 1, 0.36, 1] }} className={`scene-page story-page story-page--${section}${isPaper ? ' story-page--paper-turn' : ''}`}>{isPaper && !reduced && <PaperCornerFlip />}{children}</motion.main>;
 };
 
 export const StoryAction: React.FC<{ to: string; children: React.ReactNode; tone?: 'light' | 'dark' }> = ({ to, children, tone = 'light' }) => (
