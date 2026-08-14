@@ -40,7 +40,12 @@ export const BirthdayRevealSection: React.FC<BirthdayRevealSectionProps> = ({ on
           transition={{ delay: 1.35, duration: 1.08, ease: [0.22, 1, 0.36, 1] }}
           className="reveal-name mt-7 font-display font-medium text-cream-50"
         >
-          {siteConfig.displayName}
+          <span className="reveal-name__word">
+            {siteConfig.displayName}
+            <span aria-hidden="true" className="reveal-name-sparkles">
+              {Array.from({ length: 7 }, (_, index) => <i key={index} />)}
+            </span>
+          </span>
         </motion.h1>
         <motion.div
           initial={reduced || !visible ? {} : { opacity: 0, y: 18 }}

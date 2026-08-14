@@ -72,8 +72,6 @@ const App: React.FC = () => {
   const guard = (content: React.ReactNode) => birthdayAvailable ? content : <Navigate to="/" replace />;
   const journey = ['/birthday', '/memories', '/gallery', '/wishes', '/letter', '/daughter', '/final'];
   const journeyIndex = journey.indexOf(location.pathname);
-  const chapterNumber = String(journeyIndex + 1).padStart(2, '0');
-  const progressPercent = ((journeyIndex + 1) / journey.length) * 100;
   const paperChapter = location.pathname === '/wishes' || location.pathname === '/letter';
   const previous = journeyIndex > 0 ? journey[journeyIndex - 1] : undefined;
   const next = journeyIndex >= 0 && journeyIndex < journey.length - 1 ? journey[journeyIndex + 1] : undefined;
@@ -131,10 +129,9 @@ const App: React.FC = () => {
         <button type="button" aria-label="Previous story page" disabled={!previous} onClick={() => go(previous)} className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-cream-100/15 bg-matcha-950/65 font-body text-lg text-cream-100/75 backdrop-blur transition hover:bg-matcha-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deepred-500 disabled:opacity-0">‹</button>
         <button type="button" aria-label="Next story page" disabled={!next} onClick={() => go(next)} className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-cream-100/15 bg-matcha-950/65 font-body text-lg text-cream-100/75 backdrop-blur transition hover:bg-matcha-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deepred-500 disabled:opacity-0">›</button>
       </nav>}
-      {birthdayAvailable && journeyIndex >= 0 && <nav aria-label={`Chapter ${chapterNumber} of ${journey.length}`} className={`story-chapter-progress ${preview ? 'story-chapter-progress--preview' : ''} ${paperChapter ? 'story-chapter-progress--paper' : ''}`}>
+      {birthdayAvailable && journeyIndex >= 0 && <nav aria-label="Story progress" className={`story-chapter-progress ${preview ? 'story-chapter-progress--preview' : ''} ${paperChapter ? 'story-chapter-progress--paper' : ''}`}>
         <span className="story-chapter-progress__age">31</span>
-        <span className="story-chapter-progress__line" aria-hidden="true"><span style={{ width: `${progressPercent}%` }} /></span>
-        <span className="story-chapter-progress__label">chapter {chapterNumber} / {String(journey.length).padStart(2, '0')}</span>
+        <span className="story-chapter-progress__line" aria-hidden="true"><span key={location.pathname} /></span>
       </nav>}
     </div>
   );
