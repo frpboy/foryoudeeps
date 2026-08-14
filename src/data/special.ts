@@ -25,4 +25,13 @@ export const finalMessage: FinalMessage = {
   creditText: 'made with love ♡',
 };
 
-export const musicTracks: MusicTrack[] = [];
+export const musicTracks: MusicTrack[] = [
+  {
+    id: 'aye-brown-happy-birthday',
+    title: 'Happy Birthday',
+    artist: 'Aye Brown',
+    src: '/media/music/aye-brown-happy-birthday.mp3',
+    order: 1,
+    enabled: true,
+  },
+];

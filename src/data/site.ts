@@ -14,7 +14,7 @@ export const siteConfig: SiteConfig = {
   showGallery: true,
   showWishes: true,
   showDaughterMessage: true,
-  showMusic: false,
+  showMusic: true,
   showFinal: true,
   siteTitle: 'For You, Deeps',
   description: 'Something special is waiting for you ♡',

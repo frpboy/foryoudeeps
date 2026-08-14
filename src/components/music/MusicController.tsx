@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { IconButton, Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from '@/components/ui/primitives';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useEffect, useRef, useState } from 'react';
+import { IconButton, Volume2, VolumeX } from '@/components/ui/primitives';
+import { motion } from 'motion/react';
 import { useReducedMotion } from '@/hooks';
 import { filterEnabled, sortByOrder } from '@/lib/media';
 import { musicTracks } from '@/data/special';
@@ -10,131 +10,102 @@ interface MusicControllerProps {
   userInteracted: boolean;
 }
 
+const DUCKED_VOLUME = 0.0005;
+
 export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userInteracted }) => {
   const reduced = useReducedMotion();
   const audioRef = useRef<HTMLAudioElement>(null);
+  const foregroundMedia = useRef(new Set<HTMLMediaElement>());
+  const resumeAfterFocus = useRef(false);
   const tracks = sortByOrder(filterEnabled(musicTracks));
-  const hasTracks = tracks.length > 0 && enabled;
-
-  const [active, setActive] = useState(false);
+  const activeTrack = tracks[0];
+  const hasTrack = Boolean(enabled && activeTrack);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
-  const [trackIndex, setTrackIndex] = useState(0);
-  const [resumeOnTrackChange, setResumeOnTrackChange] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const activeTrack = tracks[trackIndex];
-
-  useEffect(() => {
-    if (!userInteracted || !hasTracks) return;
-    setActive(true);
-  }, [userInteracted, hasTracks]);
-
-  const togglePlayback = () => {
-    const a = audioRef.current;
-    if (!a || !hasTracks) return;
-    if (playing) {
-      a.pause();
-    } else {
-      a.play().catch(() => setPlaying(false));
-    }
-  };
-
-  const selectNextTrack = (resume = !audioRef.current?.paused) => {
-    if (tracks.length < 2) return;
-    setResumeOnTrackChange(resume);
-    setTrackIndex((current) => (current + 1) % tracks.length);
-  };
-
-  const selectPreviousTrack = (resume = !audioRef.current?.paused) => {
-    if (tracks.length < 2) return;
-    setResumeOnTrackChange(resume);
-    setTrackIndex((current) => (current - 1 + tracks.length) % tracks.length);
-  };
+  const [ducked, setDucked] = useState(false);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    setProgress(0);
-    audio.load();
-    if (resumeOnTrackChange) {
-      audio.play().catch(() => setPlaying(false));
-      setResumeOnTrackChange(false);
-    }
-  }, [trackIndex, resumeOnTrackChange]);
+    audio.volume = muted ? 0 : ducked ? DUCKED_VOLUME : 1;
+  }, [ducked, muted]);
 
-  if (!hasTracks || !active) return null;
+  useEffect(() => {
+    if (!hasTrack || muted) return;
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.volume = ducked ? DUCKED_VOLUME : 1;
+    void audio.play().catch(() => setPlaying(false));
+  }, [ducked, hasTrack, muted, userInteracted]);
+
+  useEffect(() => {
+    const syncDucking = () => setDucked(foregroundMedia.current.size > 0);
+    const onMediaEvent = (event: Event) => {
+      const media = event.target;
+      if (!(media instanceof HTMLMediaElement) || media === audioRef.current) return;
+      if (event.type === 'play') foregroundMedia.current.add(media);
+      else foregroundMedia.current.delete(media);
+      syncDucking();
+    };
+    document.addEventListener('play', onMediaEvent, true);
+    document.addEventListener('pause', onMediaEvent, true);
+    document.addEventListener('ended', onMediaEvent, true);
+    return () => {
+      document.removeEventListener('play', onMediaEvent, true);
+      document.removeEventListener('pause', onMediaEvent, true);
+      document.removeEventListener('ended', onMediaEvent, true);
+    };
+  }, []);
+
+  useEffect(() => {
+    const onVisibilityChange = () => {
+      const audio = audioRef.current;
+      if (!audio) return;
+      if (document.visibilityState === 'hidden') {
+        resumeAfterFocus.current = !audio.paused && !muted;
+        audio.pause();
+      } else if (resumeAfterFocus.current && !muted) {
+        resumeAfterFocus.current = false;
+        audio.volume = ducked ? DUCKED_VOLUME : 1;
+        void audio.play().catch(() => setPlaying(false));
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+  }, [ducked, muted]);
+
+  if (!hasTrack) return null;
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={reduced ? {} : { opacity: 0, y: 20, scale: 0.9 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed z-40 bottom-5 right-5 safe-bottom"
-      >
-        <audio
-          ref={audioRef}
-          src={activeTrack?.src}
-          muted={muted}
-          onPlay={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
-          onEnded={() => {
-            if (tracks.length > 1) selectNextTrack(true);
-          }}
-          onError={() => setPlaying(false)}
-          onTimeUpdate={(event) => {
-            const { currentTime, duration } = event.currentTarget;
-            setProgress(Number.isFinite(duration) && duration > 0 ? (currentTime / duration) * 100 : 0);
-          }}
-          preload="metadata"
-          loop={tracks.length === 1}
+    <motion.div
+      initial={reduced ? {} : { opacity: 0, y: -10, scale: 0.94 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      className="fixed right-4 top-4 z-[60] safe-top"
+    >
+      <audio
+        ref={audioRef}
+        src={activeTrack.src}
+        autoPlay
+        loop
+        preload="auto"
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        onError={() => setPlaying(false)}
+      />
+      <div className="flex items-center gap-2 rounded-full border border-cream-100/10 bg-matcha-950/90 px-2 py-1.5 shadow-card backdrop-blur-xl">
+        <span className={`music-spectrum ${playing && !muted ? 'music-spectrum--playing' : ''}`} aria-label={playing && !muted ? 'Background music playing' : 'Background music paused'}>
+          {Array.from({ length: 7 }, (_, index) => <i key={index} />)}
+        </span>
+        <IconButton
+          icon={muted ? VolumeX : Volume2}
+          size="sm"
+          variant="ghost"
+          label={muted ? 'Unmute background music' : 'Mute background music'}
+          className="!h-9 !w-9 text-cream-100"
+          onClick={() => setMuted((value) => !value)}
         />
-        <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-matcha-900/85 backdrop-blur-xl border border-cream-100/10 shadow-card">
-          <span className="hidden sm:block font-handwritten text-deepred-400 text-lg leading-none pr-1">
-            {activeTrack?.title}
-          </span>
-          <IconButton
-            icon={playing ? Pause : Play}
-            size="sm"
-            variant="red"
-            label={playing ? 'Pause music' : 'Play music'}
-            onClick={togglePlayback}
-            className="!w-9 !h-9"
-          />
-          {tracks.length > 1 && (
-            <IconButton
-              icon={SkipBack}
-              size="sm"
-              variant="ghost"
-              label="Previous track"
-              className="!w-9 !h-9 opacity-70 hover:opacity-100"
-              onClick={() => selectPreviousTrack()}
-            />
-          )}
-          {tracks.length > 1 && (
-            <IconButton
-              icon={SkipForward}
-              size="sm"
-              variant="ghost"
-              label="Next track"
-              className="!w-9 !h-9 opacity-70 hover:opacity-100"
-              onClick={() => selectNextTrack()}
-            />
-          )}
-          <IconButton
-            icon={muted ? VolumeX : Volume2}
-            size="sm"
-            variant="ghost"
-            label={muted ? 'Unmute music' : 'Mute music'}
-            className="!w-9 !h-9 opacity-70 hover:opacity-100"
-            onClick={() => setMuted((value) => !value)}
-          />
-        </div>
-        <div className="mt-1 h-px overflow-hidden rounded-full bg-cream-100/10" aria-label="Music progress">
-          <div className="h-full bg-deepred-500 transition-[width] duration-150" style={{ width: `${progress}%` }} />
-        </div>
-      </motion.div>
-    </AnimatePresence>
+      </div>
+    </motion.div>
   );
 };

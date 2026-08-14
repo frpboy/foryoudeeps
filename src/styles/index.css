@@ -242,7 +242,8 @@ body.no-scroll {
 .scene-detail { position: relative; display: flex; height: var(--scene-height, 100dvh); min-height: 0; align-items: center; overflow: hidden; padding: max(3.5rem, env(safe-area-inset-top)) 1.25rem max(1.25rem, env(safe-area-inset-bottom)); }
 .scene-detail__content { position: relative; z-index: 10; display: flex; width: min(100%, 72rem); max-height: 100%; flex-direction: column; margin: 0 auto; }
 .scene-detail__media { display: flex; min-height: 0; flex: 1 1 auto; align-items: center; justify-content: center; }
-.scene-detail__media img, .scene-detail__media video { max-height: min(52dvh, 520px); object-fit: contain; }
+.scene-detail__media .gallery-detail-image, .scene-detail__media .gallery-detail-video { width: 100%; height: min(70dvh, 760px); max-height: 100%; }
+.scene-detail__media .gallery-detail-image img, .scene-detail__media .gallery-detail-video { width: 100%; height: 100%; object-fit: contain; }
 
 /* Full-screen scene compositions: preserve the editorial hierarchy while
    reducing secondary space before primary media/navigation can be displaced. */
@@ -357,6 +358,16 @@ body.no-scroll {
 .audio-waveform--playing .audio-waveform__bar:nth-child(4) { animation-delay: -460ms; }
 .audio-waveform--playing .audio-waveform__bar:nth-child(5) { animation-delay: -250ms; }
 @keyframes waveform { from { transform: scaleY(.55); } to { transform: scaleY(2.1); } }
+.music-spectrum { display: flex; align-items: center; gap: 2px; height: 20px; padding-left: .25rem; }
+.music-spectrum i { display: block; width: 2px; height: 5px; border-radius: 999px; background: var(--color-red-500); opacity: .5; transform-origin: center; }
+.music-spectrum--playing i { animation: music-spectrum-wave 680ms ease-in-out infinite alternate; }
+.music-spectrum--playing i:nth-child(2) { animation-delay: -130ms; }
+.music-spectrum--playing i:nth-child(3) { animation-delay: -290ms; }
+.music-spectrum--playing i:nth-child(4) { animation-delay: -410ms; }
+.music-spectrum--playing i:nth-child(5) { animation-delay: -180ms; }
+.music-spectrum--playing i:nth-child(6) { animation-delay: -520ms; }
+.music-spectrum--playing i:nth-child(7) { animation-delay: -350ms; }
+@keyframes music-spectrum-wave { from { transform: scaleY(.5); } to { transform: scaleY(2.25); } }
 .story-progress-active { animation: story-progress-pulse 2.8s ease-in-out infinite; }
 @keyframes story-progress-pulse { 50% { opacity: .65; transform: scaleX(1.12); } }
 @media (max-width: 767px) { .ambient-particle:nth-child(n + 19) { display: none; } }

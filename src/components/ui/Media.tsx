@@ -7,6 +7,7 @@ interface ResponsiveImageProps extends React.ImgHTMLAttributes<HTMLImageElement>
   lazy?: boolean;
   aspect?: string;
   rounded?: 'sm' | 'md' | 'lg' | 'xl' | 'none';
+  fit?: 'cover' | 'contain';
 }
 
 export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
@@ -15,6 +16,7 @@ export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
   lazy = true,
   aspect,
   rounded = 'lg',
+  fit = 'cover',
   className = '',
   ...props
 }) => {
@@ -28,6 +30,7 @@ export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
     xl: 'rounded-3xl',
     none: 'rounded-none',
   };
+  const fitClass = fit === 'contain' ? 'object-contain' : 'object-cover';
 
   if (errored) {
     return (
@@ -56,7 +59,7 @@ export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
         decoding="async"
         onError={() => setErrored(true)}
         onLoad={() => setLoaded(true)}
-        className={`w-full h-full object-cover transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`w-full h-full ${fitClass} transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
         {...props}
       />
     </div>
