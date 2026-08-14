@@ -135,4 +135,14 @@ export const wishes: Wish[] = [
     timestampLabel: 'birthday deploy',
     enabled: true,
   },
+  {
+    id: 'wish-rasmiya',
+    name: 'Rasmiya',
+    relationship: 'with love',
+    text: 'Happy Birthday, Deepthi Chechi! ❤️🥹 You’re not just my colleague, you’re truly like a sister and a beautiful friend to me. I’m so grateful for all the little moments, talks, laughs, and memories we share. 🫶🏻 So lucky to have you in my life. May you always be happy, loved, and blessed with everything your heart wishes for. ❤️ Happy Birthday, Chechi! Love you always! 🎂🫂✨',
+    order: 16,
+    presentationStyle: 'chat',
+    timestampLabel: 'with love',
+    enabled: true,
+  },
 ];
