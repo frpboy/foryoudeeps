@@ -242,21 +242,6 @@ export const galleryItems: GalleryItem[] = [
     enabled: true,
   },
   {
-    id: 'gallery-035',
-    media: {
-      id: 'gallery-035-image',
-      type: 'image',
-      src: '/media/gallery/deeps-gallery-035.png',
-      alt: 'Two friends taking a mirror selfie.',
-      width: 716,
-      height: 1600,
-      order: 35,
-      enabled: true,
-    },
-    order: 35,
-    enabled: true,
-  },
-  {
     id: 'gallery-036',
     media: {
       id: 'gallery-036-image',

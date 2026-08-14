@@ -12,8 +12,17 @@ export const DaughterSection: React.FC = () => {
   const [started] = React.useState(true);
   const [missing, setMissing] = React.useState(!daughterMessage.video?.enabled || !daughterMessage.video.src);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { pauseAll, registerVideo, unregisterVideo } = useMediaPlayback();
+  const { registerVideo, unregisterVideo } = useMediaPlayback();
   useEffect(() => { const video = videoRef.current; if (!video) return; registerVideo(video); return () => unregisterVideo(video); }, [started, registerVideo, unregisterVideo]);
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !visible) return;
+    video.muted = false;
+    video.volume = 1;
+    void video.play().catch(() => {
+      // Some embedded browsers prohibit audible autoplay until the route was reached by a user gesture.
+    });
+  }, [visible]);
   if (!daughterMessage.enabled) {
     return (
       <section id="daughter" className="story-section daughter-atmosphere flex min-h-[72svh] items-center justify-center">
@@ -40,7 +49,7 @@ export const DaughterSection: React.FC = () => {
         </motion.div>
         <motion.div initial={reduced || !visible ? {} : { opacity: 0, scale: .97, y: 24 }} animate={visible ? { opacity: 1, scale: 1, y: 0 } : {}} transition={{ delay: .25, duration: .9 }} className="mt-20 w-full max-w-lg">
           {missing ? <MediaFallback message="This special message is being saved for the right moment." /> : (
-            <div className="overflow-hidden bg-matcha-900 outline outline-1 outline-offset-8 outline-deepred-500/50"><video ref={videoRef} src={daughterMessage.video?.src} poster={daughterMessage.poster || daughterMessage.video?.poster} autoPlay muted loop controls playsInline preload="metadata" className="aspect-[4/5] w-full bg-matcha-800 object-cover" onError={() => setMissing(true)} onPlay={pauseAll} /></div>
+            <div className="overflow-hidden bg-matcha-900 outline outline-1 outline-offset-8 outline-deepred-500/50"><video ref={videoRef} src={daughterMessage.video?.src} poster={daughterMessage.poster || daughterMessage.video?.poster} autoPlay loop playsInline preload="auto" className="aspect-[4/5] w-full bg-matcha-800 object-cover" onCanPlay={() => { const video = videoRef.current; if (video) { video.muted = false; video.volume = 1; void video.play().catch(() => {}); } }} onError={() => setMissing(true)} /></div>
           )}
         </motion.div>
         {daughterMessage.caption && <motion.p initial={reduced || !visible ? {} : { opacity: 0 }} animate={visible ? { opacity: 1 } : {}} transition={{ delay: .6 }} className="mt-20 font-handwritten text-xl leading-none text-deepred-300 md:text-2xl">{daughterMessage.caption}</motion.p>}
