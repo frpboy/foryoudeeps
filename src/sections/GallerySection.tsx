@@ -85,7 +85,7 @@ export const GallerySection: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const items = sortByOrder(filterEnabled(galleryItems)).filter((item) => item.media.enabled);
-  const sceneItems = items.slice(0, 4);
+  const sceneItems = items;
 
   return (
     <section id="gallery" className="story-section gallery-atmosphere">

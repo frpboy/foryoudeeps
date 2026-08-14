@@ -1,5 +1,49 @@
 import type { GalleryItem } from '@/types';
 
+const celebrationPhotoAlt = [
+  'Deeps in a black dress at an indoor celebration.',
+  'Deeps with her daughter at an indoor celebration.',
+  'Deeps with her daughter at an indoor celebration.',
+  'Deeps, her daughter, and friends at an indoor celebration.',
+  'Deeps in a black dress at an indoor celebration.',
+  'Deeps, her daughter, and friends taking a group selfie.',
+  'Deeps in a black dress at an indoor celebration.',
+  'Deeps in a black dress at an indoor celebration.',
+  'Deeps, her daughter, and friends at an indoor celebration.',
+  'Deeps in a black dress at an indoor celebration.',
+  'Deeps, her daughter, and friends at an indoor celebration.',
+  'Deeps with her daughter at an indoor celebration.',
+  'Deeps in a black dress at an indoor celebration.',
+  'Deeps in a black dress at an indoor celebration.',
+  'Deeps in a black dress at an indoor celebration.',
+  'Deeps with her daughter at an indoor celebration.',
+  'Deeps, her daughter, and friends at an indoor celebration.',
+  'Deeps in a black dress at an indoor celebration.',
+  'Deeps with her daughter at an indoor celebration.',
+  'Deeps, her daughter, and friends at an indoor celebration.',
+  'Deeps in a black dress at an indoor celebration.',
+  'Deeps with her daughter at an indoor celebration.',
+];
+
+const celebrationGalleryItems: GalleryItem[] = celebrationPhotoAlt.map((alt, index) => {
+  const order = index + 8;
+  const sequence = String(order).padStart(3, '0');
+  return {
+    id: `gallery-${sequence}`,
+    media: {
+      id: `gallery-${sequence}-image`,
+      type: 'image',
+      src: `/media/gallery/deeps-gallery-${sequence}.jpeg`,
+      alt,
+      order,
+      enabled: true,
+    },
+    order,
+    rotation: index % 2 === 0 ? 1 : -1,
+    enabled: true,
+  };
+});
+
 // Reviewed real photographs. Add captions, stickers, and date labels only when
 // the content owner explicitly supplies or approves them.
 export const galleryItems: GalleryItem[] = [
@@ -52,4 +96,69 @@ export const galleryItems: GalleryItem[] = [
     rotation: -0.8,
     enabled: true,
   },
+  {
+    id: 'gallery-004',
+    media: {
+      id: 'gallery-004-image',
+      type: 'image',
+      src: '/media/gallery/deeps-gallery-004.jpg',
+      alt: 'Deeps smiling outdoors in a green embroidered outfit among plants.',
+      width: 1080,
+      height: 1440,
+      order: 4,
+      enabled: true,
+    },
+    order: 4,
+    rotation: 1.4,
+    enabled: true,
+  },
+  {
+    id: 'gallery-005',
+    media: {
+      id: 'gallery-005-image',
+      type: 'image',
+      src: '/media/gallery/deeps-gallery-005.jpg',
+      alt: 'Deeps standing outdoors in front of a green hedge.',
+      width: 1080,
+      height: 1440,
+      order: 5,
+      enabled: true,
+    },
+    order: 5,
+    rotation: -1.3,
+    enabled: true,
+  },
+  {
+    id: 'gallery-006',
+    media: {
+      id: 'gallery-006-image',
+      type: 'image',
+      src: '/media/gallery/deeps-gallery-006.jpg',
+      alt: 'Deeps standing outdoors in a pink saree surrounded by tropical leaves.',
+      width: 1080,
+      height: 1440,
+      order: 6,
+      enabled: true,
+    },
+    order: 6,
+    rotation: 0.9,
+    enabled: true,
+  },
+  {
+    id: 'gallery-007',
+    media: {
+      id: 'gallery-007-image',
+      type: 'image',
+      src: '/media/gallery/deeps-gallery-007.jpg',
+      alt: 'Deeps standing outdoors in a blue outfit near flowering plants.',
+      width: 1080,
+      height: 1440,
+      order: 7,
+      enabled: true,
+    },
+    order: 7,
+    rotation: -0.7,
+    enabled: true,
+  },
+  ...celebrationGalleryItems,
 ];
