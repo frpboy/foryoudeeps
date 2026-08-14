@@ -88,11 +88,11 @@ export const JourneySection: React.FC = () => {
       className="story-section journey-atmosphere"
     >
       <AmbientParticles mood="memories" />
-      <AgeMotif tone="dark" />
+      <AgeMotif tone="dark" variant="chapter" />
       <div className="mx-auto w-full max-w-5xl">
         <div className="mb-16 md:mb-24">
           <SectionHeading
-            eyebrow="chapter thirty-one"
+            eyebrow="chapter 31"
             title="the parts that stay with us"
             subtitle="A few photographs will arrive here soon — exactly as they happened."
           />

@@ -328,26 +328,30 @@ body.no-scroll {
 .letter-scene { position: relative; display: flex; height: var(--scene-height, 100dvh); min-height: 0; align-items: center; justify-content: center; overflow: hidden; padding: max(4.5rem, env(safe-area-inset-top)) 1.25rem max(4rem, env(safe-area-inset-bottom)); color: #07150f; background: var(--paper); }
 .letter-scene::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(92,17,25,.1) .7px, transparent .7px); background-size: 8px 8px; opacity: .22; pointer-events: none; }
 .letter-paper { position: relative; z-index: 1; display: flex; width: min(100%, 42rem); height: min(100%, 42rem); flex-direction: column; overflow: hidden; border: 1px solid rgba(92,17,25,.16); border-radius: 2px; background: linear-gradient(135deg, #fffdf5, #f1e4c8); box-shadow: 0 24px 55px -35px rgba(7,21,15,.7); }
-.letter-paper__heading { flex: 0 0 auto; padding: 1.5rem 1.5rem 1rem; text-align: center; }
-.letter-scroll-hint { margin-top: .75rem; font-family: 'DM Sans', sans-serif; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(7,21,15,.45); }
-.letter-paper__body { min-height: 0; overflow-y: auto; scroll-behavior: smooth; padding: .5rem clamp(1.5rem, 5vw, 3.5rem) 2.5rem; scrollbar-width: thin; scrollbar-color: rgba(92,17,25,.35) transparent; }
+.letter-paper::before { content: ''; position: absolute; inset: -30%; z-index: 0; pointer-events: none; opacity: .22; background-image: radial-gradient(rgba(92,17,25,.11) .65px, transparent .72px), linear-gradient(115deg, transparent 45%, rgba(255,255,255,.48) 50%, transparent 55%); background-size: 9px 9px, 220% 100%; animation: letter-paper-texture 16s ease-in-out infinite alternate; }
+.letter-paper--still::before { animation: none; }
+.letter-paper__heading { position: relative; z-index: 1; flex: 0 0 auto; padding: 1.75rem 1.5rem 1.05rem; text-align: center; }
+.letter-paper__body { position: relative; z-index: 1; min-height: 0; overflow-y: auto; scroll-behavior: smooth; padding: .65rem clamp(1.5rem, 5vw, 3.5rem) 2.75rem; scrollbar-width: none; }
+.letter-paper__body::-webkit-scrollbar { display: none; }
 .letter-paper__body p { margin: 0 0 1.25rem; font-family: 'Caveat', cursive; font-size: clamp(1.32rem, 2.4vw, 1.7rem); line-height: 1.35; color: #31221d; }
 .letter-paper__body .letter-paper__emphasis { font-size: clamp(1.6rem, 3vw, 2rem); color: #8b2633; }
 .letter-paper__body .letter-paper__signature { margin-bottom: 0; text-align: right; color: #8b2633; }
 .letter-pen { display: inline-block; width: .1em; height: 1.05em; margin-left: .1em; vertical-align: -.15em; background: #8b2633; animation: letter-pen-blink .7s steps(1, end) infinite; }
-.letter-play, .letter-replay { border: 0; background: transparent; cursor: pointer; }
-.letter-play { margin-top: .55rem; border-bottom: 1px solid rgba(139,38,51,.45); font-family: 'Caveat', cursive; font-size: 1.15rem; color: #8b2633; }
-.letter-replay { display: block; margin: 1.5rem auto 0; border-bottom: 1px solid rgba(139,38,51,.45); font-family: 'Caveat', cursive; font-size: 1.25rem; color: #8b2633; transition: color .2s ease; }
-.letter-replay:hover { color: #5c1119; }
 @keyframes letter-pen-blink { 50% { opacity: 0; } }
+@keyframes letter-paper-texture { from { background-position: 0 0, 0 0; transform: translate3d(-.7%, -.45%, 0); } to { background-position: 5px 3px, 100% 0; transform: translate3d(.7%, .45%, 0); } }
 .wish-typing-caret { display: inline-block; width: .1em; height: 1.15em; margin-left: .08em; vertical-align: -.2em; background: #8b2633; animation: letter-pen-blink .7s steps(1, end) infinite; }
-@media (hover: none) { .letter-scroll-hint { font-size: 0; } .letter-scroll-hint::after { content: 'Swipe to read'; font-size: .72rem; } }
 .daughter-atmosphere { background: linear-gradient(180deg, #0d2419 0%, #07150f 100%); }
 .final-atmosphere { width: 100%; height: 100%; min-height: var(--scene-height, 100dvh); background: radial-gradient(ellipse 65% 55% at 50% 48%, #102a1d 0%, #06140d 74%); }
 .age-motif { position: absolute; right: -1.7rem; bottom: -3.2rem; z-index: 0; pointer-events: none; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(15rem, 49vw, 32rem); line-height: 1; letter-spacing: -.11em; }
 .age-motif--dark { color: rgba(248,240,221,.042); }
 .age-motif--paper { color: rgba(92,17,25,.06); }
 .age-motif--quiet { color: rgba(248,240,221,.028); }
+.age-motif--chapter { top: .5rem; right: clamp(1.25rem, 7vw, 7rem); bottom: auto; font-size: clamp(7rem, 15vw, 13rem); color: rgba(248,240,221,.065); }
+.age-motif--chapter::after { content: 'chapter'; position: absolute; right: .16em; bottom: .12em; font-family: 'DM Sans', sans-serif; font-size: .095em; font-weight: 600; letter-spacing: .25em; text-transform: uppercase; color: rgba(248,240,221,.55); }
+.age-motif--watermark { right: 4%; bottom: -4rem; font-size: clamp(18rem, 48vw, 34rem); color: rgba(248,240,221,.032); }
+.age-motif--behind-paper { right: 50%; bottom: -4rem; transform: translateX(50%); font-size: clamp(19rem, 55vw, 37rem); color: rgba(92,17,25,.045); }
+.age-motif--whisper { right: -1rem; bottom: -2.8rem; font-size: clamp(12rem, 38vw, 24rem); color: rgba(248,240,221,.014); }
+.age-motif--return { right: -1.5rem; bottom: -3rem; font-size: clamp(17rem, 52vw, 34rem); color: rgba(248,240,221,.055); }
 .age-motif--signature { right: 1.25rem; top: 1.5rem; bottom: auto; font-size: clamp(2.1rem, 4vw, 3.5rem); color: rgba(248,240,221,.22); }
 
 .ambient-particles { --ambient-pointer-x: 0px; --ambient-pointer-y: 0px; position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }

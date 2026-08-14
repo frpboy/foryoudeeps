@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { useReducedMotion } from '@/hooks';
-import { AgeMotif } from '@/components/ui/AgeMotif';
 
 const letterParagraphs = [
   'Some people become part of your journey simply because you happen to work with them. And then there are a few people whose presence genuinely makes the journey better. You are one of those people.',
@@ -19,13 +18,10 @@ export const LetterSection: React.FC = () => {
   const reduced = useReducedMotion();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [visibleCharacters, setVisibleCharacters] = useState(reduced ? Number.MAX_SAFE_INTEGER : 0);
-  const [writingRun, setWritingRun] = useState(0);
-  const [forceWriting, setForceWriting] = useState(false);
   const totalCharacters = letterParagraphs.reduce((total, paragraph) => total + paragraph.length, 0);
-  const shouldWrite = !reduced || forceWriting;
 
   useEffect(() => {
-    if (!shouldWrite) {
+    if (reduced) {
       setVisibleCharacters(Number.MAX_SAFE_INTEGER);
       return;
     }
@@ -38,14 +34,14 @@ export const LetterSection: React.FC = () => {
       });
     }, 48);
     return () => window.clearInterval(timer);
-  }, [shouldWrite, totalCharacters, writingRun]);
+  }, [reduced, totalCharacters]);
 
   useEffect(() => {
     const panel = scrollRef.current;
-    if (!panel || visibleCharacters >= totalCharacters || !shouldWrite) return;
+    if (!panel || visibleCharacters >= totalCharacters || reduced) return;
     const progress = visibleCharacters / totalCharacters;
     panel.scrollTop = progress * (panel.scrollHeight - panel.clientHeight);
-  }, [shouldWrite, totalCharacters, visibleCharacters]);
+  }, [reduced, totalCharacters, visibleCharacters]);
 
   const guideScroll = (event: React.PointerEvent<HTMLElement>) => {
     if (event.pointerType === 'touch' || reduced) return;
@@ -57,21 +53,19 @@ export const LetterSection: React.FC = () => {
   };
 
   return (
-    <section className="letter-scene" onPointerMove={guideScroll}>
-      <AgeMotif tone="paper" />
+    <section className="letter-scene">
       <motion.div
         initial={reduced ? { opacity: 0 } : { opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduced ? .01 : .55, ease: [0.22, 1, 0.36, 1] }}
-        className="letter-paper"
+        className={`letter-paper${reduced ? ' letter-paper--still' : ''}`}
+        onPointerMove={guideScroll}
       >
         <div className="letter-paper__heading">
           <p className="font-handwritten text-2xl text-deepred-700">a birthday wish</p>
           <h1 className="font-display text-4xl text-ink md:text-5xl">Happy Birthday, Deeps. ❤️</h1>
-          <p className="letter-scroll-hint">{visibleCharacters < totalCharacters ? 'Writing your note…' : 'Move your cursor down to read'}</p>
-          {reduced && !forceWriting && <button type="button" className="letter-play" onClick={() => setForceWriting(true)}>play the handwriting</button>}
         </div>
-        <div ref={scrollRef} className="letter-paper__body" tabIndex={0} aria-label="A birthday wish for Deeps">
+        <div ref={scrollRef} className="letter-paper__body" aria-label="A birthday wish for Deeps">
           {letterParagraphs.map((paragraph, index) => {
             const previousCharacters = letterParagraphs.slice(0, index).reduce((total, item) => total + item.length, 0);
             const typedLength = Math.min(paragraph.length, Math.max(0, visibleCharacters - previousCharacters));
@@ -79,7 +73,7 @@ export const LetterSection: React.FC = () => {
             if (typedLength === 0) return null;
             return <p key={paragraph} className={index === 4 || index === 7 ? 'letter-paper__emphasis' : undefined}>{paragraph.slice(0, typedLength)}{isWriting && <span className="letter-pen" aria-hidden="true" />}</p>;
           })}
-          {visibleCharacters >= totalCharacters && <><p className="letter-paper__signature">With appreciation, always.</p><button type="button" className="letter-replay" onClick={() => { setForceWriting(true); setWritingRun((run) => run + 1); }}>write it again</button></>}
+          {visibleCharacters >= totalCharacters && <p className="letter-paper__signature">With appreciation, always.</p>}
         </div>
       </motion.div>
     </section>

@@ -13,7 +13,7 @@ export const FinalWishSection: React.FC<{ onReplay?: () => void }> = ({ onReplay
   return (
     <section id="final" ref={ref} className="final-atmosphere relative flex items-center justify-center overflow-hidden safe-top safe-bottom">
       <AmbientParticles mood="final" />
-      <AgeMotif tone="quiet" />
+      <AgeMotif tone="quiet" variant="return" />
       <div className="relative z-10 flex w-full max-w-3xl flex-col items-center px-6 py-24 text-center">
         <motion.div initial={reduced || !visible ? {} : { opacity: 0 }} animate={visible ? { opacity: 1 } : {}} transition={{ duration: .9 }} className="flex items-center gap-4 text-deepred-300"><span className="h-px w-10 bg-current opacity-60" /><DecorativeHeart size="sm" className="text-deepred-300" /><span className="h-px w-10 bg-current opacity-60" /></motion.div>
         <motion.p initial={reduced || !visible ? {} : { opacity: 0, y: 18 }} animate={visible ? { opacity: 1, y: 0 } : {}} transition={{ delay: .18, duration: .85 }} className="mt-12 font-handwritten text-3xl leading-none text-deepred-300 md:text-4xl">{finalMessage.heading}</motion.p>

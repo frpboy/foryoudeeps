@@ -27,7 +27,7 @@ export const DaughterSection: React.FC = () => {
     return (
       <section id="daughter" className="story-section daughter-atmosphere flex min-h-[72svh] items-center justify-center">
         <AmbientParticles mood="daughter" />
-        <AgeMotif tone="quiet" />
+        <AgeMotif tone="quiet" variant="whisper" />
         <div className="mx-auto flex max-w-xl flex-col items-center px-6 text-center">
           <span className="font-handwritten text-3xl text-deepred-300">and then...</span>
           <h1 className="mt-5 font-display text-5xl text-cream-50 md:text-7xl">one more message</h1>
@@ -40,7 +40,7 @@ export const DaughterSection: React.FC = () => {
   return (
     <section id="daughter" ref={ref} className="story-section daughter-atmosphere">
       <AmbientParticles mood="daughter" />
-      <AgeMotif tone="quiet" />
+      <AgeMotif tone="quiet" variant="whisper" />
       <div className="mx-auto flex w-full max-w-3xl flex-col items-center">
         <motion.div initial={reduced || !visible ? {} : { opacity: 0, y: 20 }} animate={visible ? { opacity: 1, y: 0 } : {}} transition={{ duration: .8 }} className="flex flex-col items-center gap-4 text-center">
           <span className="font-handwritten text-2xl leading-none text-deepred-300 md:text-3xl">and then...</span>

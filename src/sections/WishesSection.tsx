@@ -268,7 +268,7 @@ export const WishesSection: React.FC = () => {
       id="wishes"
       className="story-section wishes-atmosphere"
     >
-      <AgeMotif tone="paper" />
+      <AgeMotif tone="paper" variant="behind-paper" />
       <div className="mx-auto w-full max-w-7xl">
         <div className="mb-16 md:mb-24">
           <SectionHeading

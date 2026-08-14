@@ -83,7 +83,7 @@ export const GallerySection: React.FC = () => {
   return (
     <section id="gallery" className="story-section gallery-atmosphere">
       <AmbientParticles mood="gallery" />
-      <AgeMotif tone="dark" />
+      <AgeMotif tone="dark" variant="watermark" />
       <div className="mx-auto w-full max-w-7xl">
         <div className="mb-16 md:mb-24">
           <SectionHeading
