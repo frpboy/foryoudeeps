@@ -35,7 +35,7 @@ export const AmbientParticles: React.FC<{ mood: ParticleMood; className?: string
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (reduced || !window.matchMedia('(hover: hover)').matches) return;
+    if (reduced || typeof window.matchMedia !== 'function' || !window.matchMedia('(hover: hover)').matches) return;
     const onPointerMove = (event: PointerEvent) => {
       const root = containerRef.current;
       if (!root) return;

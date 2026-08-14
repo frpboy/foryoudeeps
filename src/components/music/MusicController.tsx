@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { IconButton, Volume2, VolumeX } from '@/components/ui/primitives';
 import { motion } from 'motion/react';
 import { useReducedMotion } from '@/hooks';
@@ -17,12 +17,22 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
   const audioRef = useRef<HTMLAudioElement>(null);
   const foregroundMedia = useRef(new Set<HTMLMediaElement>());
   const resumeAfterFocus = useRef(false);
+  const interactionSeen = useRef(userInteracted);
   const tracks = sortByOrder(filterEnabled(musicTracks));
   const activeTrack = tracks[0];
   const hasTrack = Boolean(enabled && activeTrack);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
   const [ducked, setDucked] = useState(false);
+
+  const startPlayback = useCallback(() => {
+    const audio = audioRef.current;
+    if (!hasTrack || muted || !audio || document.visibilityState !== 'visible') return;
+    audio.volume = ducked ? DUCKED_VOLUME : 1;
+    if (!audio.paused) return;
+    if (audio.error) audio.load();
+    void audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+  }, [ducked, hasTrack, muted]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -31,27 +41,24 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
   }, [ducked, muted]);
 
   useEffect(() => {
-    if (!hasTrack || muted) return;
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.volume = ducked ? DUCKED_VOLUME : 1;
-    void audio.play().catch(() => setPlaying(false));
-  }, [ducked, hasTrack, muted, userInteracted]);
+    if (userInteracted) interactionSeen.current = true;
+    if (interactionSeen.current) startPlayback();
+  }, [startPlayback, userInteracted]);
 
   useEffect(() => {
-    const startFromFirstGesture = () => {
-      const audio = audioRef.current;
-      if (!hasTrack || muted || !audio) return;
-      audio.volume = ducked ? DUCKED_VOLUME : 1;
-      void audio.play().catch(() => setPlaying(false));
+    const startFromGesture = () => {
+      interactionSeen.current = true;
+      startPlayback();
     };
-    window.addEventListener('pointerdown', startFromFirstGesture, { once: true, capture: true });
-    window.addEventListener('keydown', startFromFirstGesture, { once: true, capture: true });
+    window.addEventListener('pointerdown', startFromGesture, true);
+    window.addEventListener('touchstart', startFromGesture, true);
+    window.addEventListener('keydown', startFromGesture, true);
     return () => {
-      window.removeEventListener('pointerdown', startFromFirstGesture, true);
-      window.removeEventListener('keydown', startFromFirstGesture, true);
+      window.removeEventListener('pointerdown', startFromGesture, true);
+      window.removeEventListener('touchstart', startFromGesture, true);
+      window.removeEventListener('keydown', startFromGesture, true);
     };
-  }, [ducked, hasTrack, muted]);
+  }, [startPlayback]);
 
   useEffect(() => {
     const syncDucking = () => setDucked(foregroundMedia.current.size > 0);
@@ -81,13 +88,12 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
         audio.pause();
       } else if (resumeAfterFocus.current && !muted) {
         resumeAfterFocus.current = false;
-        audio.volume = ducked ? DUCKED_VOLUME : 1;
-        void audio.play().catch(() => setPlaying(false));
+        startPlayback();
       }
     };
     document.addEventListener('visibilitychange', onVisibilityChange);
     return () => document.removeEventListener('visibilitychange', onVisibilityChange);
-  }, [ducked, muted]);
+  }, [muted, startPlayback]);
 
   if (!hasTrack) return null;
 
@@ -101,12 +107,12 @@ export const MusicController: React.FC<MusicControllerProps> = ({ enabled, userI
       <audio
         ref={audioRef}
         src={activeTrack.src}
-        autoPlay
         loop
         preload="auto"
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
         onError={() => setPlaying(false)}
+        onCanPlay={() => { if (interactionSeen.current) startPlayback(); }}
       />
       <div className="flex items-center gap-2 rounded-full border border-cream-100/10 bg-matcha-950/90 px-2 py-1.5 shadow-card backdrop-blur-xl">
         <span className={`music-spectrum ${playing && !muted ? 'music-spectrum--playing' : ''}`} aria-label={playing && !muted ? 'Background music playing' : 'Background music paused'}>
