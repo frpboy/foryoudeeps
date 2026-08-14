@@ -24,6 +24,30 @@ function GalleryMedia({ item }: { item: typeof galleryItems[number] }) {
   return <ResponsiveImage src={item.media.src} alt={item.media.alt || ''} lazy={false} rounded="none" className="max-h-[72svh] w-full" />;
 }
 
+const TypedWishText: React.FC<{ text: string; wishId: string }> = ({ text, wishId }) => {
+  const reduced = useReducedMotion();
+  const [visibleCharacters, setVisibleCharacters] = React.useState(reduced ? text.length : 0);
+
+  useEffect(() => {
+    if (reduced) {
+      setVisibleCharacters(text.length);
+      return;
+    }
+    setVisibleCharacters(0);
+    const timer = window.setInterval(() => {
+      setVisibleCharacters((current) => {
+        const next = Math.min(text.length, current + 1);
+        if (next === text.length) window.clearInterval(timer);
+        return next;
+      });
+    }, 38);
+    return () => window.clearInterval(timer);
+  }, [reduced, text, wishId]);
+
+  const writing = visibleCharacters < text.length;
+  return <p className="mt-4 font-body text-sm leading-relaxed text-ink md:text-base">{text.slice(0, visibleCharacters)}{writing && <span className="wish-typing-caret" aria-hidden="true" />}</p>;
+};
+
 export const RoutedGalleryDetail: React.FC<{ to: (path: string) => string }> = ({ to }) => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -66,7 +90,7 @@ export const RoutedWishDetail: React.FC<{ to: (path: string) => string }> = ({ t
     window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey);
   }, [move]);
   if (!wish) return <StoryFallback birthdayAvailable to={to} />;
-  return <StoryPage><section onTouchStart={(event) => { start.current = { x: event.touches[0].clientX, y: event.touches[0].clientY, blocked: isInteractive(event.target) }; }} onTouchEnd={(event) => { const gesture = start.current; start.current = null; if (!gesture || gesture.blocked) return; const dx = event.changedTouches[0].clientX - gesture.x; const dy = event.changedTouches[0].clientY - gesture.y; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) move(dx < 0 ? 1 : -1); }} className="wishes-atmosphere scene-detail"><AmbientParticles mood="wishes" /><div className="scene-detail__content"><Link to={to('/wishes')} className="inline-flex items-center gap-2 font-body text-sm text-ink/60 hover:text-ink"><ChevronLeft size={17} /> back to wishes</Link><article className="paper-edge card-cream mt-5 p-5 md:p-7"><h1 className="font-display text-3xl text-ink md:text-4xl">{wish.name}</h1>{wish.relationship && <p className="mt-1 font-handwritten text-xl text-deepred-700">{wish.relationship}</p>}{wish.photo?.enabled && <ResponsiveImage src={wish.photo.src} alt={wish.photo.alt || wish.name} className="mt-4 max-h-[36dvh]" aspect="4 / 5" />}{wish.text && <p className="mt-4 font-body text-sm leading-relaxed text-ink md:text-base">{wish.text}</p>}{wish.video?.enabled && <video src={wish.video.src} controls playsInline preload="metadata" className="mt-4 max-h-[36dvh] w-full" />}{wish.audio?.enabled && <audio src={wish.audio.src} controls preload="metadata" className="mt-4 w-full" />}</article><nav aria-label="Wish navigation" className="mt-5 flex justify-between"><button type="button" disabled={!previous} onClick={() => move(-1)} className="inline-flex items-center gap-2 font-body text-sm text-ink/65 disabled:opacity-25"><ChevronLeft size={18} /> previous</button><button type="button" disabled={!next} onClick={() => move(1)} className="inline-flex items-center gap-2 font-body text-sm text-ink/65 disabled:opacity-25">next <ChevronRight size={18} /></button></nav></div></section></StoryPage>;
+  return <StoryPage><section onTouchStart={(event) => { start.current = { x: event.touches[0].clientX, y: event.touches[0].clientY, blocked: isInteractive(event.target) }; }} onTouchEnd={(event) => { const gesture = start.current; start.current = null; if (!gesture || gesture.blocked) return; const dx = event.changedTouches[0].clientX - gesture.x; const dy = event.changedTouches[0].clientY - gesture.y; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) move(dx < 0 ? 1 : -1); }} className="wishes-atmosphere scene-detail"><AmbientParticles mood="wishes" /><div className="scene-detail__content"><Link to={to('/wishes')} className="inline-flex items-center gap-2 font-body text-sm text-ink/60 hover:text-ink"><ChevronLeft size={17} /> back to wishes</Link><article className="paper-edge card-cream mt-5 p-5 md:p-7"><h1 className="font-display text-3xl text-ink md:text-4xl">{wish.name}</h1>{wish.relationship && <p className="mt-1 font-handwritten text-xl text-deepred-700">{wish.relationship}</p>}{wish.photo?.enabled && <ResponsiveImage src={wish.photo.src} alt={wish.photo.alt || wish.name} className="mt-4 max-h-[36dvh]" aspect="4 / 5" />}{wish.text && <TypedWishText key={wish.id} wishId={wish.id} text={wish.text} />}{wish.video?.enabled && <video src={wish.video.src} controls playsInline preload="metadata" className="mt-4 max-h-[36dvh] w-full" />}{wish.audio?.enabled && <audio src={wish.audio.src} autoPlay controls preload="auto" className="mt-4 w-full" />}</article><nav aria-label="Wish navigation" className="mt-5 flex justify-between"><button type="button" disabled={!previous} onClick={() => move(-1)} className="inline-flex items-center gap-2 font-body text-sm text-ink/65 disabled:opacity-25"><ChevronLeft size={18} /> previous</button><button type="button" disabled={!next} onClick={() => move(1)} className="inline-flex items-center gap-2 font-body text-sm text-ink/65 disabled:opacity-25">next <ChevronRight size={18} /></button></nav></div></section></StoryPage>;
 };
 
 export const StoryFallback: React.FC<{ birthdayAvailable: boolean; to: (path: string) => string }> = ({ birthdayAvailable, to }) => <StoryPage><section className="final-atmosphere scene-detail justify-center px-6 text-center"><div><p className="font-handwritten text-3xl text-deepred-300">a small wrong turn</p><h1 className="mt-5 font-display text-5xl text-cream-50">Looks like you wandered somewhere that isn’t part of the surprise.</h1><Link to={birthdayAvailable ? to('/birthday') : '/'} className="mt-10 inline-block font-body text-cream-200/70 hover:text-cream-50">take me back</Link></div></section></StoryPage>;
