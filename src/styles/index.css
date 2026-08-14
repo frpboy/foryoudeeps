@@ -311,6 +311,16 @@ body.no-scroll {
 .gallery-atmosphere::before { background: radial-gradient(ellipse 65% 46% at 12% 12%, rgba(48, 104, 75, .23), transparent 72%); }
 .wishes-atmosphere { color: #07150f; background: var(--paper); }
 .wishes-atmosphere::before { background-image: radial-gradient(rgba(92,17,25,.1) .7px, transparent .7px); background-size: 8px 8px; opacity: .22; }
+.letter-scene { position: relative; display: flex; height: var(--scene-height, 100dvh); min-height: 0; align-items: center; justify-content: center; overflow: hidden; padding: max(4.5rem, env(safe-area-inset-top)) 1.25rem max(4rem, env(safe-area-inset-bottom)); color: #07150f; background: var(--paper); }
+.letter-scene::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(92,17,25,.1) .7px, transparent .7px); background-size: 8px 8px; opacity: .22; pointer-events: none; }
+.letter-paper { position: relative; z-index: 1; display: flex; width: min(100%, 42rem); height: min(100%, 42rem); flex-direction: column; overflow: hidden; border: 1px solid rgba(92,17,25,.16); border-radius: 2px; background: linear-gradient(135deg, #fffdf5, #f1e4c8); box-shadow: 0 24px 55px -35px rgba(7,21,15,.7); }
+.letter-paper__heading { flex: 0 0 auto; padding: 1.5rem 1.5rem 1rem; text-align: center; }
+.letter-scroll-hint { margin-top: .75rem; font-family: 'DM Sans', sans-serif; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(7,21,15,.45); }
+.letter-paper__body { min-height: 0; overflow-y: auto; scroll-behavior: smooth; padding: .5rem clamp(1.5rem, 5vw, 3.5rem) 2.5rem; scrollbar-width: thin; scrollbar-color: rgba(92,17,25,.35) transparent; }
+.letter-paper__body p { margin: 0 0 1.25rem; font-family: 'Caveat', cursive; font-size: clamp(1.32rem, 2.4vw, 1.7rem); line-height: 1.35; color: #31221d; }
+.letter-paper__body .letter-paper__emphasis { font-size: clamp(1.6rem, 3vw, 2rem); color: #8b2633; }
+.letter-paper__body .letter-paper__signature { margin-bottom: 0; text-align: right; color: #8b2633; }
+@media (hover: none) { .letter-scroll-hint { font-size: 0; } .letter-scroll-hint::after { content: 'Swipe to read'; font-size: .72rem; } }
 .daughter-atmosphere { background: linear-gradient(180deg, #0d2419 0%, #07150f 100%); }
 .final-atmosphere { width: 100%; height: 100%; min-height: var(--scene-height, 100dvh); background: radial-gradient(ellipse 65% 55% at 50% 48%, #102a1d 0%, #06140d 74%); }
 .age-motif { position: absolute; right: -1.7rem; bottom: -3.2rem; z-index: 0; pointer-events: none; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(15rem, 49vw, 32rem); line-height: 1; letter-spacing: -.11em; }

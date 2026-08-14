@@ -26,7 +26,7 @@ export const wishes: Wish[] = [
     id: 'wish-rahul',
     name: 'Rahul',
     relationship: 'with love',
-    text: 'Hope this year brings you new adventures, calm mornings, big laughter, and everything you have been hoping for.',
+    text: 'Happy 31st, Deeps! ❤️ You’ve been more than a teammate—you’ve been someone who keeps people going through the chaos. Thank you for always helping, guiding, and pushing us to do better. Here’s to a new chapter, more laughter, fewer bugs, and countless beautiful memories. Happy Birthday, Deeps — Level 31 unlocked! 🎂✨',
     order: 3,
     presentationStyle: 'chat',
     timestampLabel: 'birthday note',

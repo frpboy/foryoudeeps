@@ -5,6 +5,7 @@ import { BirthdayRevealSection } from '@/sections/BirthdayRevealSection';
 import { JourneySection } from '@/sections/JourneySection';
 import { GallerySection } from '@/sections/GallerySection';
 import { WishesSection } from '@/sections/WishesSection';
+import { LetterSection } from '@/sections/LetterSection';
 import { DaughterSection } from '@/sections/DaughterSection';
 import { FinalWishSection } from '@/sections/FinalWishSection';
 import { MusicController } from '@/components/music/MusicController';
@@ -69,7 +70,7 @@ const App: React.FC = () => {
   }, [markInteracted]);
 
   const guard = (content: React.ReactNode) => birthdayAvailable ? content : <Navigate to="/" replace />;
-  const journey = ['/birthday', '/memories', '/gallery', '/wishes', '/daughter', '/final'];
+  const journey = ['/birthday', '/memories', '/gallery', '/wishes', '/letter', '/daughter', '/final'];
   const journeyIndex = journey.indexOf(location.pathname);
   const previous = journeyIndex > 0 ? journey[journeyIndex - 1] : undefined;
   const next = journeyIndex >= 0 && journeyIndex < journey.length - 1 ? journey[journeyIndex + 1] : undefined;
@@ -115,8 +116,9 @@ const App: React.FC = () => {
         <Route path="/memories" element={guard(<StoryPage><JourneySection /><StoryAction to={to('/gallery')}>see the memories</StoryAction></StoryPage>)} />
         <Route path="/gallery" element={guard(<StoryPage><GallerySection /><StoryAction to={to('/wishes')}>read their wishes</StoryAction></StoryPage>)} />
         <Route path="/gallery/:id" element={guard(<RoutedGalleryDetail to={to} />)} />
-        <Route path="/wishes" element={guard(<StoryPage><WishesSection /><StoryAction to={to('/daughter')} tone="dark">one more message</StoryAction></StoryPage>)} />
+        <Route path="/wishes" element={guard(<StoryPage><WishesSection /><StoryAction to={to('/letter')} tone="dark">one more message</StoryAction></StoryPage>)} />
         <Route path="/wishes/:id" element={guard(<RoutedWishDetail to={to} />)} />
+        <Route path="/letter" element={guard(<StoryPage><LetterSection /><StoryAction to={to('/daughter')} tone="dark">one more message</StoryAction></StoryPage>)} />
         <Route path="/daughter" element={guard(<StoryPage><DaughterSection /><StoryAction to={to('/final')}>one last thing</StoryAction></StoryPage>)} />
         <Route path="/final" element={guard(<StoryPage><FinalWishSection onReplay={() => navigate(to('/birthday'))} /></StoryPage>)} />
         <Route path="*" element={<StoryFallback birthdayAvailable={birthdayAvailable} to={to} />} />
