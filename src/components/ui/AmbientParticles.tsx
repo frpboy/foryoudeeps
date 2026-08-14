@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useReducedMotion } from '@/hooks';
 
 type ParticleMood = 'birthday' | 'memories' | 'gallery' | 'wishes' | 'daughter' | 'final';
@@ -19,18 +19,53 @@ const kindsByMood: Record<ParticleMood, readonly string[]> = {
   final: ['dust', 'dot', 'sparkle'],
 };
 
+const foregroundKindsByMood: Record<ParticleMood, readonly string[]> = {
+  birthday: ['sparkle', 'heart', 'sparkle'],
+  memories: ['sparkle', 'doodle', 'sparkle'],
+  gallery: ['sparkle', 'dot', 'sparkle'],
+  wishes: ['heart', 'sparkle', 'heart'],
+  daughter: ['sparkle', 'dot', 'sparkle'],
+  final: ['sparkle', 'heart', 'sparkle'],
+};
+
 export const AmbientParticles: React.FC<{ mood: ParticleMood; className?: string }> = ({ mood, className = '' }) => {
   const reduced = useReducedMotion();
   const kinds = kindsByMood[mood];
+  const foregroundKinds = foregroundKindsByMood[mood];
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (reduced || !window.matchMedia('(hover: hover)').matches) return;
+    const onPointerMove = (event: PointerEvent) => {
+      const root = containerRef.current;
+      if (!root) return;
+      root.style.setProperty('--ambient-pointer-x', `${((event.clientX / window.innerWidth) - .5) * 14}px`);
+      root.style.setProperty('--ambient-pointer-y', `${((event.clientY / window.innerHeight) - .5) * 10}px`);
+    };
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    return () => window.removeEventListener('pointermove', onPointerMove);
+  }, [reduced]);
+
   return (
-    <div aria-hidden="true" className={`ambient-particles ambient-particles--${mood} ${reduced ? 'ambient-particles--still' : ''} ${className}`}>
-      {positions.map(([left, top], index) => (
-        <span
-          key={`${left}-${top}`}
-          className={`ambient-particle ambient-particle--${kinds[index % kinds.length]}`}
-          style={{ '--particle-left': `${left}%`, '--particle-top': `${top}%`, '--particle-delay': `${-(index % 9) * 0.73}s`, '--particle-duration': `${5.8 + (index % 7) * 0.64}s` } as React.CSSProperties}
-        />
-      ))}
+    <div ref={containerRef} aria-hidden="true" className={`ambient-particles ambient-particles--${mood} ${reduced ? 'ambient-particles--still' : ''} ${className}`}>
+      <div className="ambient-particles__midground">
+        {positions.map(([left, top], index) => (
+          <span
+            key={`${left}-${top}`}
+            className={`ambient-particle ambient-particle--${kinds[index % kinds.length]}`}
+            style={{ '--particle-left': `${left}%`, '--particle-top': `${top}%`, '--particle-delay': `${-(index % 9) * 0.73}s`, '--particle-duration': `${5.8 + (index % 7) * 0.64}s` } as React.CSSProperties}
+          />
+        ))}
+      </div>
+      <div className="ambient-particles__foreground">
+        {positions.filter((_, index) => index % 5 === 0).map(([left, top], index) => (
+          <span
+            key={`foreground-${left}-${top}`}
+            className={`ambient-particle ambient-particle--foreground ambient-particle--${foregroundKinds[index % foregroundKinds.length]}`}
+            style={{ '--particle-left': `${left}%`, '--particle-top': `${top}%`, '--particle-delay': `${-(index % 6) * 1.2}s`, '--particle-duration': `${7.5 + (index % 4) * .9}s` } as React.CSSProperties}
+          />
+        ))}
+      </div>
     </div>
   );
 };

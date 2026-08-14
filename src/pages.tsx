@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowDown, ChevronLeft, ChevronRight } from '@/components/ui/primitives';
 import { ResponsiveImage } from '@/components/ui/Media';
@@ -12,7 +12,17 @@ import { AmbientParticles } from '@/components/ui/AmbientParticles';
 
 export const StoryPage: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const reduced = useReducedMotion();
-  return <motion.main initial={reduced ? { opacity: 0 } : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduced ? .01 : .42, ease: [0.22, 1, 0.36, 1] }} className="scene-page">{children}</motion.main>;
+  const { pathname } = useLocation();
+  const section = pathname.split('/')[1] || 'birthday';
+  const isPaper = section === 'wishes' || section === 'letter';
+  const entrance = isPaper
+    ? { opacity: 0, rotateY: -5, x: 20, scale: 0.985 }
+    : section === 'gallery'
+      ? { opacity: 0, y: 26, scale: 0.975, filter: 'blur(2px)' }
+      : section === 'daughter' || section === 'final'
+        ? { opacity: 0, scale: 1.025, filter: 'brightness(.68)' }
+        : { opacity: 0, y: 14, scale: 1.01 };
+  return <motion.main initial={reduced ? { opacity: 0 } : entrance} animate={{ opacity: 1, x: 0, y: 0, scale: 1, rotateY: 0, filter: 'blur(0px) brightness(1)' }} transition={{ duration: reduced ? .01 : isPaper ? .7 : .58, ease: [0.22, 1, 0.36, 1] }} className={`scene-page story-page story-page--${section}${isPaper ? ' story-page--paper-turn' : ''}`}>{children}</motion.main>;
 };
 
 export const StoryAction: React.FC<{ to: string; children: React.ReactNode; tone?: 'light' | 'dark' }> = ({ to, children, tone = 'light' }) => (
