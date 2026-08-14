@@ -3,7 +3,6 @@ import { motion } from 'motion/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SectionHeading, IconButton, Play, Pause, DecorativeHeart, PaperNote } from '@/components/ui/primitives';
 import { MediaFallback, ResponsiveImage } from '@/components/ui/Media';
-import { AmbientParticles } from '@/components/ui/AmbientParticles';
 import { AgeMotif } from '@/components/ui/AgeMotif';
 import { useReducedMotion, useIntersectionObserver, useMediaRegistry } from '@/hooks';
 import { filterEnabled, sortByOrder, getWishVariant } from '@/lib/media';
@@ -122,7 +121,6 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
   const hasAudio = Boolean(wish.audio?.enabled && wish.audio.src);
   const hasVideo = Boolean(wish.video?.enabled && wish.video.src);
   const toneCream = index % 3 !== 1 || wish.featured;
-  const rotation = wish.featured ? 0 : ((index % 5) - 2) * 0.4;
   const presentation = wish.presentationStyle ?? (hasAudio ? 'audio' : hasVideo ? 'video' : hasPhoto ? 'polaroid' : 'note');
   const openFromCard = (target: EventTarget | null) => {
     if (target instanceof Element && target.closest('button, a, audio, video, input, [role="slider"]')) return;
@@ -200,19 +198,17 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
   return (
     <motion.article
       ref={ref}
-      initial={reduced || !visible ? {} : { opacity: 0, y: 32, rotate: rotation * 2 }}
-      animate={visible ? { opacity: 1, y: 0, rotate: rotation } : {}}
+      initial={reduced || !visible ? {} : { opacity: 0, y: 20 }}
+      animate={visible ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: Math.min((index % 6) * 0.08, 0.45), ease: [0.22, 1, 0.36, 1] }}
-      className={`wish-note wish-note-${index % 4} wish-scatter-${index % 3} wish-${presentation} ${index > 1 ? 'wish-note--mobile-hidden' : ''}`}
+      className={`wish-note wish-${presentation}`}
       role="button"
       tabIndex={0}
       aria-label={`Open ${wish.name}'s birthday wish`}
       onClick={(event) => openFromCard(event.target)}
       onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); onOpen?.(); } }}
     >
-      <AmbientParticles mood="wishes" />
-      <AgeMotif tone="paper" />
-      <PaperNote tone={toneCream ? 'cream' : 'matcha'} rotation={rotation} className="h-full">
+      <PaperNote tone={toneCream ? 'cream' : 'matcha'} rotation={0} className="h-full">
         {wish.featured && (
           <div className="absolute -top-3 right-4">
             <DecorativeHeart size="md" className="animate-float" />
@@ -260,7 +256,6 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
 export const WishesSection: React.FC = () => {
   const reduced = useReducedMotion();
   const items = sortByOrder(filterEnabled(wishes));
-  const sceneItems = items.slice(0, 3);
   const navigate = useNavigate();
   const location = useLocation();
   const { pauseAll, register, unregister } = useMediaRegistry();
@@ -270,6 +265,7 @@ export const WishesSection: React.FC = () => {
       id="wishes"
       className="story-section wishes-atmosphere"
     >
+      <AgeMotif tone="paper" />
       <div className="mx-auto w-full max-w-7xl">
         <div className="mb-16 md:mb-24">
           <SectionHeading
@@ -287,8 +283,8 @@ export const WishesSection: React.FC = () => {
             <p className="max-w-md font-body leading-relaxed text-ink/65">Every note here will be shared by the person who wrote it.</p>
           </div>
         ) : (
-          <div className="wishes-scatter grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-7">
-            {sceneItems.map((wish, i) => (
+          <div className="wishes-list">
+            {items.map((wish, i) => (
               <WishCard
                 key={wish.id}
                 wish={wish}

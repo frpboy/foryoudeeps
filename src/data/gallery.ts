@@ -25,23 +25,31 @@ const celebrationPhotoAlt = [
   'Deeps with her daughter at an indoor celebration.',
 ];
 
-const celebrationGalleryItems: GalleryItem[] = celebrationPhotoAlt.map((alt, index) => {
+// This supplied batch contains many near-identical portraits from the same
+// moment. Keep the distinct solo, mother-and-daughter, and friends memories;
+// original files remain in public/media/gallery for the content owner.
+const selectedCelebrationPhotoIndexes = new Set([0, 2, 3, 5, 10]);
+
+const celebrationGalleryItems: GalleryItem[] = celebrationPhotoAlt.flatMap((alt, index) => {
+  if (!selectedCelebrationPhotoIndexes.has(index)) return [];
   const order = index + 8;
   const sequence = String(order).padStart(3, '0');
-  return {
+  return [{
     id: `gallery-${sequence}`,
     media: {
       id: `gallery-${sequence}-image`,
       type: 'image',
       src: `/media/gallery/deeps-gallery-${sequence}.jpeg`,
       alt,
+      width: index === 5 ? 1280 : 960,
+      height: index === 5 ? 720 : 1280,
       order,
       enabled: true,
     },
     order,
     rotation: index % 2 === 0 ? 1 : -1,
     enabled: true,
-  };
+  }];
 });
 
 // Reviewed real photographs. Add captions, stickers, and date labels only when

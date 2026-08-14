@@ -243,14 +243,10 @@ body.no-scroll {
 .wishes-atmosphere > .mx-auto { display: flex; flex-direction: column; }
 .journey-atmosphere .editorial-empty,
 .wishes-atmosphere .editorial-empty { flex: 1 1 auto; min-height: 0; }
-.gallery-composition { display: grid; min-height: 0; flex: 1 1 auto; grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); align-content: start; gap: clamp(.65rem, 1vw, 1.1rem); overflow-y: auto; overscroll-behavior: contain; padding: .6rem .45rem 1.25rem; }
-.gallery-composition .gallery-polaroid { width: 100%; height: auto; max-width: none; }
-.gallery-composition .gallery-polaroid--featured { width: 100%; }
-.gallery-composition .gallery-polaroid--scatter-0 { position: relative; top: .25rem; left: .15rem; z-index: 2; }
-.gallery-composition .gallery-polaroid--scatter-1 { position: relative; top: -.25rem; z-index: 3; }
-.gallery-composition .gallery-polaroid--scatter-2 { position: relative; top: .1rem; left: -.15rem; z-index: 1; }
-.gallery-polaroid__photo { display: flex; height: calc(100% - 1.15rem); align-items: center; justify-content: center; overflow: hidden; }
-.gallery-polaroid__image { display: block; width: auto; max-width: 100%; height: 100%; object-fit: contain; }
+.gallery-composition { column-count: 5; column-gap: clamp(.45rem, .8vw, .75rem); min-height: 0; flex: 1 1 auto; overflow-y: auto; overscroll-behavior: contain; padding: .35rem .1rem 1.25rem; }
+.gallery-tile { width: 100%; margin: 0 0 clamp(.45rem, .8vw, .75rem); break-inside: avoid; background: #123324; border-radius: .18rem; box-shadow: 0 12px 30px -24px rgba(0, 0, 0, .9); }
+.gallery-tile__photo { overflow: hidden; }
+.gallery-tile__image { display: block; width: 100%; height: auto; object-fit: contain; }
 .daughter-atmosphere > .mx-auto { max-height: 100%; justify-content: center; }
 .daughter-atmosphere .mt-20 { margin-top: clamp(1.5rem, 5vh, 4rem); }
 .daughter-atmosphere video { max-height: min(46dvh, 500px); object-fit: contain; }
@@ -356,30 +352,22 @@ body.no-scroll {
 .wish-polaroid .paper-edge::after { content: '♡'; position: absolute; right: .8rem; bottom: .65rem; color: var(--rose-ink); font-family: 'Caveat', cursive; font-size: 1.45rem; }
 
 @media (max-width: 767px) {
-  .gallery-composition { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .45rem; padding: .35rem .15rem 1rem; }
-  .gallery-composition .gallery-polaroid--scatter-0 { top: .2rem; left: .1rem; }
-  .gallery-composition .gallery-polaroid--scatter-1 { top: -.2rem; left: 0; }
-  .gallery-composition .gallery-polaroid--scatter-2 { top: .1rem; left: -.1rem; }
-  .gallery-polaroid { padding: .18rem .18rem .95rem; }
-  .gallery-polaroid__photo { height: calc(100% - .95rem); }
-  .wishes-atmosphere .wish-note--mobile-hidden { display: none; }
+  .gallery-composition { column-count: 2; column-gap: .45rem; padding: .2rem 0 1rem; }
 }
 .wish-chat .paper-edge { border-radius: 18px 18px 18px 4px; clip-path: none; }
 .wish-chat .paper-edge::before { content: ''; position: absolute; left: .8rem; bottom: -.5rem; border-top: .7rem solid currentColor; border-right: .7rem solid transparent; opacity: .14; }
 
+.wishes-list { display: grid; min-height: 0; flex: 1 1 auto; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; gap: .8rem; overflow-y: auto; overscroll-behavior: contain; padding: .25rem .1rem 1.25rem; }
 .wish-note { width: 100%; }
-.wish-note-1 { width: 96%; justify-self: end; }
-.wish-note-2 { width: 98%; }
-.wish-note-3 { width: 94%; justify-self: center; }
-.wishes-scatter { align-items: center; justify-items: center; }
-.wishes-scatter .wish-scatter-0 { position: relative; top: 1rem; transform: rotate(-1.1deg); }
-.wishes-scatter .wish-scatter-1 { position: relative; top: -1rem; transform: rotate(.7deg); }
-.wishes-scatter .wish-scatter-2 { position: relative; top: .45rem; transform: rotate(-.45deg); }
 .wishes-atmosphere .paper-edge { box-shadow: 0 17px 36px -30px rgba(7,21,15,.55); }
 .wishes-atmosphere .wish-note:nth-child(3n + 1) .paper-edge { background: linear-gradient(135deg, #fffdf5, #f1e4c8); }
 .wishes-atmosphere .wish-note:nth-child(3n + 2) .paper-edge { background: linear-gradient(145deg, #103525, #0b2117); }
 .wishes-atmosphere .wish-note:nth-child(3n + 2) .paper-edge :is(h3, p) { color: #fff8e8; }
 .wishes-atmosphere .wish-note:nth-child(3n + 2) .paper-edge .font-handwritten { color: #f4a1a8; }
+
+@media (max-width: 767px) {
+  .wishes-list { grid-template-columns: 1fr; gap: .7rem; padding: .2rem 0 1rem; }
+}
 
 @media (min-width: 768px) {
   .story-section { padding-left: 3rem; padding-right: 3rem; }
@@ -401,10 +389,7 @@ body.no-scroll {
   .journey-atmosphere .mb-16,
   .gallery-atmosphere .mb-16,
   .wishes-atmosphere .mb-16 { margin-bottom: 1.25rem; }
-  .gallery-composition { gap: .45rem; }
-  .gallery-composition .gallery-polaroid,
-  .gallery-composition .gallery-polaroid--featured { width: 100%; height: auto; max-width: none; padding-bottom: 1.7rem; }
-  .gallery-polaroid__photo { height: calc(100% - 1.7rem); }
+  .gallery-composition { column-gap: .4rem; }
   .daughter-atmosphere .mt-20 { margin-top: 1.25rem; }
   .daughter-atmosphere .text-4xl { font-size: 2rem; }
   .final-atmosphere .mt-12 { margin-top: 1rem; }

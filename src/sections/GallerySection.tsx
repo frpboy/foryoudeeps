@@ -20,30 +20,26 @@ interface GalleryCardProps {
 const GalleryCard: React.FC<GalleryCardProps> = ({ item, index, reduced, onOpen }) => {
   const { ref, visible } = useIntersectionObserver<HTMLButtonElement>();
   const isVideo = item.media.type === 'video';
-  const rotation = item.rotation ?? (((index * 7) % 5) - 2) * 0.7;
-  const photoRatio = item.media.width && item.media.height ? item.media.width / item.media.height : 0.7;
-  const polaroidRatio = photoRatio * 0.9 + 0.02;
 
   return (
     <motion.button
       ref={ref as React.RefObject<HTMLButtonElement>}
       onClick={onOpen}
-      initial={reduced || !visible ? {} : { opacity: 0, y: -24, scale: 0.96, rotate: rotation + (index % 2 ? 2.2 : -2.2) }}
-      animate={visible ? { opacity: 1, y: 0, scale: 1, rotate: rotation } : {}}
+      initial={reduced || !visible ? {} : { opacity: 0, y: 16, scale: 0.98 }}
+      animate={visible ? { opacity: 1, y: 0, scale: 1 } : {}}
       transition={{ duration: 0.66, delay: Math.min(index * 0.07, 0.48), ease: [0.22, 1, 0.36, 1] }}
-      whileHover={reduced ? {} : { scale: 1.02, y: -5, rotate: rotation + (index % 2 ? 0.8 : -0.8) }}
+      whileHover={reduced ? {} : { scale: 1.015, y: -3 }}
       whileTap={reduced ? {} : { scale: 0.98 }}
-      className={`gallery-memory gallery-polaroid gallery-polaroid--scatter-${index % 3} ${item.featured ? 'gallery-polaroid--featured' : 'gallery-polaroid--supporting'} group relative block overflow-hidden text-left`}
-      style={{ transform: `rotate(${rotation}deg)`, aspectRatio: polaroidRatio }}
+      className="gallery-memory gallery-tile group relative block overflow-hidden text-left"
       aria-label={`Open gallery item ${index + 1}`}
     >
-      <div className="gallery-polaroid__photo">
+      <div className="gallery-tile__photo">
         <img
           src={item.media.poster || item.media.src}
           alt={item.media.alt || ''}
           loading={index > 1 ? 'lazy' : 'eager'}
           decoding="async"
-          className="gallery-polaroid__image"
+          className="gallery-tile__image"
         />
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-matcha-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />

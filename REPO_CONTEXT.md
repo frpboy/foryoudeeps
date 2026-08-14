@@ -38,7 +38,7 @@ Content lives under `src/data/` and is typed in `src/types/index.ts`.
 
 - `site.ts`: August 15, 2026, 00:00 IST, age 31, and high-level feature flags.
 - `journey.ts`: currently intentionally empty.
-- `gallery.ts`: twenty-nine supplied local photographs; `gallery-003` is featured.
+- `gallery.ts`: twelve curated local photographs are rendered from twenty-nine supplied files; non-rendered near-duplicates are preserved on disk.
 - `wishes.ts`: twelve enabled starter messages, explicitly marked as draft wording pending contributor approval.
 - `special.ts`: final message is enabled; music track list is empty and daughter message is disabled.
 
@@ -59,7 +59,7 @@ Scenes respect reduced motion. Gallery and wish detail pages support arrow keys 
 
 ## Current content/release status
 
-- Available real personal media: twenty-nine gallery JPEGs only.
+- Available real personal media: twenty-nine gallery JPEGs, with twelve currently curated into the rendered album.
 - Outstanding supplied content: journey photographs/video, contributor-approved wishes, daughter video, and music.
 - Intentional empty states are visible for missing personal material; preserve them until reviewed source material is supplied.
 - `log.md` is append-only. Do not rewrite its existing history.
