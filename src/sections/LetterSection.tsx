@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { useReducedMotion } from '@/hooks';
 import { AgeMotif } from '@/components/ui/AgeMotif';
@@ -18,6 +18,34 @@ const letterParagraphs = [
 export const LetterSection: React.FC = () => {
   const reduced = useReducedMotion();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [visibleCharacters, setVisibleCharacters] = useState(reduced ? Number.MAX_SAFE_INTEGER : 0);
+  const [writingRun, setWritingRun] = useState(0);
+  const [forceWriting, setForceWriting] = useState(false);
+  const totalCharacters = letterParagraphs.reduce((total, paragraph) => total + paragraph.length, 0);
+  const shouldWrite = !reduced || forceWriting;
+
+  useEffect(() => {
+    if (!shouldWrite) {
+      setVisibleCharacters(Number.MAX_SAFE_INTEGER);
+      return;
+    }
+    setVisibleCharacters(0);
+    const timer = window.setInterval(() => {
+      setVisibleCharacters((current) => {
+        const next = Math.min(totalCharacters, current + 2);
+        if (next === totalCharacters) window.clearInterval(timer);
+        return next;
+      });
+    }, 24);
+    return () => window.clearInterval(timer);
+  }, [shouldWrite, totalCharacters, writingRun]);
+
+  useEffect(() => {
+    const panel = scrollRef.current;
+    if (!panel || visibleCharacters >= totalCharacters || !shouldWrite) return;
+    const progress = visibleCharacters / totalCharacters;
+    panel.scrollTop = progress * (panel.scrollHeight - panel.clientHeight);
+  }, [shouldWrite, totalCharacters, visibleCharacters]);
 
   const guideScroll = (event: React.PointerEvent<HTMLElement>) => {
     if (event.pointerType === 'touch' || reduced) return;
@@ -40,13 +68,18 @@ export const LetterSection: React.FC = () => {
         <div className="letter-paper__heading">
           <p className="font-handwritten text-2xl text-deepred-700">a birthday wish</p>
           <h1 className="font-display text-4xl text-ink md:text-5xl">Happy Birthday, Deeps. ❤️</h1>
-          <p className="letter-scroll-hint">Move your cursor down to read</p>
+          <p className="letter-scroll-hint">{visibleCharacters < totalCharacters ? 'Writing your note…' : 'Move your cursor down to read'}</p>
+          {reduced && !forceWriting && <button type="button" className="letter-play" onClick={() => setForceWriting(true)}>play the handwriting</button>}
         </div>
         <div ref={scrollRef} className="letter-paper__body" tabIndex={0} aria-label="A birthday wish for Deeps">
-          {letterParagraphs.map((paragraph, index) => (
-            <p key={paragraph} className={index === 4 || index === 7 ? 'letter-paper__emphasis' : undefined}>{paragraph}</p>
-          ))}
-          <p className="letter-paper__signature">With appreciation, always.</p>
+          {letterParagraphs.map((paragraph, index) => {
+            const previousCharacters = letterParagraphs.slice(0, index).reduce((total, item) => total + item.length, 0);
+            const typedLength = Math.min(paragraph.length, Math.max(0, visibleCharacters - previousCharacters));
+            const isWriting = typedLength > 0 && typedLength < paragraph.length;
+            if (typedLength === 0) return null;
+            return <p key={paragraph} className={index === 4 || index === 7 ? 'letter-paper__emphasis' : undefined}>{paragraph.slice(0, typedLength)}{isWriting && <span className="letter-pen" aria-hidden="true" />}</p>;
+          })}
+          {visibleCharacters >= totalCharacters && <><p className="letter-paper__signature">With appreciation, always.</p><button type="button" className="letter-replay" onClick={() => { setForceWriting(true); setWritingRun((run) => run + 1); }}>write it again</button></>}
         </div>
       </motion.div>
     </section>

@@ -320,6 +320,12 @@ body.no-scroll {
 .letter-paper__body p { margin: 0 0 1.25rem; font-family: 'Caveat', cursive; font-size: clamp(1.32rem, 2.4vw, 1.7rem); line-height: 1.35; color: #31221d; }
 .letter-paper__body .letter-paper__emphasis { font-size: clamp(1.6rem, 3vw, 2rem); color: #8b2633; }
 .letter-paper__body .letter-paper__signature { margin-bottom: 0; text-align: right; color: #8b2633; }
+.letter-pen { display: inline-block; width: .1em; height: 1.05em; margin-left: .1em; vertical-align: -.15em; background: #8b2633; animation: letter-pen-blink .7s steps(1, end) infinite; }
+.letter-play, .letter-replay { border: 0; background: transparent; cursor: pointer; }
+.letter-play { margin-top: .55rem; border-bottom: 1px solid rgba(139,38,51,.45); font-family: 'Caveat', cursive; font-size: 1.15rem; color: #8b2633; }
+.letter-replay { display: block; margin: 1.5rem auto 0; border-bottom: 1px solid rgba(139,38,51,.45); font-family: 'Caveat', cursive; font-size: 1.25rem; color: #8b2633; transition: color .2s ease; }
+.letter-replay:hover { color: #5c1119; }
+@keyframes letter-pen-blink { 50% { opacity: 0; } }
 @media (hover: none) { .letter-scroll-hint { font-size: 0; } .letter-scroll-hint::after { content: 'Swipe to read'; font-size: .72rem; } }
 .daughter-atmosphere { background: linear-gradient(180deg, #0d2419 0%, #07150f 100%); }
 .final-atmosphere { width: 100%; height: 100%; min-height: var(--scene-height, 100dvh); background: radial-gradient(ellipse 65% 55% at 50% 48%, #102a1d 0%, #06140d 74%); }

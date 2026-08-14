@@ -55,7 +55,7 @@ export const wishes: Wish[] = [
     id: 'wish-amaya',
     name: 'Amaya',
     relationship: 'with love',
-    text: 'Happy birthday, Deeps! May this year bring you beautiful surprises, easy laughter, and so many good memories.',
+    text: 'Happy 31st Birthday, chechi! 🎂❤️ May your day be filled with happiness, laughter and lots of love. Stay happy and blessed always! 🥰✨🥂',
     order: 7,
     presentationStyle: 'chat',
     timestampLabel: 'birthday note',
