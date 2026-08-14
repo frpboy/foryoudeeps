@@ -293,6 +293,11 @@ body.no-scroll {
   font-size: clamp(15rem, 52vw, 35rem);
   line-height: 1;
 }
+.reveal-curtain { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: #020b07; }
+.reveal-age-mark { position: relative; z-index: 1; margin-top: 1.2rem; color: var(--color-cream-100); font-family: 'Playfair Display', Georgia, serif; font-size: clamp(4.8rem, 13vw, 8.6rem); line-height: .78; letter-spacing: -.09em; text-shadow: 0 0 34px rgba(201,74,85,.2); }
+.reveal-burst { position: absolute; left: 50%; top: 65%; z-index: 2; width: 1px; height: 1px; pointer-events: none; }
+.reveal-burst span { position: absolute; display: block; width: 5px; height: 5px; border-radius: 999px; background: var(--color-red-500); box-shadow: 0 0 13px rgba(201,74,85,.82); }
+.reveal-burst span:nth-child(3n) { width: 7px; height: 7px; background: var(--color-cream-100); box-shadow: 0 0 15px rgba(248,240,221,.8); }
 
 .countdown-age-transition { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .countdown-age { position: absolute; right: -1.8rem; bottom: -3.3rem; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(15rem, 52vw, 35rem); line-height: 1; letter-spacing: -.1em; will-change: transform, opacity, filter; transition: opacity 950ms linear, transform 950ms ease-out, filter 950ms ease-out; }
