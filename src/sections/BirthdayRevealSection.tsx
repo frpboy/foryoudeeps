@@ -22,6 +22,7 @@ export const BirthdayRevealSection: React.FC<BirthdayRevealSectionProps> = ({ on
 
   return (
     <section id="reveal" ref={ref} className="reveal-stage relative flex items-center justify-center overflow-hidden safe-top safe-bottom">
+      <div aria-hidden="true" className={`reveal-photo-wave${reduced ? ' reveal-photo-wave--still' : ''}`} />
       <motion.div aria-hidden="true" initial={reduced || !visible ? {} : { opacity: .9 }} animate={visible ? { opacity: 0 } : {}} transition={{ delay: .18, duration: 1.15, ease: [0.22, 1, 0.36, 1] }} className="reveal-curtain" />
       <motion.div initial={reduced || !visible ? {} : { opacity: 0, scale: .98 }} animate={visible ? { opacity: 1, scale: 1 } : {}} transition={{ delay: .24, duration: .85 }} className="absolute inset-0"><AmbientParticles mood="birthday" /></motion.div>
       <div className="relative z-10 flex w-full max-w-4xl flex-col items-center px-6 py-16 text-center">
