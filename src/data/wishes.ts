@@ -145,4 +145,19 @@ export const wishes: Wish[] = [
     timestampLabel: 'with love',
     enabled: true,
   },
+  {
+    id: 'wish-suttu',
+    name: 'Suttu',
+    relationship: 'with love',
+    order: 17,
+    presentationStyle: 'audio',
+    audio: {
+      id: 'suttu-voice-note',
+      type: 'audio',
+      src: '/media/wishes/suttu-voice-note.opus',
+      order: 17,
+      enabled: true,
+    },
+    enabled: true,
+  },
 ];
