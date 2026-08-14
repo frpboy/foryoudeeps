@@ -13,6 +13,7 @@ interface AudioPlayerProps {
   src: string;
   label: string;
   duration?: number;
+  autoPlay?: boolean;
   pauseOthers: () => void;
   register: (el: HTMLMediaElement | null) => void;
   unregister: (el: HTMLMediaElement | null) => void;
@@ -24,7 +25,7 @@ function formatDuration(seconds?: number): string | null {
   return `${minutes}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
 }
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, label, duration, pauseOthers, register, unregister }) => {
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, label, duration, autoPlay = false, pauseOthers, register, unregister }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = React.useState(false);
   const [progress, setProgress] = React.useState(0);
@@ -57,7 +58,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, label, duration, pauseOt
       <audio
         ref={audioRef}
         src={src}
-        preload="none"
+        autoPlay={autoPlay}
+        preload={autoPlay ? 'auto' : 'none'}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
         onLoadedMetadata={(event) => {
@@ -186,6 +188,7 @@ export const WishCard: React.FC<WishCardProps> = ({ wish, index, reduced, pauseA
             src={wish.audio.src}
             label={`${wish.name}'s voice message`}
             duration={wish.audio.duration}
+            autoPlay={wish.id === 'wish-nikitha'}
             pauseOthers={pauseAllMedia}
             register={registerMedia}
             unregister={unregisterMedia}
